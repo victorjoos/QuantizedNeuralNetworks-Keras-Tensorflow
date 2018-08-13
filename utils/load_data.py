@@ -18,8 +18,24 @@
 # along with QNN.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy as np
-from pylearn2.datasets.cifar10 import CIFAR10
-from pylearn2.datasets.mnist import MNIST
+# from pylearn2.datasets.cifar10 import CIFAR10
+# from pylearn2.datasets.mnist import MNIST
+from keras.datasets import cifar10
+from keras.datasets import mnist
+
+def split_train(train_set, size):
+    train = []
+    valid = []
+    train.append(train_set[0][0:size])
+    train.append(train_set[1][0:size])
+    valid.append(train_set[0][size:])
+    valid.append(train_set[1][size:])
+    return Dataset(train), Dataset(valid)
+
+class Dataset:
+    def __init__(self, dset):
+        self.X = dset[0]
+        self.y = dset[1]
 
 
 def load_dataset(dataset):
@@ -27,10 +43,15 @@ def load_dataset(dataset):
 
         print('Loading CIFAR-10 dataset...')
 
+
         train_set_size = 45000
-        train_set = CIFAR10(which_set="train", start=0, stop=train_set_size)
-        valid_set = CIFAR10(which_set="train", start=train_set_size, stop=50000)
-        test_set = CIFAR10(which_set="test")
+        train_init, test_init = cifar10.load_data()
+        train_set, valid_set = split_train(train_init, train_set_size)
+        test_set = Dataset(test_init)
+
+        # train_set = CIFAR10(which_set="train", start=0, stop=train_set_size)
+        # valid_set = CIFAR10(which_set="train", start=train_set_size, stop=50000)
+        # test_set = CIFAR10(which_set="test")
 
         train_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., train_set.X), 1.), (-1, 3, 32, 32)),(0,2,3,1))
         valid_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., valid_set.X), 1.), (-1, 3, 32, 32)),(0,2,3,1))
@@ -60,9 +81,12 @@ def load_dataset(dataset):
         print('Loading MNIST dataset...')
 
         train_set_size = 50000
-        train_set = MNIST(which_set="train", start=0, stop=train_set_size)
-        valid_set = MNIST(which_set="train", start=train_set_size, stop=60000)
-        test_set = MNIST(which_set="test")
+        train_init, test_init = mnist.load_data()
+        train_set, valid_set = split_train(train_init, train_set_size)
+        test_set = Dataset(test_init)
+        # train_set = MNIST(which_set="train", start=0, stop=train_set_size)
+        # valid_set = MNIST(which_set="train", start=train_set_size, stop=60000)
+        # test_set = MNIST(which_set="test")
 
         train_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., train_set.X), 1.), (-1, 1, 28, 28)),(0,2,3,1))
         valid_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., valid_set.X), 1.), (-1, 1,  28, 28)),(0,2,3,1))
@@ -94,3 +118,6 @@ def load_dataset(dataset):
         print("wrong dataset given")
 
     return train_set, valid_set, test_set
+
+if __name__ == "__main__":
+    value = load_dataset("MNIST")
