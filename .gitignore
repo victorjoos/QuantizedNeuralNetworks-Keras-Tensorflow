@@ -3,4 +3,5 @@
 *~
 .idea
 .*.swp
+*.hdf5
 venv/

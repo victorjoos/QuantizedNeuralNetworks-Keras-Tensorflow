@@ -13,7 +13,7 @@ def switch(condition, t, e):
 
 
 def _ternarize(W, H=1):
-    '''The weights' ternarization function, 
+    '''The weights' ternarization function,
 
     # References:
     - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902)
@@ -31,7 +31,7 @@ def _ternarize(W, H=1):
 
 
 def ternarize(W, H=1):
-    '''The weights' ternarization function, 
+    '''The weights' ternarization function,
 
     # References:
     - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902)
@@ -42,8 +42,13 @@ def ternarize(W, H=1):
 
 
 def ternarize_dot(x, W):
-    '''For RNN (maybe Dense or Conv too). 
+    '''For RNN (maybe Dense or Conv too).
     Refer to 'Recurrent Neural Networks with Limited Numerical Precision' Section 3.1
     '''
     Wt = _ternarize(W)
     return K.dot(x, W) + K.stop_gradient(K.dot(x, Wt - W))
+
+
+def ternary_tanh(x):
+    x = K.clip(x, -1, 1)
+    return ternarize(x)
