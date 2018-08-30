@@ -7,7 +7,7 @@ from keras.layers import InputSpec, Dense, Conv2D, SimpleRNN
 from keras import constraints
 from keras import initializers
 
-from ternary_ops import ternarize as ternarize, ternarize_dot
+from .ternary_ops import ternarize as ternarize, ternarize_dot
 
 
 class Clip(constraints.Constraint):
@@ -30,7 +30,7 @@ class Clip(constraints.Constraint):
 class TernaryDense(Dense):
     ''' Ternarized Dense layer
 
-    References: 
+    References:
     - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902}
     - [Ternary Weight Networks](http://arxiv.org/abs/1605.04711)
     '''
@@ -39,8 +39,8 @@ class TernaryDense(Dense):
         self.H = H
         self.kernel_lr_multiplier = kernel_lr_multiplier
         self.bias_lr_multiplier = bias_lr_multiplier
-        
-    
+
+
     def build(self, input_shape):
         assert len(input_shape) >= 2
         input_dim = input_shape[1]
@@ -51,7 +51,7 @@ class TernaryDense(Dense):
         if self.kernel_lr_multiplier == 'Glorot':
             self.kernel_lr_multiplier = np.float32(1. / np.sqrt(1.5 / (input_dim + self.units)))
             #print('Glorot learning rate multiplier: {}'.format(self.kernel_lr_multiplier))
-            
+
         self.kernel_constraint = Clip(-self.H, self.H)
         self.kernel_initializer = initializers.RandomUniform(-self.H, self.H)
         self.kernel = self.add_weight(shape=(input_dim, self.units),
@@ -82,7 +82,7 @@ class TernaryDense(Dense):
         if self.activation is not None:
             output = self.activation(output)
         return output
-        
+
     def get_config(self):
         config = {'H': self.H,
                   'kernel_lr_multiplier': self.kernel_lr_multiplier,
@@ -93,36 +93,36 @@ class TernaryDense(Dense):
 
 class TernaryConv2D(Conv2D):
     '''Ternarized Convolution2D layer
-    References: 
+    References:
     - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902}
     - [Ternary Weight Networks](http://arxiv.org/abs/1605.04711)
     '''
-    def __init__(self, filters, kernel_lr_multiplier='Glorot', 
+    def __init__(self, filters, kernel_lr_multiplier='Glorot',
                  bias_lr_multiplier=None, H=1., **kwargs):
         super(TernaryConv2D, self).__init__(filters, **kwargs)
         self.H = H
         self.kernel_lr_multiplier = kernel_lr_multiplier
         self.bias_lr_multiplier = bias_lr_multiplier
-        
+
     def build(self, input_shape):
         if self.data_format == 'channels_first':
             channel_axis = 1
         else:
-            channel_axis = -1 
+            channel_axis = -1
         if input_shape[channel_axis] is None:
                 raise ValueError('The channel dimension of the inputs '
                                  'should be defined. Found `None`.')
 
         input_dim = input_shape[channel_axis]
         kernel_shape = self.kernel_size + (input_dim, self.filters)
-            
+
         base = self.kernel_size[0] * self.kernel_size[1]
         if self.H == 'Glorot':
             nb_input = int(input_dim * base)
             nb_output = int(self.filters * base)
             self.H = np.float32(np.sqrt(1.5 / (nb_input + nb_output)))
             #print('Glorot H: {}'.format(self.H))
-            
+
         if self.kernel_lr_multiplier == 'Glorot':
             nb_input = int(input_dim * base)
             nb_output = int(self.filters * base)
@@ -154,7 +154,7 @@ class TernaryConv2D(Conv2D):
         self.built = True
 
     def call(self, inputs):
-        ternary_kernel = ternarize(self.kernel, H=self.H) 
+        ternary_kernel = ternarize(self.kernel, H=self.H)
         outputs = K.conv2d(
             inputs,
             ternary_kernel,
@@ -172,7 +172,7 @@ class TernaryConv2D(Conv2D):
         if self.activation is not None:
             return self.activation(outputs)
         return outputs
-        
+
     def get_config(self):
         config = {'H': self.H,
                   'kernel_lr_multiplier': self.kernel_lr_multiplier,
@@ -184,7 +184,7 @@ class TernaryConv2D(Conv2D):
 class TernaryRNN(SimpleRNN):
     ''' Ternarized RNN layer
 
-    References: 
+    References:
     - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902}
     '''
     def preprocess_input(self, inputs, training=None):
