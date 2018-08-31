@@ -5,3 +5,5 @@
 .*.swp
 *.hdf5
 venv/
+logs/
+weights/

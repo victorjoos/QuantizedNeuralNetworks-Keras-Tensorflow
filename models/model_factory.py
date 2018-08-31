@@ -7,9 +7,9 @@ import numpy as np
 
 from layers.quantized_layers import QuantizedConv2D,QuantizedDense
 from layers.quantized_ops import quantized_relu as quantize_op
-from layers.binary_layers import BinaryConv2D
+from layers.binary_layers import BinaryConv2D, BinaryDense
 from layers.binary_ops import binary_tanh
-from layers.ternary_layers import TernaryConv2D
+from layers.ternary_layers import TernaryConv2D, TernaryDense
 from layers.ternary_ops import ternary_tanh
 
 def build_model(cf):
@@ -19,33 +19,39 @@ def build_model(cf):
 
     H = 1.
     if cf.network_type =='float':
-        Conv_ = lambda s, f, i, c: Conv2D(kernel_size=(s, s), filters=f, strides=(1, 1), padding='same', activation='linear',
-                                   kernel_regularizer=l2(cf.kernel_regularizer),input_shape = (i,i,c))
-        Conv = lambda s, f: Conv2D(kernel_size=(s, s), filters=f, strides=(1, 1), padding='same', activation='linear',
-                                   kernel_regularizer=l2(cf.kernel_regularizer))
+        Conv = lambda s, f, i=None, c=None: Conv2D(
+            kernel_size=(s, s), filters=f, strides=(1, 1), padding='same',
+            activation='linear',
+            kernel_regularizer=l2(cf.kernel_regularizer),
+            **({'input_shape': (i,i,c)} if i!=None else {})
+        )
+        Fc = lambda o: Dense(o, use_bias=False)
         Act = lambda: LeakyReLU()
 
     elif cf.network_type in ['qnn', 'full-qnn']:
-        Conv_ = lambda s, f, i, c: QuantizedConv2D(kernel_size=(s, s), H=1, nb=cf.wbits, filters=f, strides=(1, 1),
-                                            padding='same', activation='linear',
-                                            kernel_regularizer=l2(cf.kernel_regularizer),
-                                            kernel_lr_multiplier=cf.kernel_lr_multiplier,input_shape = (i,i,c))
-        Conv = lambda s, f: QuantizedConv2D(kernel_size=(s, s), H=1, nb=cf.wbits, filters=f, strides=(1, 1),
-                                            padding='same', activation='linear',
-                                            kernel_regularizer=l2(cf.kernel_regularizer),
-                                            kernel_lr_multiplier=cf.kernel_lr_multiplier)
+        Conv = lambda s, f,i=None,c=None: QuantizedConv2D(
+            kernel_size=(s, s), H=1, nb=cf.wbits, filters=f, strides=(1, 1),
+            padding='same', activation='linear',
+            kernel_regularizer=l2(cf.kernel_regularizer),
+            kernel_lr_multiplier=cf.kernel_lr_multiplier,
+            **({'input_shape': (i,i,c)} if i!=None else {})
+        )
+        Fc = lambda o: QuantizedDense(o, use_bias=False)
+
         if cf.network_type=='qnn':
             Act = lambda: LeakyReLU()
         else: # full-qnn
             Act = lambda: Activation(quantized_relu)
 
     elif cf.network_type in ['bnn', 'qbnn', 'full-bnn']:
-        Conv_ = lambda s, f,i,c: BinaryConv2D(kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
-                                         activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-                                         kernel_lr_multiplier=cf.kernel_lr_multiplier,input_shape = (i,i,c))
-        Conv = lambda s, f: BinaryConv2D(kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
-                                         activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-                                         kernel_lr_multiplier=cf.kernel_lr_multiplier)
+        Conv = lambda s, f, i=None, c=None: BinaryConv2D(
+            kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
+             activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
+             kernel_lr_multiplier=cf.kernel_lr_multiplier,
+             **({'input_shape': (i,i,c)} if i!=None else {})
+         )
+        Fc = lambda o: BinaryDense(o, use_bias=False)
+
         if cf.network_type=='bnn':
             Act = lambda: LeakyReLU()
         elif cf.network_type=='qbnn':
@@ -54,12 +60,14 @@ def build_model(cf):
             Act = lambda: Activation(binary_tanh)
 
     elif cf.network_type in ['tnn', 'qtnn', 'full-tnn']:
-        Conv_ = lambda s, f,i,c: TernaryConv2D(kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
-                                         activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-                                         kernel_lr_multiplier=cf.kernel_lr_multiplier,input_shape = (i,i,c), use_bias=False)
-        Conv = lambda s, f: TernaryConv2D(kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
-                                         activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-                                         kernel_lr_multiplier=cf.kernel_lr_multiplier,  use_bias=False)
+        Conv = lambda s, f, i=None, c=None: TernaryConv2D(
+            kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
+            activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
+            kernel_lr_multiplier=cf.kernel_lr_multiplier,
+            **({'input_shape': (i,i,c)} if i!=None else {})
+        )
+        Fc = lambda o: TernaryDense(o, use_bias=False)
+
         if cf.network_type=='tnn':
             Act = lambda: LeakyReLU()
         elif cf.network_type=='qtnn':
@@ -72,7 +80,7 @@ def build_model(cf):
 
 
     model = Sequential()
-    model.add(Conv_(3, cf.nfa,cf.dim,cf.channels))
+    model.add(Conv(3, cf.nfa,cf.dim,cf.channels))
     model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
     model.add(Act())
     # block A
@@ -99,7 +107,7 @@ def build_model(cf):
 
     # Dense Layer
     model.add(Flatten())
-    model.add(Dense(cf.classes,use_bias=False))
+    model.add(Fc(cf.classes))
     model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
 
     # In[5]:
