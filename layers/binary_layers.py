@@ -30,7 +30,7 @@ class Clip(constraints.Constraint):
 
 class BinaryDense(Dense):
     ''' Binarized Dense layer
-    References: 
+    References:
     "BinaryNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1" [http://arxiv.org/abs/1602.02830]
     '''
     def __init__(self, units, H=1., kernel_lr_multiplier='Glorot', bias_lr_multiplier=None, **kwargs):
@@ -38,9 +38,9 @@ class BinaryDense(Dense):
         self.H = H
         self.kernel_lr_multiplier = kernel_lr_multiplier
         self.bias_lr_multiplier = bias_lr_multiplier
-        
+
         super(BinaryDense, self).__init__(units, **kwargs)
-    
+
     def build(self, input_shape):
         assert len(input_shape) >= 2
         input_dim = input_shape[1]
@@ -51,7 +51,7 @@ class BinaryDense(Dense):
         if self.kernel_lr_multiplier == 'Glorot':
             self.kernel_lr_multiplier = np.float32(1. / np.sqrt(1.5 / (input_dim + self.units)))
             #print('Glorot learning rate multiplier: {}'.format(self.kernel_lr_multiplier))
-            
+
         self.kernel_constraint = Clip(-self.H, self.H)
         self.kernel_initializer = initializers.RandomUniform(-self.H, self.H)
         self.kernel = self.add_weight(shape=(input_dim, self.units),
@@ -62,7 +62,7 @@ class BinaryDense(Dense):
 
         if self.use_bias:
             self.lr_multipliers = [self.kernel_lr_multiplier, self.bias_lr_multiplier]
-            self.bias = self.add_weight(shape=(self.output_dim,),
+            self.bias = self.add_weight(shape=(self.units,),
                                      initializer=self.bias_initializer,
                                      name='bias',
                                      regularizer=self.bias_regularizer,
@@ -83,7 +83,7 @@ class BinaryDense(Dense):
         if self.activation is not None:
             output = self.activation(output)
         return output
-        
+
     def get_config(self):
         config = {'H': self.H,
                   'kernel_lr_multiplier': self.kernel_lr_multiplier,
@@ -94,7 +94,7 @@ class BinaryDense(Dense):
 
 class BinaryConv2D(Conv2D):
     '''Binarized Convolution2D layer
-    References: 
+    References:
     "BinaryNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1" [http://arxiv.org/abs/1602.02830]
     '''
     def __init__(self, filters, kernel_regularizer=None,activity_regularizer=None, kernel_lr_multiplier='Glorot',
@@ -105,27 +105,27 @@ class BinaryConv2D(Conv2D):
         self.bias_lr_multiplier = bias_lr_multiplier
         self.activity_regularizer = activity_regularizer
         self.kernel_regularizer = kernel_regularizer
-        
-        
+
+
     def build(self, input_shape):
         if self.data_format == 'channels_first':
             channel_axis = 1
         else:
-            channel_axis = -1 
+            channel_axis = -1
         if input_shape[channel_axis] is None:
                 raise ValueError('The channel dimension of the inputs '
                                  'should be defined. Found `None`.')
 
         input_dim = input_shape[channel_axis]
         kernel_shape = self.kernel_size + (input_dim, self.filters)
-            
+
         base = self.kernel_size[0] * self.kernel_size[1]
         if self.H == 'Glorot':
             nb_input = int(input_dim * base)
             nb_output = int(self.filters * base)
             self.H = np.float32(np.sqrt(1.5 / (nb_input + nb_output)))
             #print('Glorot H: {}'.format(self.H))
-            
+
         if self.kernel_lr_multiplier == 'Glorot':
             nb_input = int(input_dim * base)
             nb_output = int(self.filters * base)
@@ -185,7 +185,7 @@ class BinaryConv2D(Conv2D):
         if self.activation is not None:
             return self.activation(outputs)
         return outputs
-        
+
     def get_config(self):
         config = {'H': self.H,
                   'kernel_lr_multiplier': self.kernel_lr_multiplier,

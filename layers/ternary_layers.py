@@ -62,7 +62,7 @@ class TernaryDense(Dense):
 
         if self.use_bias:
             self.lr_multipliers = [self.kernel_lr_multiplier, self.bias_lr_multiplier]
-            self.bias = self.add_weight(shape=(self.output_dim,),
+            self.bias = self.add_weight(shape=(self.units,),
                                      initializer=self.bias_initializer,
                                      name='bias',
                                      regularizer=self.bias_regularizer,
@@ -139,7 +139,7 @@ class TernaryConv2D(Conv2D):
 
         if self.use_bias:
             self.lr_multipliers = [self.kernel_lr_multiplier, self.bias_lr_multiplier]
-            self.bias = self.add_weight((self.output_dim,),
+            self.bias = self.add_weight((self.filters,),
                                      initializer=self.bias_initializers,
                                      name='bias',
                                      regularizer=self.bias_regularizer,
@@ -180,67 +180,6 @@ class TernaryConv2D(Conv2D):
         base_config = super(TernaryConv2D, self).get_config()
         return dict(list(base_config.items()) + list(config.items()))
 
-
-class TernaryRNN(SimpleRNN):
-    ''' Ternarized RNN layer
-
-    References:
-    - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902}
-    '''
-    def preprocess_input(self, inputs, training=None):
-        return inputs
-
-    def step(self, inputs, states):
-        if 0 < self.dropout < 1:
-            h = ternarize_dot(inputs * states[1], self.kernel)
-        else:
-            h = ternarize_dot(inputs, self.kernel)
-        if self.bias is not None:
-            h = K.bias_add(h, self.bias)
-
-        prev_output = states[0]
-        if 0 < self.recurrent_dropout < 1:
-            prev_output *= states[2]
-        output = h + ternarize_dot(prev_output, self.recurrent_kernel)
-        if self.activation is not None:
-            output = self.activation(output)
-
-        # Properly set learning phase on output tensor.
-        if 0 < self.dropout + self.recurrent_dropout:
-            output._uses_learning_phase = True
-        return output, [output]
-
-    def get_constants(self, inputs, training=None):
-        constants = []
-        if 0 < self.dropout < 1:
-            input_shape = K.int_shape(inputs)
-            input_dim = input_shape[-1]
-            ones = K.ones_like(K.reshape(inputs[:, 0, 0], (-1, 1)))
-            ones = K.tile(ones, (1, int(input_dim)))
-
-            def dropped_inputs():
-                return K.dropout(ones, self.dropout)
-
-            dp_mask = K.in_train_phase(dropped_inputs,
-                                       ones,
-                                       training=training)
-            constants.append(dp_mask)
-        else:
-            constants.append(K.cast_to_floatx(1.))
-
-        if 0 < self.recurrent_dropout < 1:
-            ones = K.ones_like(K.reshape(inputs[:, 0, 0], (-1, 1)))
-            ones = K.tile(ones, (1, self.units))
-
-            def dropped_inputs():
-                return K.dropout(ones, self.recurrent_dropout)
-            rec_dp_mask = K.in_train_phase(dropped_inputs,
-                                           ones,
-                                           training=training)
-            constants.append(rec_dp_mask)
-        else:
-            constants.append(K.cast_to_floatx(1.))
-        return constants
 
 # Aliases
 

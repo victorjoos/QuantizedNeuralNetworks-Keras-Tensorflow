@@ -56,10 +56,10 @@ def build_model(cf):
     elif cf.network_type in ['tnn', 'qtnn', 'full-tnn']:
         Conv_ = lambda s, f,i,c: TernaryConv2D(kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
                                          activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-                                         kernel_lr_multiplier=cf.kernel_lr_multiplier,input_shape = (i,i,c))
+                                         kernel_lr_multiplier=cf.kernel_lr_multiplier,input_shape = (i,i,c), use_bias=False)
         Conv = lambda s, f: TernaryConv2D(kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
                                          activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-                                         kernel_lr_multiplier=cf.kernel_lr_multiplier)
+                                         kernel_lr_multiplier=cf.kernel_lr_multiplier,  use_bias=False)
         if cf.network_type=='tnn':
             Act = lambda: LeakyReLU()
         elif cf.network_type=='qtnn':
