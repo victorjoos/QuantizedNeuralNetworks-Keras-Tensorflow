@@ -140,7 +140,7 @@ class TernaryConv2D(Conv2D):
         if self.use_bias:
             self.lr_multipliers = [self.kernel_lr_multiplier, self.bias_lr_multiplier]
             self.bias = self.add_weight((self.filters,),
-                                     initializer=self.bias_initializers,
+                                     initializer=self.bias_initializer,
                                      name='bias',
                                      regularizer=self.bias_regularizer,
                                      constraint=self.bias_constraint)

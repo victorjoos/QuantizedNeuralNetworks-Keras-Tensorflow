@@ -46,9 +46,9 @@ def build_model(cf):
     elif cf.network_type in ['bnn', 'qbnn', 'full-bnn']:
         Conv = lambda s, f, i=None, c=None: BinaryConv2D(
             kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
-             activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-             kernel_lr_multiplier=cf.kernel_lr_multiplier,
-             **({'input_shape': (i,i,c)} if i!=None else {})
+            activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
+            kernel_lr_multiplier=cf.kernel_lr_multiplier,
+            **({'input_shape': (i,i,c)} if i!=None else {})
          )
         Fc = lambda o: BinaryDense(o, use_bias=False)
 
