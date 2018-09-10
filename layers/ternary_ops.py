@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import keras.backend as K
-
+from time import sleep
 
 def switch(condition, t, e):
     if K.backend() == 'tensorflow':
@@ -19,11 +19,11 @@ def _ternarize(W, H=1):
     - [Recurrent Neural Networks with Limited Numerical Precision](http://arxiv.org/abs/1608.06902)
     - [Ternary Weight Networks](http://arxiv.org/abs/1605.04711)
     '''
-    W /= H
-
+    W = W / H
+    cutoff = 0.7*K.mean(K.abs(W)) # # TODO: is this ok??  
     ones = K.ones_like(W)
     zeros = K.zeros_like(W)
-    Wt = switch(W > 0.5, ones, switch(W <= -0.5, -ones, zeros))
+    Wt = switch(W > cutoff, ones, switch(W <= -cutoff, -ones, zeros))
 
     Wt *= H
 

@@ -20,12 +20,12 @@ kernel_regularizer=0.
 activity_regularizer=0.
 
 # width and depth
-nla=1
-nfa=64
-nlb=1
-nfb=64
-nlc=1
-nfc=64
+nla=2
+nfa=128
+nlb=2
+nfb=256
+nlc=2
+nfc=512
 
 #learning rate decay, factor => LR *= factor
 decay_at_epoch = [0, 25, 80 ]
@@ -36,7 +36,7 @@ kernel_lr_multiplier = 10
 progress_logging = 2 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
 epochs = 100
 batch_size = 64
-lr = 0.001
+lr = 0.1
 decay = 0.000025
 
 
