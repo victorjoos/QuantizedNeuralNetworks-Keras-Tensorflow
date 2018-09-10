@@ -10,7 +10,7 @@ abits = 4
 # finetune an be false or true
 finetune = False
 
-dataset='MNIST'
+dataset='FASHION'
 dim=28
 channels=1
 classes=10

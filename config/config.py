@@ -10,9 +10,15 @@ abits = 4
 # finetune an be false or true
 finetune = False
 
-dataset='CIFAR-10'
-dim=32
-channels=3
+# dataset='CIFAR-10'
+dataset='FASHION'
+
+if dataset == 'CIFAR-10':
+    dim=32
+    channels=3
+else:
+    dim=28
+    channels=1
 classes=10
 
 #regularization
@@ -33,7 +39,7 @@ factor_at_epoch = [1, .1, 1]
 kernel_lr_multiplier = 10
 
 # debug and logging
-progress_logging = 2 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
+progress_logging = 1 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
 epochs = 100
 batch_size = 64
 lr = 0.001
