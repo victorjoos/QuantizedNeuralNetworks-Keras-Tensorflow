@@ -22,6 +22,7 @@ import numpy as np
 # from pylearn2.datasets.mnist import MNIST
 from keras.datasets import cifar10
 from keras.datasets import mnist
+from keras.datasets import fashion_mnist
 
 def split_train(train_set, size):
     train = []
@@ -76,12 +77,15 @@ def load_dataset(dataset):
         train_set.X = np.concatenate((train_set.X, x_train_flip), axis=0)
         train_set.y = np.concatenate((train_set.y, y_train_flip), axis=0)
 
-    elif (dataset == "MNIST"):
+    elif (dataset == "MNIST" or dataset == "FASHION"):
 
         print('Loading MNIST dataset...')
 
         train_set_size = 50000
-        train_init, test_init = mnist.load_data()
+        if dataset == "MNIST":
+            train_init, test_init = mnist.load_data()
+        elif dataset == "FASHION":
+            train_init, test_init = fashion_mnist.load_data()
         train_set, valid_set = split_train(train_init, train_set_size)
         test_set = Dataset(test_init)
         # train_set = MNIST(which_set="train", start=0, stop=train_set_size)
@@ -110,8 +114,6 @@ def load_dataset(dataset):
         y_train_flip = train_set.y
         train_set.X = np.concatenate((train_set.X, x_train_flip), axis=0)
         train_set.y = np.concatenate((train_set.y, y_train_flip), axis=0)
-
-
 
 
     else:
