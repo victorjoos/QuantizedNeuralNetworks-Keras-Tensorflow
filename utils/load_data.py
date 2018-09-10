@@ -79,7 +79,7 @@ def load_dataset(dataset):
 
     elif (dataset == "MNIST" or dataset == "FASHION"):
 
-        print('Loading MNIST dataset...')
+        print('Loading {} dataset...'.format(dataset))
 
         train_set_size = 50000
         if dataset == "MNIST":
