@@ -12,15 +12,17 @@ from layers.binary_ops import binary_tanh
 from layers.ternary_layers import TernaryConv2D, TernaryDense
 from layers.ternary_ops import ternary_tanh
 
-def build_model(cf):
+from models.resnet import ResNet18
+
+def build_model(cf, type="VGG"):
     def quantized_relu(x):
         return quantize_op(x,nb=cf.abits)
 
 
     H = 1.
     if cf.network_type =='float':
-        Conv = lambda s, f, i=None, c=None: Conv2D(
-            kernel_size=(s, s), filters=f, strides=(1, 1), padding='same',
+        Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: Conv2D(
+            kernel_size=(s, s), filters=f, strides=strides, padding='same',
             activation='linear',
             kernel_regularizer=l2(cf.kernel_regularizer),
             **({'input_shape': (i,i,c)} if i!=None else {})
@@ -29,8 +31,8 @@ def build_model(cf):
         Act = lambda: LeakyReLU()
 
     elif cf.network_type in ['qnn', 'full-qnn']:
-        Conv = lambda s, f,i=None,c=None: QuantizedConv2D(
-            kernel_size=(s, s), H=1, nb=cf.wbits, filters=f, strides=(1, 1),
+        Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: QuantizedConv2D(
+            kernel_size=(s, s), H=1, nb=cf.wbits, filters=f, strides=strides,
             padding='same', activation='linear',
             kernel_regularizer=l2(cf.kernel_regularizer),
             kernel_lr_multiplier=cf.kernel_lr_multiplier,
@@ -44,8 +46,8 @@ def build_model(cf):
             Act = lambda: Activation(quantized_relu)
 
     elif cf.network_type in ['bnn', 'qbnn', 'full-bnn']:
-        Conv = lambda s, f, i=None, c=None: BinaryConv2D(
-            kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
+        Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: BinaryConv2D(
+            kernel_size=(s, s), H=1, filters=f, strides=strides, padding='same',
             activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
             kernel_lr_multiplier=cf.kernel_lr_multiplier,
             **({'input_shape': (i,i,c)} if i!=None else {})
@@ -60,8 +62,8 @@ def build_model(cf):
             Act = lambda: Activation(binary_tanh)
 
     elif cf.network_type in ['tnn', 'qtnn', 'full-tnn']:
-        Conv = lambda s, f, i=None, c=None: TernaryConv2D(
-            kernel_size=(s, s), H=1, filters=f, strides=(1, 1), padding='same',
+        Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: TernaryConv2D(
+            kernel_size=(s, s), H=1, filters=f, strides=strides, padding='same',
             activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
             kernel_lr_multiplier=cf.kernel_lr_multiplier,
             **({'input_shape': (i,i,c)} if i!=None else {})
@@ -78,39 +80,52 @@ def build_model(cf):
     else:
         print('wrong network type, the supported network types in this repo are float, qnn, full-qnn, bnn and full-bnn')
 
+    if type=="VGG":
 
-    model = Sequential()
-    model.add(Conv(3, cf.nfa,cf.dim,cf.channels))
-    model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
-    model.add(Act())
-    # block A
-    for i in range(0,cf.nla-1):
-        model.add(Conv(3, cf.nfa))
-        model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
-        model.add(Act())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        img_input = Input(shape=(cf.dim,cf.dim,cf.channels))
+        x = Conv(3, cf.nfa)(img_input)
+        x = BatchNormalization(momentum=0.1,epsilon=0.0001)(x)
+        x = Act()(x)
+        x = Flatten()(x)
+        x = Fc(cf.classes)(x)
+        x = BatchNormalization(momentum=0.1,epsilon=0.0001)(x)
+        model = Model(img_input, x)
+        # model = Sequential()
+        # model.add(Conv(3, cf.nfa,cf.dim,cf.channels))
+        # model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
+        # model.add(Act())
+        # block A
+        # for i in range(0,cf.nla-1):
+        #     model.add(Conv(3, cf.nfa))
+        #     model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
+        #     model.add(Act())
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # block B
-    for i in range(0,cf.nlb):
-        model.add(Conv(3, cf.nfb))
-        model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
-        model.add(Act())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        # block B
+        # for i in range(0,cf.nlb):
+        #     model.add(Conv(3, cf.nfb))
+        #     model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
+        #     model.add(Act())
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # block C
-    for i in range(0,cf.nlc):
-        model.add(Conv(3, cf.nfc))
-        model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
-        model.add(Act())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+        # block C
+        # for i in range(0,cf.nlc):
+        #     model.add(Conv(3, cf.nfc))
+        #     model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
+        #     model.add(Act())
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
 
 
-    # Dense Layer
-    model.add(Flatten())
-    model.add(Fc(cf.classes))
-    model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
+        # Dense Layer
+        # model.add(Flatten())
+        # model.add(Fc(cf.classes))
+        # model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
+    elif type=="RESNET":
+        model = ResNet18(Conv, Act, Fc, input_shape=(cf.dim,cf.dim,cf.channels), classes=cf.classes)
+    else:
+        print(f"Error: type {type} is not supported")
+        return None
 
-    # In[5]:
     model.summary()
 
     return model
