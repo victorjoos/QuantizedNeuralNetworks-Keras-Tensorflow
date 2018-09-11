@@ -23,6 +23,8 @@ import numpy as np
 from keras.datasets import cifar10
 from keras.datasets import mnist
 from keras.datasets import fashion_mnist
+from keras import backend as K
+import keras
 
 def split_train(train_set, size):
     train = []
@@ -35,7 +37,7 @@ def split_train(train_set, size):
 
 class Dataset:
     def __init__(self, dset):
-        self.X = dset[0]
+        self.X = dset[0] / 255
         self.y = dset[1]
 
 
@@ -50,32 +52,25 @@ def load_dataset(dataset):
         train_set, valid_set = split_train(train_init, train_set_size)
         test_set = Dataset(test_init)
 
-        # train_set = CIFAR10(which_set="train", start=0, stop=train_set_size)
-        # valid_set = CIFAR10(which_set="train", start=train_set_size, stop=50000)
-        # test_set = CIFAR10(which_set="test")
 
-        train_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., train_set.X), 1.), (-1, 3, 32, 32)),(0,2,3,1))
-        valid_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., valid_set.X), 1.), (-1, 3, 32, 32)),(0,2,3,1))
-        test_set.X = np.transpose(np.reshape(np.subtract(np.multiply(2. / 255., test_set.X), 1.), (-1, 3, 32, 32)),(0,2,3,1))
+        # If subtract pixel mean is enabled
+        subtract_pixel_mean = True
+        if subtract_pixel_mean:
+            x_mean = np.mean(train_set.X, axis=0)
+            train_set.X -= x_mean
+            test_set.X -= x_mean
+            valid_set.X -= x_mean
+
         # flatten targets
-        train_set.y = np.hstack(train_set.y)
-        valid_set.y = np.hstack(valid_set.y)
-        test_set.y = np.hstack(test_set.y)
-
-        # Onehot the targets
-        train_set.y = np.float32(np.eye(10)[train_set.y])
-        valid_set.y = np.float32(np.eye(10)[valid_set.y])
-        test_set.y = np.float32(np.eye(10)[test_set.y])
+        train_set.y = keras.utils.to_categorical(train_set.y, 10)
+        valid_set.y = keras.utils.to_categorical(valid_set.y, 10)
+        test_set.y = keras.utils.to_categorical(test_set.y, 10)
 
         # for hinge loss
         train_set.y = 2 * train_set.y - 1.
         valid_set.y = 2 * valid_set.y - 1.
         test_set.y = 2 * test_set.y - 1.
-        # enlarge train data set by mirrroring
-        x_train_flip = train_set.X[:, :, ::-1, :]
-        y_train_flip = train_set.y
-        train_set.X = np.concatenate((train_set.X, x_train_flip), axis=0)
-        train_set.y = np.concatenate((train_set.y, y_train_flip), axis=0)
+
 
     elif (dataset == "MNIST" or dataset == "FASHION"):
 

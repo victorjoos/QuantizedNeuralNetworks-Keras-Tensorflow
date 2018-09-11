@@ -1,112 +1,191 @@
-# -*- coding: utf-8 -*-
-'''ResNet18 model for Keras.
+"""
+Taken from https://github.com/keras-team/keras/blob/master/examples/cifar10_resnet.py
+"""
 
-# Reference:
-
-- [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385)
-
-Adapted from code contributed by BigMoyan.
-'''
 from __future__ import print_function
-
-import numpy as np
-import warnings
-from keras.models import Model
-from keras.layers import Input
-from keras import layers
-from keras.layers import Flatten
-from keras.layers import MaxPooling2D
-from keras.layers import GlobalMaxPooling2D
-from keras.layers import ZeroPadding2D
-from keras.layers import AveragePooling2D
-from keras.layers import GlobalAveragePooling2D
+import keras
 from keras.layers import BatchNormalization
-import keras.backend as K
-
-
+from keras.layers import AveragePooling2D, Input, Flatten
+from keras.optimizers import Adam
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from keras.callbacks import ReduceLROnPlateau
+from keras.preprocessing.image import ImageDataGenerator
+from keras.regularizers import l2
+from keras import backend as K
+from keras.models import Model
+from keras.datasets import cifar10
+import numpy as np
+import os
 
 def ResNet18(Conv2D,
              Activation,
              Dense,
              input_shape,
              classes):
+    # Training parameters
+    batch_size = 128  # orig paper trained all networks with batch_size=128
+    epochs = 200
+    data_augmentation = False
 
-    def identity_block(input_tensor, filters, stage, block):
+    # Subtracting pixel mean improves accuracy
+    subtract_pixel_mean = True
 
-        filters1, filters2 = filters
-        bn_axis = 3
-        kernel_size = 3
+    n = 3
 
-        conv_name_base = 'res' + str(stage) + block + '_branch'
-        bn_name_base = 'bn' + str(stage) + block + '_branch'
+    # Model version
+    # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
+    version = 2
 
-        x = Conv2D(filters1, kernel_size, name=conv_name_base + '2a')(input_tensor)
-        x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2a')(x)
-        x = Activation()(x)
+    # Computed depth from supplied model parameter n
+    if version == 1:
+        depth = n * 6 + 2
+    elif version == 2:
+        depth = n * 9 + 2
 
-        x = Conv2D(filters2, kernel_size, name=conv_name_base + '2b')(x)
-        x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2b')(x)
+    # Model name, depth and version
+    model_type = 'ResNet%dv%d' % (depth, version)
 
-        x = layers.add([x, input_tensor])
-        x = Activation()(x)
+
+    def resnet_layer(inputs,
+                     num_filters=16,
+                     kernel_size=3,
+                     strides=1,
+                     batch_normalization=True,
+                     activation="relu",
+                     conv_first=True):
+        """2D Convolution-Batch Normalization-Activation stack builder
+
+        # Arguments
+            inputs (tensor): input tensor from input image or previous layer
+            num_filters (int): Conv2D number of filters
+            kernel_size (int): Conv2D square kernel dimensions
+            strides (int): Conv2D square stride dimensions
+            activation (string): activation name
+            batch_normalization (bool): whether to include batch normalization
+            conv_first (bool): conv-bn-activation (True) or
+                bn-activation-conv (False)
+
+        # Returns
+            x (tensor): tensor as input to the next layer
+        """
+        conv = Conv2D(num_filters,
+                      kernel_size,
+                      strides=strides,
+                      #kernel_initializer='he_normal',
+                      #kernel_regularizer=l2(1e-4)
+                      )
+
+        x = inputs
+        if conv_first:
+            x = conv(x)
+            if batch_normalization:
+                x = BatchNormalization()(x)
+            if activation is not None:
+                x = Activation()(x)
+        else:
+            if batch_normalization:
+                x = BatchNormalization()(x)
+            if activation is not None:
+                x = Activation()(x)
+            x = conv(x)
         return x
 
 
-    def conv_block(input_tensor, filters, stage, block, strides=(2, 2)):
+    def resnet_v2(input_shape, depth, num_classes=10):
+        """ResNet Version 2 Model builder [b]
 
-        filters1, filters2 = filters
-        bn_axis = 3
-        kernel_size = 3
+        Stacks of (1 x 1)-(3 x 3)-(1 x 1) BN-ReLU-Conv2D or also known as
+        bottleneck layer
+        First shortcut connection per layer is 1 x 1 Conv2D.
+        Second and onwards shortcut connection is identity.
+        At the beginning of each stage, the feature map size is halved (downsampled)
+        by a convolutional layer with strides=2, while the number of filter maps is
+        doubled. Within each stage, the layers have the same number filters and the
+        same filter map sizes.
+        Features maps sizes:
+        conv1  : 32x32,  16
+        stage 0: 32x32,  64
+        stage 1: 16x16, 128
+        stage 2:  8x8,  256
 
-        conv_name_base = 'res' + str(stage) + block + '_branch'
-        bn_name_base = 'bn' + str(stage) + block + '_branch'
+        # Arguments
+            input_shape (tensor): shape of input image tensor
+            depth (int): number of core convolutional layers
+            num_classes (int): number of classes (CIFAR10 has 10)
 
-        x = Conv2D(filters1, kernel_size, strides=strides,
-                   name=conv_name_base + '2a')(input_tensor)
-        x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2a')(x)
+        # Returns
+            model (Model): Keras model instance
+        """
+        if (depth - 2) % 9 != 0:
+            raise ValueError('depth should be 9n+2 (eg 56 or 110 in [b])')
+        # Start model definition.
+        num_filters_in = 16
+        num_res_blocks = int((depth - 2) / 9)
+
+        inputs = Input(shape=input_shape)
+        # v2 performs Conv2D with BN-ReLU on input before splitting into 2 paths
+        x = resnet_layer(inputs=inputs,
+                         num_filters=num_filters_in,
+                         conv_first=True)
+
+        # Instantiate the stack of residual units
+        for stage in range(3):
+            for res_block in range(num_res_blocks):
+                activation = 'relu'
+                batch_normalization = True
+                strides = 1
+                if stage == 0:
+                    num_filters_out = num_filters_in * 4
+                    if res_block == 0:  # first layer and first stage
+                        activation = None
+                        batch_normalization = False
+                else:
+                    num_filters_out = num_filters_in * 2
+                    if res_block == 0:  # first layer but not first stage
+                        strides = 2    # downsample
+
+                # bottleneck residual unit
+                y = resnet_layer(inputs=x,
+                                 num_filters=num_filters_in,
+                                 kernel_size=1,
+                                 strides=strides,
+                                 activation=activation,
+                                 batch_normalization=batch_normalization,
+                                 conv_first=False)
+                y = resnet_layer(inputs=y,
+                                 num_filters=num_filters_in,
+                                 conv_first=False)
+                y = resnet_layer(inputs=y,
+                                 num_filters=num_filters_out,
+                                 kernel_size=1,
+                                 conv_first=False)
+                if res_block == 0:
+                    # linear projection residual shortcut connection to match
+                    # changed dims
+                    x = resnet_layer(inputs=x,
+                                     num_filters=num_filters_out,
+                                     kernel_size=1,
+                                     strides=strides,
+                                     activation=None,
+                                     batch_normalization=False)
+                x = keras.layers.add([x, y])
+
+            num_filters_in = num_filters_out
+
+        # Add classifier on top.
+        # v2 has BN-ReLU before Pooling
+        x = BatchNormalization()(x)
         x = Activation()(x)
+        x = AveragePooling2D(pool_size=8)(x) # TODO: why is this now 7 and not 8???
+        y = Flatten()(x)
+        outputs = Dense(classes,
+                        #kernel_initializer='he_normal'
+                        )(y)
 
-        x = Conv2D(filters2, kernel_size,
-                   name=conv_name_base + '2b')(x)
-        x = BatchNormalization(axis=bn_axis, name=bn_name_base + '2b')(x)
-
-        shortcut = Conv2D(filters2, 1, strides=strides,
-                          name=conv_name_base + '1')(input_tensor)
-        shortcut = BatchNormalization(axis=bn_axis, name=bn_name_base + '1')(shortcut)
-
-        x = layers.add([x, shortcut])
-        x = Activation()(x)
-        return x
-
-    bn_axis = 3
-
-    # x = ZeroPadding2D((3, 3))(img_input)
-    img_input = Input(shape=input_shape)
-    x = Conv2D(64, 3, strides=(1, 1), name='conv1')(img_input)
-    x = BatchNormalization(axis=bn_axis, name='bn_conv1')(x)
-    x = Activation()(x)
-    # x = MaxPooling2D((3, 3), strides=(2, 2))(x)
-
-    x = conv_block(x, [64, 64], stage=2, block='a', strides=(1, 1))
-    x = identity_block(x, [64, 64], stage=2, block='b')
-
-    x = conv_block(x, [128, 128], stage=3, block='a')
-    x = identity_block(x, [128, 128], stage=3, block='b')
+        # Instantiate model.
+        model = Model(inputs=inputs, outputs=outputs)
+        return model
 
 
-    x = conv_block(x, [256, 256], stage=4, block='a')
-    x = identity_block(x, [256, 256], stage=4, block='b')
 
-    x = conv_block(x, [512, 512], stage=5, block='a')
-    x = identity_block(x, [512, 512], stage=5, block='b')
-
-    x = AveragePooling2D((4, 4), name='avg_pool')(x)
-
-    x = Flatten()(x)
-    x = Dense(classes)(x) #  activation='softmax', name='classify'
-    x = BatchNormalization(momentum=0.1,epsilon=0.0001)(x)
-
-    # Create model.
-    model = Model(img_input, x, name='resnet18')
-
-    return model
+    return resnet_v2(input_shape=input_shape, depth=depth)

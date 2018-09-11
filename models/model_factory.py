@@ -14,7 +14,7 @@ from layers.ternary_ops import ternary_tanh
 
 from models.resnet import ResNet18
 
-def build_model(cf, type="RESNET"):
+def build_model(cf):
     def quantized_relu(x):
         return quantize_op(x,nb=cf.abits)
 
@@ -23,12 +23,12 @@ def build_model(cf, type="RESNET"):
     if cf.network_type =='float':
         Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: Conv2D(
             kernel_size=(s, s), filters=f, strides=strides, padding='same',
-            activation='linear',
+            kernel_initializer=cf.kernel_initializer,
             kernel_regularizer=l2(cf.kernel_regularizer),
             **({'input_shape': (i,i,c)} if i!=None else {})
         )
-        Fc = lambda o: Dense(o, use_bias=False)
-        Act = lambda: LeakyReLU()
+        Fc = lambda o: Dense(o)
+        Act = lambda: Activation("relu")# LeakyReLU()
 
     elif cf.network_type in ['qnn', 'full-qnn']:
         Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: QuantizedConv2D(
@@ -80,8 +80,7 @@ def build_model(cf, type="RESNET"):
     else:
         print('wrong network type, the supported network types in this repo are float, qnn, full-qnn, bnn and full-bnn')
 
-    if type=="VGG":
-
+    if cf.architecture=="VGG":
         model = Sequential()
         model.add(Conv(3, cf.nfa,cf.dim,cf.channels))
         model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
@@ -107,15 +106,15 @@ def build_model(cf, type="RESNET"):
             model.add(Act())
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
-
         # Dense Layer
         model.add(Flatten())
         model.add(Fc(cf.classes))
         model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
-    elif type=="RESNET":
+
+    elif cf.architecture=="RESNET":
         model = ResNet18(Conv, Act, Fc, input_shape=(cf.dim,cf.dim,cf.channels), classes=cf.classes)
     else:
-        print(f"Error: type {type} is not supported")
+        print(f"Error: type {cf.architecture} is not supported")
         return None
 
     model.summary()
