@@ -14,7 +14,7 @@ from layers.ternary_ops import ternary_tanh
 
 from models.resnet import ResNet18
 
-def build_model(cf, type="VGG"):
+def build_model(cf, type="RESNET"):
     def quantized_relu(x):
         return quantize_op(x,nb=cf.abits)
 
@@ -82,44 +82,36 @@ def build_model(cf, type="VGG"):
 
     if type=="VGG":
 
-        img_input = Input(shape=(cf.dim,cf.dim,cf.channels))
-        x = Conv(3, cf.nfa)(img_input)
-        x = BatchNormalization(momentum=0.1,epsilon=0.0001)(x)
-        x = Act()(x)
-        x = Flatten()(x)
-        x = Fc(cf.classes)(x)
-        x = BatchNormalization(momentum=0.1,epsilon=0.0001)(x)
-        model = Model(img_input, x)
-        # model = Sequential()
-        # model.add(Conv(3, cf.nfa,cf.dim,cf.channels))
-        # model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
-        # model.add(Act())
+        model = Sequential()
+        model.add(Conv(3, cf.nfa,cf.dim,cf.channels))
+        model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
+        model.add(Act())
         # block A
-        # for i in range(0,cf.nla-1):
-        #     model.add(Conv(3, cf.nfa))
-        #     model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
-        #     model.add(Act())
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        for i in range(0,cf.nla-1):
+            model.add(Conv(3, cf.nfa))
+            model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
+            model.add(Act())
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
         # block B
-        # for i in range(0,cf.nlb):
-        #     model.add(Conv(3, cf.nfb))
-        #     model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
-        #     model.add(Act())
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        for i in range(0,cf.nlb):
+            model.add(Conv(3, cf.nfb))
+            model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
+            model.add(Act())
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
         # block C
-        # for i in range(0,cf.nlc):
-        #     model.add(Conv(3, cf.nfc))
-        #     model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
-        #     model.add(Act())
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        for i in range(0,cf.nlc):
+            model.add(Conv(3, cf.nfc))
+            model.add(BatchNormalization(momentum=0.1, epsilon=0.0001))
+            model.add(Act())
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
 
         # Dense Layer
-        # model.add(Flatten())
-        # model.add(Fc(cf.classes))
-        # model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
+        model.add(Flatten())
+        model.add(Fc(cf.classes))
+        model.add(BatchNormalization(momentum=0.1,epsilon=0.0001))
     elif type=="RESNET":
         model = ResNet18(Conv, Act, Fc, input_shape=(cf.dim,cf.dim,cf.channels), classes=cf.classes)
     else:
