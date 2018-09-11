@@ -21,14 +21,14 @@ def build_model(cf):
 
     H = 1.
     if cf.network_type =='float':
-        Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: Conv2D(
-            kernel_size=(s, s), filters=f, strides=strides, padding='same',
-            kernel_initializer=cf.kernel_initializer,
-            kernel_regularizer=l2(cf.kernel_regularizer),
-            **({'input_shape': (i,i,c)} if i!=None else {})
-        )
-        Fc = lambda o: Dense(o)
-        Act = lambda: Activation("relu")# LeakyReLU()
+        Conv = Conv2D #lambda s, f, i=None, c=None, strides=(1,1), name=None: Conv2D(
+        #     kernel_size=(s, s), filters=f, strides=strides, padding='same',
+        #     kernel_initializer=cf.kernel_initializer,
+        #     kernel_regularizer=l2(cf.kernel_regularizer),
+        #     **({'input_shape': (i,i,c)} if i!=None else {})
+        # )
+        Fc = Dense # lambda o: Dense(o)
+        Act = LeakyReLU # lambda: LeakyReLU()
 
     elif cf.network_type in ['qnn', 'full-qnn']:
         Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: QuantizedConv2D(
@@ -46,13 +46,13 @@ def build_model(cf):
             Act = lambda: Activation(quantized_relu)
 
     elif cf.network_type in ['bnn', 'qbnn', 'full-bnn']:
-        Conv = lambda s, f, i=None, c=None, strides=(1,1), name=None: BinaryConv2D(
-            kernel_size=(s, s), H=1, filters=f, strides=strides, padding='same',
-            activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
-            kernel_lr_multiplier=cf.kernel_lr_multiplier,
-            **({'input_shape': (i,i,c)} if i!=None else {})
-         )
-        Fc = lambda o: BinaryDense(o, use_bias=False)
+        Conv = BinaryConv2D # lambda s, f, i=None, c=None, strides=(1,1), name=None: BinaryConv2D(
+         #    kernel_size=(s, s), H=1, filters=f, strides=strides, padding='same',
+         #    activation='linear', kernel_regularizer=l2(cf.kernel_regularizer),
+         #    kernel_lr_multiplier=cf.kernel_lr_multiplier,
+         #    **({'input_shape': (i,i,c)} if i!=None else {})
+         # )
+        Fc = BinaryDense #lambda o: BinaryDense(o, use_bias=False)
 
         if cf.network_type=='bnn':
             Act = lambda: LeakyReLU()

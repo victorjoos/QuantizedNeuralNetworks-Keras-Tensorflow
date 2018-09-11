@@ -69,10 +69,11 @@ def ResNet18(Conv2D,
             x (tensor): tensor as input to the next layer
         """
         conv = Conv2D(num_filters,
-                      kernel_size,
+                      kernel_size=kernel_size,
                       strides=strides,
-                      #kernel_initializer='he_normal',
-                      #kernel_regularizer=l2(1e-4)
+                      padding='same',
+                      kernel_initializer='he_normal',
+                      kernel_regularizer=l2(1e-4)
                       )
 
         x = inputs
@@ -92,30 +93,7 @@ def ResNet18(Conv2D,
 
 
     def resnet_v2(input_shape, depth, num_classes=10):
-        """ResNet Version 2 Model builder [b]
 
-        Stacks of (1 x 1)-(3 x 3)-(1 x 1) BN-ReLU-Conv2D or also known as
-        bottleneck layer
-        First shortcut connection per layer is 1 x 1 Conv2D.
-        Second and onwards shortcut connection is identity.
-        At the beginning of each stage, the feature map size is halved (downsampled)
-        by a convolutional layer with strides=2, while the number of filter maps is
-        doubled. Within each stage, the layers have the same number filters and the
-        same filter map sizes.
-        Features maps sizes:
-        conv1  : 32x32,  16
-        stage 0: 32x32,  64
-        stage 1: 16x16, 128
-        stage 2:  8x8,  256
-
-        # Arguments
-            input_shape (tensor): shape of input image tensor
-            depth (int): number of core convolutional layers
-            num_classes (int): number of classes (CIFAR10 has 10)
-
-        # Returns
-            model (Model): Keras model instance
-        """
         if (depth - 2) % 9 != 0:
             raise ValueError('depth should be 9n+2 (eg 56 or 110 in [b])')
         # Start model definition.
@@ -176,10 +154,10 @@ def ResNet18(Conv2D,
         # v2 has BN-ReLU before Pooling
         x = BatchNormalization()(x)
         x = Activation()(x)
-        x = AveragePooling2D(pool_size=8)(x) # TODO: why is this now 7 and not 8???
+        x = AveragePooling2D(pool_size=8)(x)
         y = Flatten()(x)
         outputs = Dense(classes,
-                        #kernel_initializer='he_normal'
+                        kernel_initializer='he_normal'
                         )(y)
 
         # Instantiate model.

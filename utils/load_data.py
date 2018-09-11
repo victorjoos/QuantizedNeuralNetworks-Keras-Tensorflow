@@ -54,7 +54,7 @@ def load_dataset(dataset):
 
 
         # If subtract pixel mean is enabled
-        subtract_pixel_mean = True
+        subtract_pixel_mean = False
         if subtract_pixel_mean:
             x_mean = np.mean(train_set.X, axis=0)
             train_set.X -= x_mean
