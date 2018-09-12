@@ -67,7 +67,7 @@ if cf.architecture == "VGG":
 
 elif cf.architecture=="RESNET":
     def lr_schedule(epoch):
-        lr = 1e-3
+        lr = cf.lr
         if epoch > 180:
             lr *= 0.5e-3
         elif epoch > 160:
@@ -85,7 +85,7 @@ elif cf.architecture=="RESNET":
                                    min_lr=0.5e-6)
     callbacks += [lr_scheduler, lr_reducer]
     adam = Adam(lr=lr_schedule(0))
-    loss = 'categorical_crossentropy'
+    loss = squared_hinge#'categorical_crossentropy'
 
 
 print('compiling the network\n')
