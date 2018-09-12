@@ -11,6 +11,7 @@ abits = 4
 finetune = False
 
 architecture = 'RESNET'
+# architecture = 'VGG'
 dataset='CIFAR-10'
 # dataset='FASHION'
 
@@ -21,6 +22,7 @@ else:
     dim=28
     channels=1
 classes=10
+data_augmentation=False
 
 #regularization
 kernel_regularizer=0.
@@ -42,7 +44,7 @@ kernel_lr_multiplier = 10
 
 # debug and logging
 progress_logging = 1 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
-epochs = 15
+epochs = 1
 batch_size = 128
 lr = 0.05
 decay = 0.000025

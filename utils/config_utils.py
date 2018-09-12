@@ -25,7 +25,7 @@ parameter_specs = {
     'kernel_regularizer'       :[True, None, float],
     'kernel_initializer'       :[True, None, str],
     'activity_regularizer'     :[True, None, float],
-    'bits'                    : [False, None, int],
+    'bits'                     :[False, None, int],
     'wbits'                    :[False, None, int],
     'abits'                    :[False, None, int],
     'nla'                      :[False, None, int],
@@ -34,10 +34,11 @@ parameter_specs = {
     'nfb'                      :[False, None, int],
     'nlc'                      :[False, None, int],
     'nfc'                      :[False, None, int],
-    'dataset'                      :[False, None, int],
+    'dataset'                  :[False, None, int],
     'dim'                      :[False, None, int],
-    'channels'                      :[False, None, int],
-    'classes'                      :[False, None, int],
+    'channels'                 :[False, None, int],
+    'classes'                  :[False, None, int],
+    'data_augmentation'        :[True, None, bool],
     }
 
 def parse_param(param, value):

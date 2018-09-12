@@ -17,33 +17,15 @@ from keras.datasets import cifar10
 import numpy as np
 import os
 
-def ResNet18(Conv2D,
-             Activation,
-             Dense,
-             input_shape,
-             classes):
-    # Training parameters
-    batch_size = 128  # orig paper trained all networks with batch_size=128
-    epochs = 200
-    data_augmentation = False
+def ResNet18(Conv2D, Activation, Dense, cf):
 
-    # Subtracting pixel mean improves accuracy
-    subtract_pixel_mean = True
-
+    input_shape = (cf.dim,cf.dim,cf.channels)
+    classes = cf.classes
     n = 3
-
-    # Model version
-    # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
-    version = 2
-
-    # Computed depth from supplied model parameter n
-    if version == 1:
-        depth = n * 6 + 2
-    elif version == 2:
-        depth = n * 9 + 2
+    depth = n * 9 + 2
 
     # Model name, depth and version
-    model_type = 'ResNet%dv%d' % (depth, version)
+    model_type = 'ResNet%dv%d' % (depth, 2)
 
 
     def resnet_layer(inputs,
@@ -68,12 +50,12 @@ def ResNet18(Conv2D,
         # Returns
             x (tensor): tensor as input to the next layer
         """
-        conv = Conv2D(num_filters,
+        conv = Conv2D(filters=num_filters,
                       kernel_size=kernel_size,
                       strides=strides,
                       padding='same',
-                      kernel_initializer='he_normal',
-                      kernel_regularizer=l2(1e-4)
+                      kernel_initializer=cf.kernel_initializer,
+                      kernel_regularizer=l2(cf.kernel_regularizer)
                       )
 
         x = inputs
@@ -157,7 +139,8 @@ def ResNet18(Conv2D,
         x = AveragePooling2D(pool_size=8)(x)
         y = Flatten()(x)
         outputs = Dense(classes,
-                        kernel_initializer='he_normal'
+                        kernel_initializer='he_normal',
+                        activation='softmax'
                         )(y)
 
         # Instantiate model.

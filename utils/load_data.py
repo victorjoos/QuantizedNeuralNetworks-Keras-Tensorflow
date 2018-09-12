@@ -41,7 +41,7 @@ class Dataset:
         self.y = dset[1]
 
 
-def load_dataset(dataset):
+def load_dataset(dataset, cf):
     if (dataset == "CIFAR-10"):
 
         print('Loading CIFAR-10 dataset...')
@@ -67,9 +67,10 @@ def load_dataset(dataset):
         test_set.y = keras.utils.to_categorical(test_set.y, 10)
 
         # for hinge loss
-        train_set.y = 2 * train_set.y - 1.
-        valid_set.y = 2 * valid_set.y - 1.
-        test_set.y = 2 * test_set.y - 1.
+        if cf.architecture=="VGG":
+            train_set.y = 2 * train_set.y - 1.
+            valid_set.y = 2 * valid_set.y - 1.
+            test_set.y = 2 * test_set.y - 1.
 
 
     elif (dataset == "MNIST" or dataset == "FASHION"):
