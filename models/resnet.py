@@ -5,7 +5,7 @@ Taken from https://github.com/keras-team/keras/blob/master/examples/cifar10_resn
 from __future__ import print_function
 import keras
 from keras.layers import BatchNormalization
-from keras.layers import AveragePooling2D, Input, Flatten
+from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras.callbacks import ReduceLROnPlateau
@@ -22,10 +22,10 @@ def ResNet18(Conv2D, Activation, Dense, cf):
     input_shape = (cf.dim,cf.dim,cf.channels)
     classes = cf.classes
     n = 3
-    depth = n * 9 + 2
+    depth = n * 6 + 2
 
     # Model name, depth and version
-    model_type = 'ResNet%dv%d' % (depth, 2)
+    model_type = 'ResNet%dv%d' % (depth, 1)
 
 
     def resnet_layer(inputs,
@@ -73,82 +73,77 @@ def ResNet18(Conv2D, Activation, Dense, cf):
             x = conv(x)
         return x
 
+    def resnet_v1(input_shape, depth):
+        """ResNet Version 1 Model builder [a]
 
-    def resnet_v2(input_shape, depth, num_classes=10):
+        Stacks of 2 x (3 x 3) Conv2D-BN-ReLU
+        Last ReLU is after the shortcut connection.
+        At the beginning of each stage, the feature map size is halved (downsampled)
+        by a convolutional layer with strides=2, while the number of filters is
+        doubled. Within each stage, the layers have the same number filters and the
+        same number of filters.
+        Features maps sizes:
+        stage 0: 32x32, 16
+        stage 1: 16x16, 32
+        stage 2:  8x8,  64
 
-        if (depth - 2) % 9 != 0:
-            raise ValueError('depth should be 9n+2 (eg 56 or 110 in [b])')
+        # Arguments
+            input_shape (tensor): shape of input image tensor
+            depth (int): number of core convolutional layers
+            num_classes (int): number of classes (CIFAR10 has 10)
+
+        # Returns
+            model (Model): Keras model instance
+        """
+        if (depth - 2) % 6 != 0:
+            raise ValueError('depth should be 6n+2 (eg 20, 32, 44 in [a])')
         # Start model definition.
-        num_filters_in = 16
-        num_res_blocks = int((depth - 2) / 9)
+        num_filters = 16
+        num_res_blocks = int((depth - 2) / 6)
 
         inputs = Input(shape=input_shape)
-        # v2 performs Conv2D with BN-ReLU on input before splitting into 2 paths
-        x = resnet_layer(inputs=inputs,
-                         num_filters=num_filters_in,
-                         conv_first=True)
-
+        inputs = Input(shape=input_shape)
+        if cf.dataset == "MNIST" or cf.dataset == "FASHION":
+            inputs_ = ZeroPadding2D(padding=(2,2))(inputs)
+        else:
+            inputs_ = inputs
+        x = resnet_layer(inputs=inputs_)
         # Instantiate the stack of residual units
-        for stage in range(3):
+        for stack in range(3):
             for res_block in range(num_res_blocks):
-                activation = 'relu'
-                batch_normalization = True
                 strides = 1
-                if stage == 0:
-                    num_filters_out = num_filters_in * 4
-                    if res_block == 0:  # first layer and first stage
-                        activation = None
-                        batch_normalization = False
-                else:
-                    num_filters_out = num_filters_in * 2
-                    if res_block == 0:  # first layer but not first stage
-                        strides = 2    # downsample
-
-                # bottleneck residual unit
+                if stack > 0 and res_block == 0:  # first layer but not first stack
+                    strides = 2  # downsample
                 y = resnet_layer(inputs=x,
-                                 num_filters=num_filters_in,
-                                 kernel_size=1,
-                                 strides=strides,
-                                 activation=activation,
-                                 batch_normalization=batch_normalization,
-                                 conv_first=False)
+                                 num_filters=num_filters,
+                                 strides=strides)
                 y = resnet_layer(inputs=y,
-                                 num_filters=num_filters_in,
-                                 conv_first=False)
-                y = resnet_layer(inputs=y,
-                                 num_filters=num_filters_out,
-                                 kernel_size=1,
-                                 conv_first=False)
-                if res_block == 0:
+                                 num_filters=num_filters,
+                                 activation=None)
+                if stack > 0 and res_block == 0:  # first layer but not first stack
                     # linear projection residual shortcut connection to match
                     # changed dims
                     x = resnet_layer(inputs=x,
-                                     num_filters=num_filters_out,
+                                     num_filters=num_filters,
                                      kernel_size=1,
                                      strides=strides,
                                      activation=None,
                                      batch_normalization=False)
                 x = keras.layers.add([x, y])
-
-            num_filters_in = num_filters_out
+                x = Activation()(x)
+            num_filters *= 2
 
         # Add classifier on top.
-        # v2 has BN-ReLU before Pooling
-        x = BatchNormalization()(x)
-        x = Activation()(x)
+        # v1 does not use BN after last shortcut connection-ReLU
         x = AveragePooling2D(pool_size=8)(x)
         y = Flatten()(x)
-
         outputs = Dense(classes,
-                        kernel_initializer='he_normal',
-                        # activation='softmax'
-                        )(y)
-        outputs = BatchNormalization(momentum=0.1,epsilon=0.0001)(outputs)
+                        activation='softmax',
+                        kernel_initializer='he_normal')(y)
 
         # Instantiate model.
         model = Model(inputs=inputs, outputs=outputs)
         return model
 
 
-
-    return resnet_v2(input_shape=input_shape, depth=depth)
+    return resnet_v1(input_shape=input_shape, depth=depth)

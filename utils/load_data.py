@@ -26,18 +26,19 @@ from keras.datasets import fashion_mnist
 from keras import backend as K
 import keras
 
-def split_train(train_set, size):
+def split_train(train_set, size, add_dim=False):
     train = []
     valid = []
     train.append(train_set[0][0:size])
     train.append(train_set[1][0:size])
     valid.append(train_set[0][size:])
     valid.append(train_set[1][size:])
-    return Dataset(train), Dataset(valid)
+    return Dataset(train, add_dim), Dataset(valid, add_dim)
 
 class Dataset:
-    def __init__(self, dset):
-        self.X = dset[0] / 255
+    def __init__(self, dset, add_dim=False):
+        normX = dset[0].astype('float32') / 255
+        self.X = np.reshape(normX, dset[0].shape+(1,)) if add_dim else normX
         self.y = dset[1]
 
 
@@ -47,7 +48,7 @@ def load_dataset(dataset, cf):
         print('Loading CIFAR-10 dataset...')
 
 
-        train_set_size = 45000
+        train_set_size = 50000
         train_init, test_init = cifar10.load_data()
         train_set, valid_set = split_train(train_init, train_set_size)
         test_set = Dataset(test_init)
@@ -60,8 +61,8 @@ def load_dataset(dataset, cf):
             train_init, test_init = mnist.load_data()
         elif dataset == "FASHION":
             train_init, test_init = fashion_mnist.load_data()
-        train_set, valid_set = split_train(train_init, train_set_size)
-        test_set = Dataset(test_init)
+        train_set, valid_set = split_train(train_init, train_set_size, True)
+        test_set = Dataset(test_init, True)
 
     else:
         raise ValueError(f"{dataset} is not supported")
@@ -81,13 +82,13 @@ def load_dataset(dataset, cf):
     test_set.y = keras.utils.to_categorical(test_set.y, 10)
 
     # for hinge loss
-    if cf.architecture=="VGG" or True:
+    if cf.architecture=="VGG":
         train_set.y = 2 * train_set.y - 1.
         valid_set.y = 2 * valid_set.y - 1.
         test_set.y = 2 * test_set.y - 1.
 
-
-
+    print(train_set.X.shape)
+    valid_set = test_set
     return train_set, valid_set, test_set
 
 if __name__ == "__main__":

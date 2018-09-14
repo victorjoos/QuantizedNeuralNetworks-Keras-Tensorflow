@@ -85,7 +85,7 @@ elif cf.architecture=="RESNET":
                                    min_lr=0.5e-6)
     callbacks += [lr_scheduler, lr_reducer]
     adam = Adam(lr=lr_schedule(0))
-    loss = squared_hinge#'categorical_crossentropy'
+    loss = 'categorical_crossentropy'
 
 
 print('compiling the network\n')

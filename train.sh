@@ -3,7 +3,7 @@
 
 CONFIG=config
 TIME=$(date +"%Y-%m-%d_%H-%M-%S")
-# mkdir "logs/$TIME"
+mkdir "logs/$TIME"
 # standard float
 python3 train.py -c "$CONFIG" -o network_type='float' | tee "logs/$TIME/ff.out"
 
