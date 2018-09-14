@@ -65,7 +65,7 @@ def load_dataset(dataset, cf):
         test_set = Dataset(test_init, True)
 
     else:
-        raise ValueError(f"{dataset} is not supported")
+        raise ValueError(str(dataset)+ " is not supported")
 
 
     # If subtract pixel mean is enabled

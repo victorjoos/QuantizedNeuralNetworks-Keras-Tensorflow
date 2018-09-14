@@ -65,7 +65,7 @@ def build_model(cf):
     elif cf.architecture=="RESNET":
         model = ResNet18(Conv, Act, Fc, cf)
     else:
-        raise ValueError(f"Error: type {cf.architecture} is not supported")
+        raise ValueError("Error: type " + str(cf.architecture) + " is not supported")
 
     model.summary()
 
