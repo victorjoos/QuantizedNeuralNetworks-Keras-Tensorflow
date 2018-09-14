@@ -48,7 +48,7 @@ def load_dataset(dataset, cf):
         print('Loading CIFAR-10 dataset...')
 
 
-        train_set_size = 50000
+        train_set_size = 45000
         train_init, test_init = cifar10.load_data()
         train_set, valid_set = split_train(train_init, train_set_size)
         test_set = Dataset(test_init)
@@ -88,7 +88,6 @@ def load_dataset(dataset, cf):
         test_set.y = 2 * test_set.y - 1.
 
     print(train_set.X.shape)
-    valid_set = test_set
     return train_set, valid_set, test_set
 
 if __name__ == "__main__":
