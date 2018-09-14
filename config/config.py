@@ -10,33 +10,43 @@ abits = 4
 # finetune an be false or true
 finetune = False
 
+architecture = 'RESNET'
+# architecture = 'VGG'
 dataset='CIFAR-10'
-dim=32
-channels=3
+# dataset='FASHION'
+
+if dataset == 'CIFAR-10':
+    dim=32
+    channels=3
+else:
+    dim=28
+    channels=1
 classes=10
+data_augmentation=False
 
 #regularization
-kernel_regularizer=0.
+kernel_regularizer=1e-4
+kernel_initializer='he_normal'
 activity_regularizer=0.
 
 # width and depth
-nla=2
-nfa=128
-nlb=2
-nfb=256
-nlc=2
-nfc=512
+nla=1
+nfa=64
+nlb=1
+nfb=128
+nlc=1
+nfc=256
 
 #learning rate decay, factor => LR *= factor
-decay_at_epoch = [0, 25, 80 ]
-factor_at_epoch = [1, .1, 1]
+decay_at_epoch = [0, 8, 12 ]
+factor_at_epoch = [1, .1, .1]
 kernel_lr_multiplier = 10
 
 # debug and logging
 progress_logging = 2 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
-epochs = 100
-batch_size = 64
-lr = 0.1
+epochs = 200
+batch_size = 128
+lr = 0.001
 decay = 0.000025
 
 

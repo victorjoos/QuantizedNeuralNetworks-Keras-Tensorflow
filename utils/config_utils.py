@@ -11,6 +11,7 @@ parameter_specs = {
     'cpu'                      :[True, None, bool],
     'epochs'                   :[True, None, str],
     'network_type'             :[True, None, str],
+    'architecture'             :[True, None, str],
     'finetune'                 :[True, None, bool],
     'out_wght_path'            :[True, None, str],
     'decay'                    :[True, None, float],
@@ -22,8 +23,9 @@ parameter_specs = {
     'kernel_lr_multiplier'     :[True, None, float],
     'tensorboard_name'         :[True, None, str],
     'kernel_regularizer'       :[True, None, float],
+    'kernel_initializer'       :[True, None, str],
     'activity_regularizer'     :[True, None, float],
-    'bits'                    : [False, None, int],
+    'bits'                     :[False, None, int],
     'wbits'                    :[False, None, int],
     'abits'                    :[False, None, int],
     'nla'                      :[False, None, int],
@@ -32,10 +34,11 @@ parameter_specs = {
     'nfb'                      :[False, None, int],
     'nlc'                      :[False, None, int],
     'nfc'                      :[False, None, int],
-    'dataset'                      :[False, None, int],
+    'dataset'                  :[False, None, int],
     'dim'                      :[False, None, int],
-    'channels'                      :[False, None, int],
-    'classes'                      :[False, None, int],
+    'channels'                 :[False, None, int],
+    'classes'                  :[False, None, int],
+    'data_augmentation'        :[True, None, bool],
     }
 
 def parse_param(param, value):
@@ -51,7 +54,7 @@ def parse_param(param, value):
 class Config:
     def __init__(self, cfg, cmd_args = {}):
         try:
-            
+
             for k in parameter_specs:
                 self.proces_param(k, cfg, cmd_args)
 
@@ -61,7 +64,7 @@ class Config:
 
 
         self.postprocess()
-    
+
     def proces_param(self, param, cfg, cmd_args):
         if param in cmd_args :
             setattr(self, param.lower(), parse_param(param, cmd_args[param]))
@@ -72,7 +75,7 @@ class Config:
                 setattr(self, param.lower(),import_from('config.{}'.format(cfg), param))
             except AttributeError:
                 if parameter_specs[param][0]: #if required
-                    raise 
+                    raise
                 else:
                     setattr(self, param.lower(), parameter_specs[param][1])
 
