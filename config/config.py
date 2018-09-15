@@ -37,6 +37,9 @@ nfb=128
 nlc=1
 nfc=256
 
+nres=3
+cuda="0"
+
 #learning rate decay, factor => LR *= factor
 decay_at_epoch = [0, 8, 12 ]
 factor_at_epoch = [1, .1, .1]

@@ -21,7 +21,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
 
     input_shape = (cf.dim,cf.dim,cf.channels)
     classes = cf.classes
-    n = 3
+    n = cf.nres
     depth = n * 6 + 2
 
     # Model name, depth and version

@@ -8,6 +8,7 @@ import numpy as np
 from models.model_factory import build_model
 from utils.config_utils import Config
 from utils.load_data import load_dataset
+import os
 
 # parse arguments
 parser = argparse.ArgumentParser(description='Model training')
@@ -33,7 +34,8 @@ cf = Config(cfg, cmd_args = arguments.override)
 # if necessary, only use the CPU for debugging
 if cf.cpu:
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
-
+else:
+    os.environ["CUDA_VISIBLE_DEVICES"]=cf.cuda
 
 # ## Construct the network
 print('Construct the Network\n')

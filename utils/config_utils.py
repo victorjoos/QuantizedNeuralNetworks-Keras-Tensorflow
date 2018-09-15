@@ -39,6 +39,8 @@ parameter_specs = {
     'channels'                 :[False, None, int],
     'classes'                  :[False, None, int],
     'data_augmentation'        :[True, None, bool],
+    'nres'                     :[True, None, int],
+    'cuda'                     :[True, None, str],
     }
 
 def parse_param(param, value):
