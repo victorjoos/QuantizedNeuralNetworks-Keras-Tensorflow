@@ -93,7 +93,17 @@ class Config:
         del self.bits #to make sure it is not further used
         if hasattr(self, 'class'):
             self.clss=getattr(self,'class')
-        self.out_wght_path = './weights/{}_{}_{}b_{}b_{}_{}_{}_{}_{}_{}.hdf5'.format(self.dataset,self.network_type, self.abits, self.wbits, self.nla, self.nfa, self.nlb,
-                                                                             self.nfb, self.nlc, self.nfc)
-        self.tensorboard_name = '{}_{}_{}b_{}b_{}_{}_{}_{}_{}_{}.hdf5'.format(self.dataset,self.network_type, self.abits, self.wbits, self.nla, self.nfa, self.nlb,
-                                                                             self.nfb, self.nlc, self.nfc)
+        if self.architecture=="VGG":
+            self.out_wght_path = './weights/{}_{}_{}b_{}b_{}_{}_{}_{}_{}_{}.hdf5'.format(
+                self.dataset,self.network_type, self.abits, self.wbits, self.nla,
+                self.nfa, self.nlb,self.nfb, self.nlc, self.nfc)
+            self.tensorboard_name = '{}_{}_{}b_{}b_{}_{}_{}_{}_{}_{}.tsb'.format(
+                self.dataset,self.network_type, self.abits, self.wbits, self.nla,
+                self.nfa, self.nlb,self.nfb, self.nlc, self.nfc)
+        else:
+            self.out_wght_path = './weights/{}_{}_{}_{}b_{}b_{}.hdf5'.format(
+                self.architecture, self.dataset,self.network_type, self.abits,
+                self.wbits, self.nres)
+            self.tensorboard_name = '{}_{}_{}_{}b_{}b_{}.tsb'.format(
+                self.architecture, self.dataset,self.network_type, self.abits,
+                self.wbits, self.nres)
