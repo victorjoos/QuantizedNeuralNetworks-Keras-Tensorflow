@@ -25,7 +25,7 @@ classes=10
 data_augmentation=False
 
 #regularization
-kernel_regularizer=0.
+kernel_regularizer=1e-4
 kernel_initializer='he_normal'
 activity_regularizer=0.
 
@@ -43,10 +43,10 @@ factor_at_epoch = [1, .1, .1]
 kernel_lr_multiplier = 10
 
 # debug and logging
-progress_logging = 1 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
-epochs = 1
+progress_logging = 2 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
+epochs = 200
 batch_size = 128
-lr = 0.05
+lr = 0.001
 decay = 0.000025
 
 
