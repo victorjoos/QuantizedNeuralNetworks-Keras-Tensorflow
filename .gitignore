@@ -4,6 +4,7 @@
 .idea
 .*.swp
 *.hdf5
+!results/*/*.hdf5
 venv/
 logs/
 weights/
