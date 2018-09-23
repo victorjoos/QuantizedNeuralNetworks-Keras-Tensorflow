@@ -202,5 +202,6 @@ def parse_dir(directory):
 
 
 if __name__ == '__main__':
+    os.environ["CUDA_VISIBLE_DEVICES"] = 1
     outfile = open("results.ou", 'w')
     parse_dir("results")
