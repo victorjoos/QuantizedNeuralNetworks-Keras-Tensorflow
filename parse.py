@@ -147,6 +147,7 @@ def rreplace(s, old, new, occurrence=1):
 def compute_estimate(wbit, abit, log, weights):
     print(weights, wbit, abit)
     accuracy = build_with(weights)
+    match = re.match(r'.*RESNET(\d*).*weights_(..).hdf5', weights)
     Q = wbit
     As = get_acts(log)
     Ns = get_weights(log)
@@ -168,6 +169,7 @@ def compute_estimate(wbit, abit, log, weights):
     Edram = get_Edram(Ed, s_in, c_in, Q, fr, wr)
     Ehw = get_Ehw(Emac, Nc, Ns, As, p)
     print("Energy [uJ] : ", Edram, Ehw)
+    outfile.write("{}, {}, {}, {}\n".format(match.group(2), match.group(1), accuracy, Edram + Ehw))
     return accuracy, Edram + Ehw
 
 
@@ -200,4 +202,5 @@ def parse_dir(directory):
 
 
 if __name__ == '__main__':
+    outfile = open("results.ou", 'w')
     parse_dir("results")
