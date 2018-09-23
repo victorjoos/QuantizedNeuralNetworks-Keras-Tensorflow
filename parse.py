@@ -145,7 +145,7 @@ def rreplace(s, old, new, occurrence=1):
 
 
 def compute_estimate(wbit, abit, log, weights):
-    print(wbit, abit)
+    print(weights, wbit, abit)
     accuracy = build_with(weights)
     Q = wbit
     As = get_acts(log)
@@ -176,7 +176,6 @@ def parse_models(dir, accs, energy):
     # accs = defaultdict(list)
     # energy = defaultdict(list)
     for log in glob(logs):
-        print(log)
         weights = log.replace(".out", ".hdf5")
         weights = rreplace(weights, "/", "/weights_")
         if os.path.exists(weights):
