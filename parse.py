@@ -2,6 +2,9 @@ import os
 import re
 from math import sqrt, pow
 from glob import glob
+import matplotlib.pyplot as plt
+import random
+from collections import defaultdict, Counter
 import keras
 """from layers.quantized_layers import QuantizedConv2D,QuantizedDense
 from layers.quantized_ops import quantized_relu as quantize_op
@@ -142,6 +145,7 @@ def rreplace(s, old, new, occurrence=1):
 
 def compute_estimate(wbit, abit, log, weights):
     print(wbit, abit)
+    accuracy = random.random()
     Q = wbit
     As = get_acts(log)
     Ns = get_weights(log)
@@ -164,26 +168,39 @@ def compute_estimate(wbit, abit, log, weights):
     Edram = get_Edram(Ed, s_in, c_in, Q, fr, wr)
     Ehw = get_Ehw(Emac, Nc, Ns, As, p)
     print("Energy [uJ] : ", Edram, Ehw)
-    return Edram + Ehw
+    return accuracy, Edram + Ehw
 
 
-def parse_models(dir):
+def parse_models(dir, accs, energy):
     logs = os.path.join(dir, "*.out")
+    # accs = defaultdict(list)
+    # energy = defaultdict(list)
     for log in glob(logs):
         print(log)
         weights = log.replace(".out", ".hdf5")
         weights = rreplace(weights, "/", "/weights_")
         if os.path.exists(weights):
             print("ok", weights)
-            compute_estimate(*models[log[-6:-4]], log, weights)
+            type = log[-6:-4]
+            acc, ener = compute_estimate(*models[type], log, weights)
+            accs[type].append(acc)
+            energy[type].append(ener)
         else:
             print("NOK")
 
 
 def parse_dir(directory):
+    accs = defaultdict(list)
+    energy = defaultdict(list)
     for o in glob(os.path.join(directory, "RESNET*")):
         print(o)
-        parse_models(o)
+        parse_models(o, accs, energy)
+
+    for key, value in accs.items():
+        plt.semilogy(value, energy[key])
+
+    plt.show()
+
 
 
 if __name__ == '__main__':
