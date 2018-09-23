@@ -5,6 +5,7 @@ from glob import glob
 import matplotlib.pyplot as plt
 import random
 from collections import defaultdict, Counter
+from test_resnet import build_with
 import keras
 """from layers.quantized_layers import QuantizedConv2D,QuantizedDense
 from layers.quantized_ops import quantized_relu as quantize_op
@@ -145,13 +146,12 @@ def rreplace(s, old, new, occurrence=1):
 
 def compute_estimate(wbit, abit, log, weights):
     print(wbit, abit)
-    accuracy = random.random()
+    accuracy = build_with(weights)
     Q = wbit
     As = get_acts(log)
     Ns = get_weights(log)
     Nc = Ns
     s_in, c_in = get_input_size(log)
-    print("input size: ", s_in, c_in)
 
     mem = get_memory()
     fmap = get_fmap_size()
@@ -180,20 +180,17 @@ def parse_models(dir, accs, energy):
         weights = log.replace(".out", ".hdf5")
         weights = rreplace(weights, "/", "/weights_")
         if os.path.exists(weights):
-            print("ok", weights)
             type = log[-6:-4]
             acc, ener = compute_estimate(*models[type], log, weights)
             accs[type].append(acc)
             energy[type].append(ener)
         else:
-            print("NOK")
-
+            print("log file has no weights !")
 
 def parse_dir(directory):
     accs = defaultdict(list)
     energy = defaultdict(list)
     for o in glob(os.path.join(directory, "RESNET*")):
-        print(o)
         parse_models(o, accs, energy)
 
     for key, value in accs.items():
