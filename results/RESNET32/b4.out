@@ -1,0 +1,1268 @@
+Construct the Network
+
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_2 (InputLayer)            (None, 32, 32, 3)    0                                            
+__________________________________________________________________________________________________
+binary_conv2d_1 (BinaryConv2D)  (None, 32, 32, 16)   448         input_2[0][0]                    
+__________________________________________________________________________________________________
+batch_normalization_1 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_1[0][0]            
+__________________________________________________________________________________________________
+activation_1 (Activation)       (None, 32, 32, 16)   0           batch_normalization_1[0][0]      
+__________________________________________________________________________________________________
+binary_conv2d_2 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_1[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_2 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_2[0][0]            
+__________________________________________________________________________________________________
+activation_2 (Activation)       (None, 32, 32, 16)   0           batch_normalization_2[0][0]      
+__________________________________________________________________________________________________
+binary_conv2d_3 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_2[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_3 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_3[0][0]            
+__________________________________________________________________________________________________
+add_1 (Add)                     (None, 32, 32, 16)   0           activation_1[0][0]               
+                                                                 batch_normalization_3[0][0]      
+__________________________________________________________________________________________________
+activation_3 (Activation)       (None, 32, 32, 16)   0           add_1[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_4 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_3[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_4 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_4[0][0]            
+__________________________________________________________________________________________________
+activation_4 (Activation)       (None, 32, 32, 16)   0           batch_normalization_4[0][0]      
+__________________________________________________________________________________________________
+binary_conv2d_5 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_4[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_5 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_5[0][0]            
+__________________________________________________________________________________________________
+add_2 (Add)                     (None, 32, 32, 16)   0           activation_3[0][0]               
+                                                                 batch_normalization_5[0][0]      
+__________________________________________________________________________________________________
+activation_5 (Activation)       (None, 32, 32, 16)   0           add_2[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_6 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_5[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_6 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_6[0][0]            
+__________________________________________________________________________________________________
+activation_6 (Activation)       (None, 32, 32, 16)   0           batch_normalization_6[0][0]      
+__________________________________________________________________________________________________
+binary_conv2d_7 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_6[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_7 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_7[0][0]            
+__________________________________________________________________________________________________
+add_3 (Add)                     (None, 32, 32, 16)   0           activation_5[0][0]               
+                                                                 batch_normalization_7[0][0]      
+__________________________________________________________________________________________________
+activation_7 (Activation)       (None, 32, 32, 16)   0           add_3[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_8 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_7[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_8 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_8[0][0]            
+__________________________________________________________________________________________________
+activation_8 (Activation)       (None, 32, 32, 16)   0           batch_normalization_8[0][0]      
+__________________________________________________________________________________________________
+binary_conv2d_9 (BinaryConv2D)  (None, 32, 32, 16)   2320        activation_8[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_9 (BatchNor (None, 32, 32, 16)   64          binary_conv2d_9[0][0]            
+__________________________________________________________________________________________________
+add_4 (Add)                     (None, 32, 32, 16)   0           activation_7[0][0]               
+                                                                 batch_normalization_9[0][0]      
+__________________________________________________________________________________________________
+activation_9 (Activation)       (None, 32, 32, 16)   0           add_4[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_10 (BinaryConv2D) (None, 32, 32, 16)   2320        activation_9[0][0]               
+__________________________________________________________________________________________________
+batch_normalization_10 (BatchNo (None, 32, 32, 16)   64          binary_conv2d_10[0][0]           
+__________________________________________________________________________________________________
+activation_10 (Activation)      (None, 32, 32, 16)   0           batch_normalization_10[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_11 (BinaryConv2D) (None, 32, 32, 16)   2320        activation_10[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_11 (BatchNo (None, 32, 32, 16)   64          binary_conv2d_11[0][0]           
+__________________________________________________________________________________________________
+add_5 (Add)                     (None, 32, 32, 16)   0           activation_9[0][0]               
+                                                                 batch_normalization_11[0][0]     
+__________________________________________________________________________________________________
+activation_11 (Activation)      (None, 32, 32, 16)   0           add_5[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_12 (BinaryConv2D) (None, 16, 16, 32)   4640        activation_11[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_12 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_12[0][0]           
+__________________________________________________________________________________________________
+activation_12 (Activation)      (None, 16, 16, 32)   0           batch_normalization_12[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_13 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_12[0][0]              
+__________________________________________________________________________________________________
+binary_conv2d_14 (BinaryConv2D) (None, 16, 16, 32)   544         activation_11[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_13 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_13[0][0]           
+__________________________________________________________________________________________________
+add_6 (Add)                     (None, 16, 16, 32)   0           binary_conv2d_14[0][0]           
+                                                                 batch_normalization_13[0][0]     
+__________________________________________________________________________________________________
+activation_13 (Activation)      (None, 16, 16, 32)   0           add_6[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_15 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_13[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_14 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_15[0][0]           
+__________________________________________________________________________________________________
+activation_14 (Activation)      (None, 16, 16, 32)   0           batch_normalization_14[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_16 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_14[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_15 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_16[0][0]           
+__________________________________________________________________________________________________
+add_7 (Add)                     (None, 16, 16, 32)   0           activation_13[0][0]              
+                                                                 batch_normalization_15[0][0]     
+__________________________________________________________________________________________________
+activation_15 (Activation)      (None, 16, 16, 32)   0           add_7[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_17 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_15[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_16 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_17[0][0]           
+__________________________________________________________________________________________________
+activation_16 (Activation)      (None, 16, 16, 32)   0           batch_normalization_16[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_18 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_16[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_17 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_18[0][0]           
+__________________________________________________________________________________________________
+add_8 (Add)                     (None, 16, 16, 32)   0           activation_15[0][0]              
+                                                                 batch_normalization_17[0][0]     
+__________________________________________________________________________________________________
+activation_17 (Activation)      (None, 16, 16, 32)   0           add_8[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_19 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_17[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_18 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_19[0][0]           
+__________________________________________________________________________________________________
+activation_18 (Activation)      (None, 16, 16, 32)   0           batch_normalization_18[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_20 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_18[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_19 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_20[0][0]           
+__________________________________________________________________________________________________
+add_9 (Add)                     (None, 16, 16, 32)   0           activation_17[0][0]              
+                                                                 batch_normalization_19[0][0]     
+__________________________________________________________________________________________________
+activation_19 (Activation)      (None, 16, 16, 32)   0           add_9[0][0]                      
+__________________________________________________________________________________________________
+binary_conv2d_21 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_19[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_20 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_21[0][0]           
+__________________________________________________________________________________________________
+activation_20 (Activation)      (None, 16, 16, 32)   0           batch_normalization_20[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_22 (BinaryConv2D) (None, 16, 16, 32)   9248        activation_20[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_21 (BatchNo (None, 16, 16, 32)   128         binary_conv2d_22[0][0]           
+__________________________________________________________________________________________________
+add_10 (Add)                    (None, 16, 16, 32)   0           activation_19[0][0]              
+                                                                 batch_normalization_21[0][0]     
+__________________________________________________________________________________________________
+activation_21 (Activation)      (None, 16, 16, 32)   0           add_10[0][0]                     
+__________________________________________________________________________________________________
+binary_conv2d_23 (BinaryConv2D) (None, 8, 8, 64)     18496       activation_21[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_22 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_23[0][0]           
+__________________________________________________________________________________________________
+activation_22 (Activation)      (None, 8, 8, 64)     0           batch_normalization_22[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_24 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_22[0][0]              
+__________________________________________________________________________________________________
+binary_conv2d_25 (BinaryConv2D) (None, 8, 8, 64)     2112        activation_21[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_23 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_24[0][0]           
+__________________________________________________________________________________________________
+add_11 (Add)                    (None, 8, 8, 64)     0           binary_conv2d_25[0][0]           
+                                                                 batch_normalization_23[0][0]     
+__________________________________________________________________________________________________
+activation_23 (Activation)      (None, 8, 8, 64)     0           add_11[0][0]                     
+__________________________________________________________________________________________________
+binary_conv2d_26 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_23[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_24 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_26[0][0]           
+__________________________________________________________________________________________________
+activation_24 (Activation)      (None, 8, 8, 64)     0           batch_normalization_24[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_27 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_24[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_25 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_27[0][0]           
+__________________________________________________________________________________________________
+add_12 (Add)                    (None, 8, 8, 64)     0           activation_23[0][0]              
+                                                                 batch_normalization_25[0][0]     
+__________________________________________________________________________________________________
+activation_25 (Activation)      (None, 8, 8, 64)     0           add_12[0][0]                     
+__________________________________________________________________________________________________
+binary_conv2d_28 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_25[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_26 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_28[0][0]           
+__________________________________________________________________________________________________
+activation_26 (Activation)      (None, 8, 8, 64)     0           batch_normalization_26[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_29 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_26[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_27 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_29[0][0]           
+__________________________________________________________________________________________________
+add_13 (Add)                    (None, 8, 8, 64)     0           activation_25[0][0]              
+                                                                 batch_normalization_27[0][0]     
+__________________________________________________________________________________________________
+activation_27 (Activation)      (None, 8, 8, 64)     0           add_13[0][0]                     
+__________________________________________________________________________________________________
+binary_conv2d_30 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_27[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_28 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_30[0][0]           
+__________________________________________________________________________________________________
+activation_28 (Activation)      (None, 8, 8, 64)     0           batch_normalization_28[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_31 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_28[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_29 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_31[0][0]           
+__________________________________________________________________________________________________
+add_14 (Add)                    (None, 8, 8, 64)     0           activation_27[0][0]              
+                                                                 batch_normalization_29[0][0]     
+__________________________________________________________________________________________________
+activation_29 (Activation)      (None, 8, 8, 64)     0           add_14[0][0]                     
+__________________________________________________________________________________________________
+binary_conv2d_32 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_29[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_30 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_32[0][0]           
+__________________________________________________________________________________________________
+activation_30 (Activation)      (None, 8, 8, 64)     0           batch_normalization_30[0][0]     
+__________________________________________________________________________________________________
+binary_conv2d_33 (BinaryConv2D) (None, 8, 8, 64)     36928       activation_30[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_31 (BatchNo (None, 8, 8, 64)     256         binary_conv2d_33[0][0]           
+__________________________________________________________________________________________________
+add_15 (Add)                    (None, 8, 8, 64)     0           activation_29[0][0]              
+                                                                 batch_normalization_31[0][0]     
+__________________________________________________________________________________________________
+activation_31 (Activation)      (None, 8, 8, 64)     0           add_15[0][0]                     
+__________________________________________________________________________________________________
+average_pooling2d_1 (AveragePoo (None, 1, 1, 64)     0           activation_31[0][0]              
+__________________________________________________________________________________________________
+flatten_1 (Flatten)             (None, 64)           0           average_pooling2d_1[0][0]        
+__________________________________________________________________________________________________
+binary_dense_2 (BinaryDense)    (None, 10)           650         flatten_1[0][0]                  
+==================================================================================================
+Total params: 470,218
+Trainable params: 467,946
+Non-trainable params: 2,272
+__________________________________________________________________________________________________
+loading data
+
+Loading CIFAR-10 dataset...
+(45000, 32, 32, 3)
+setting up the network and creating callbacks
+
+Learning rate:  0.001
+compiling the network
+
+No weights preloaded, training from scratch
+
+(re)training the network
+
+Train on 45000 samples, validate on 5000 samples
+Learning rate:  0.001
+Epoch 1/200
+
+Epoch 00001: val_acc improved from -inf to 0.10340, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 47s - loss: 18.0374 - acc: 0.0976 - val_loss: 17.8555 - val_acc: 0.1034
+Learning rate:  0.001
+Epoch 2/200
+
+Epoch 00002: val_acc improved from 0.10340 to 0.10960, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 17.7373 - acc: 0.1004 - val_loss: 17.6990 - val_acc: 0.1096
+Learning rate:  0.001
+Epoch 3/200
+
+Epoch 00003: val_acc did not improve
+ - 38s - loss: 17.6526 - acc: 0.0998 - val_loss: 17.6497 - val_acc: 0.0958
+Learning rate:  0.001
+Epoch 4/200
+
+Epoch 00004: val_acc did not improve
+ - 38s - loss: 17.5767 - acc: 0.1010 - val_loss: 17.5468 - val_acc: 0.0968
+Learning rate:  0.001
+Epoch 5/200
+
+Epoch 00005: val_acc did not improve
+ - 38s - loss: 17.4882 - acc: 0.1009 - val_loss: 17.4511 - val_acc: 0.1060
+Learning rate:  0.001
+Epoch 6/200
+
+Epoch 00006: val_acc did not improve
+ - 38s - loss: 17.4074 - acc: 0.1039 - val_loss: 17.3729 - val_acc: 0.1068
+Learning rate:  0.001
+Epoch 7/200
+
+Epoch 00007: val_acc did not improve
+ - 38s - loss: 17.3275 - acc: 0.1025 - val_loss: 17.2893 - val_acc: 0.1004
+Learning rate:  0.001
+Epoch 8/200
+
+Epoch 00008: val_acc did not improve
+ - 37s - loss: 17.2407 - acc: 0.1033 - val_loss: 17.1913 - val_acc: 0.1088
+Learning rate:  0.001
+Epoch 9/200
+
+Epoch 00009: val_acc did not improve
+ - 37s - loss: 17.1541 - acc: 0.1032 - val_loss: 17.1398 - val_acc: 0.1036
+Learning rate:  0.001
+Epoch 10/200
+
+Epoch 00010: val_acc did not improve
+ - 38s - loss: 17.0569 - acc: 0.1082 - val_loss: 17.0255 - val_acc: 0.1008
+Learning rate:  0.001
+Epoch 11/200
+
+Epoch 00011: val_acc improved from 0.10960 to 0.12520, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 16.9555 - acc: 0.1144 - val_loss: 16.9174 - val_acc: 0.1252
+Learning rate:  0.001
+Epoch 12/200
+
+Epoch 00012: val_acc did not improve
+ - 37s - loss: 16.8467 - acc: 0.1223 - val_loss: 16.9782 - val_acc: 0.1128
+Learning rate:  0.001
+Epoch 13/200
+
+Epoch 00013: val_acc did not improve
+ - 37s - loss: 16.7431 - acc: 0.1233 - val_loss: 16.6971 - val_acc: 0.1190
+Learning rate:  0.001
+Epoch 14/200
+
+Epoch 00014: val_acc improved from 0.12520 to 0.14180, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 16.6234 - acc: 0.1338 - val_loss: 16.5731 - val_acc: 0.1418
+Learning rate:  0.001
+Epoch 15/200
+
+Epoch 00015: val_acc improved from 0.14180 to 0.14440, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 16.4848 - acc: 0.1547 - val_loss: 16.4515 - val_acc: 0.1444
+Learning rate:  0.001
+Epoch 16/200
+
+Epoch 00016: val_acc improved from 0.14440 to 0.17400, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 16.3418 - acc: 0.1710 - val_loss: 16.2836 - val_acc: 0.1740
+Learning rate:  0.001
+Epoch 17/200
+
+Epoch 00017: val_acc did not improve
+ - 38s - loss: 16.2118 - acc: 0.1871 - val_loss: 16.2565 - val_acc: 0.1490
+Learning rate:  0.001
+Epoch 18/200
+
+Epoch 00018: val_acc improved from 0.17400 to 0.18460, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 16.1041 - acc: 0.1875 - val_loss: 16.0451 - val_acc: 0.1846
+Learning rate:  0.001
+Epoch 19/200
+
+Epoch 00019: val_acc did not improve
+ - 37s - loss: 15.9716 - acc: 0.1948 - val_loss: 15.9327 - val_acc: 0.1844
+Learning rate:  0.001
+Epoch 20/200
+
+Epoch 00020: val_acc improved from 0.18460 to 0.18840, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 15.8366 - acc: 0.2047 - val_loss: 15.8015 - val_acc: 0.1884
+Learning rate:  0.001
+Epoch 21/200
+
+Epoch 00021: val_acc improved from 0.18840 to 0.19400, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 15.7127 - acc: 0.2128 - val_loss: 15.6976 - val_acc: 0.1940
+Learning rate:  0.001
+Epoch 22/200
+
+Epoch 00022: val_acc did not improve
+ - 38s - loss: 15.6653 - acc: 0.1781 - val_loss: 15.5765 - val_acc: 0.1830
+Learning rate:  0.001
+Epoch 23/200
+
+Epoch 00023: val_acc did not improve
+ - 38s - loss: 15.5737 - acc: 0.1566 - val_loss: 15.5362 - val_acc: 0.1646
+Learning rate:  0.001
+Epoch 24/200
+
+Epoch 00024: val_acc did not improve
+ - 38s - loss: 15.4351 - acc: 0.1670 - val_loss: 15.3853 - val_acc: 0.1668
+Learning rate:  0.001
+Epoch 25/200
+
+Epoch 00025: val_acc did not improve
+ - 38s - loss: 15.3162 - acc: 0.1679 - val_loss: 15.2974 - val_acc: 0.1690
+Learning rate:  0.001
+Epoch 26/200
+
+Epoch 00026: val_acc did not improve
+ - 38s - loss: 15.1320 - acc: 0.1913 - val_loss: 15.0904 - val_acc: 0.1720
+Learning rate:  0.001
+Epoch 27/200
+
+Epoch 00027: val_acc did not improve
+ - 37s - loss: 14.9436 - acc: 0.2162 - val_loss: 14.9619 - val_acc: 0.1926
+Learning rate:  0.001
+Epoch 28/200
+
+Epoch 00028: val_acc did not improve
+ - 38s - loss: 14.8842 - acc: 0.1864 - val_loss: 14.8039 - val_acc: 0.1790
+Learning rate:  0.001
+Epoch 29/200
+
+Epoch 00029: val_acc improved from 0.19400 to 0.19740, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 14.7093 - acc: 0.2049 - val_loss: 14.6900 - val_acc: 0.1974
+Learning rate:  0.001
+Epoch 30/200
+
+Epoch 00030: val_acc improved from 0.19740 to 0.21840, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 14.5272 - acc: 0.2383 - val_loss: 14.5173 - val_acc: 0.2184
+Learning rate:  0.001
+Epoch 31/200
+
+Epoch 00031: val_acc improved from 0.21840 to 0.26740, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 14.3293 - acc: 0.2670 - val_loss: 14.2930 - val_acc: 0.2674
+Learning rate:  0.001
+Epoch 32/200
+
+Epoch 00032: val_acc improved from 0.26740 to 0.27720, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 14.1741 - acc: 0.2838 - val_loss: 14.1253 - val_acc: 0.2772
+Learning rate:  0.001
+Epoch 33/200
+
+Epoch 00033: val_acc improved from 0.27720 to 0.29120, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 14.0284 - acc: 0.2944 - val_loss: 13.9738 - val_acc: 0.2912
+Learning rate:  0.001
+Epoch 34/200
+
+Epoch 00034: val_acc did not improve
+ - 37s - loss: 13.9147 - acc: 0.2938 - val_loss: 13.8961 - val_acc: 0.2752
+Learning rate:  0.001
+Epoch 35/200
+
+Epoch 00035: val_acc did not improve
+ - 38s - loss: 13.8154 - acc: 0.2885 - val_loss: 13.8558 - val_acc: 0.2506
+Learning rate:  0.001
+Epoch 36/200
+
+Epoch 00036: val_acc did not improve
+ - 37s - loss: 13.7067 - acc: 0.2825 - val_loss: 13.6457 - val_acc: 0.2890
+Learning rate:  0.001
+Epoch 37/200
+
+Epoch 00037: val_acc did not improve
+ - 38s - loss: 13.5717 - acc: 0.2923 - val_loss: 13.6257 - val_acc: 0.2568
+Learning rate:  0.001
+Epoch 38/200
+
+Epoch 00038: val_acc did not improve
+ - 37s - loss: 13.4471 - acc: 0.2960 - val_loss: 13.5741 - val_acc: 0.2242
+Learning rate:  0.001
+Epoch 39/200
+
+Epoch 00039: val_acc did not improve
+ - 38s - loss: 13.3472 - acc: 0.2838 - val_loss: 13.3678 - val_acc: 0.2512
+Learning rate:  0.001
+Epoch 40/200
+
+Epoch 00040: val_acc did not improve
+ - 37s - loss: 13.2131 - acc: 0.2947 - val_loss: 13.1649 - val_acc: 0.2870
+Learning rate:  0.001
+Epoch 41/200
+
+Epoch 00041: val_acc improved from 0.29120 to 0.32520, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 13.0619 - acc: 0.3107 - val_loss: 12.9924 - val_acc: 0.3252
+Learning rate:  0.001
+Epoch 42/200
+
+Epoch 00042: val_acc did not improve
+ - 38s - loss: 12.9345 - acc: 0.3129 - val_loss: 13.0356 - val_acc: 0.2704
+Learning rate:  0.001
+Epoch 43/200
+
+Epoch 00043: val_acc did not improve
+ - 38s - loss: 12.8076 - acc: 0.3242 - val_loss: 12.7633 - val_acc: 0.3214
+Learning rate:  0.001
+Epoch 44/200
+
+Epoch 00044: val_acc did not improve
+ - 38s - loss: 12.6878 - acc: 0.3258 - val_loss: 12.7933 - val_acc: 0.2642
+Learning rate:  0.001
+Epoch 45/200
+
+Epoch 00045: val_acc did not improve
+ - 37s - loss: 12.5744 - acc: 0.3277 - val_loss: 12.5966 - val_acc: 0.3014
+Learning rate:  0.001
+Epoch 46/200
+
+Epoch 00046: val_acc did not improve
+ - 38s - loss: 12.4605 - acc: 0.3315 - val_loss: 12.4725 - val_acc: 0.3068
+Learning rate:  0.001
+Epoch 47/200
+
+Epoch 00047: val_acc did not improve
+ - 38s - loss: 12.3311 - acc: 0.3382 - val_loss: 12.3098 - val_acc: 0.3234
+Learning rate:  0.001
+Epoch 48/200
+
+Epoch 00048: val_acc improved from 0.32520 to 0.34120, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 12.1858 - acc: 0.3556 - val_loss: 12.1489 - val_acc: 0.3412
+Learning rate:  0.001
+Epoch 49/200
+
+Epoch 00049: val_acc did not improve
+ - 37s - loss: 12.0538 - acc: 0.3642 - val_loss: 12.0763 - val_acc: 0.3296
+Learning rate:  0.001
+Epoch 50/200
+
+Epoch 00050: val_acc improved from 0.34120 to 0.34840, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 11.9513 - acc: 0.3620 - val_loss: 11.9285 - val_acc: 0.3484
+Learning rate:  0.001
+Epoch 51/200
+
+Epoch 00051: val_acc improved from 0.34840 to 0.35820, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 11.8062 - acc: 0.3771 - val_loss: 11.7908 - val_acc: 0.3582
+Learning rate:  0.001
+Epoch 52/200
+
+Epoch 00052: val_acc did not improve
+ - 37s - loss: 11.7416 - acc: 0.3659 - val_loss: 11.7563 - val_acc: 0.3348
+Learning rate:  0.001
+Epoch 53/200
+
+Epoch 00053: val_acc improved from 0.35820 to 0.36680, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 11.6007 - acc: 0.3802 - val_loss: 11.5897 - val_acc: 0.3668
+Learning rate:  0.001
+Epoch 54/200
+
+Epoch 00054: val_acc did not improve
+ - 37s - loss: 11.4833 - acc: 0.3898 - val_loss: 11.5095 - val_acc: 0.3644
+Learning rate:  0.001
+Epoch 55/200
+
+Epoch 00055: val_acc did not improve
+ - 38s - loss: 11.3749 - acc: 0.3932 - val_loss: 11.4731 - val_acc: 0.3510
+Learning rate:  0.001
+Epoch 56/200
+
+Epoch 00056: val_acc did not improve
+ - 38s - loss: 11.2757 - acc: 0.3975 - val_loss: 11.4817 - val_acc: 0.3070
+Learning rate:  0.001
+Epoch 57/200
+
+Epoch 00057: val_acc did not improve
+ - 37s - loss: 11.1801 - acc: 0.3978 - val_loss: 11.2699 - val_acc: 0.3510
+Learning rate:  0.001
+Epoch 58/200
+
+Epoch 00058: val_acc did not improve
+ - 38s - loss: 11.0938 - acc: 0.3992 - val_loss: 11.1550 - val_acc: 0.3482
+Learning rate:  0.001
+Epoch 59/200
+
+Epoch 00059: val_acc did not improve
+ - 37s - loss: 10.9674 - acc: 0.4086 - val_loss: 11.0343 - val_acc: 0.3650
+Learning rate:  0.001
+Epoch 60/200
+
+Epoch 00060: val_acc improved from 0.36680 to 0.37620, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 10.8695 - acc: 0.4154 - val_loss: 10.9316 - val_acc: 0.3762
+Learning rate:  0.001
+Epoch 61/200
+
+Epoch 00061: val_acc improved from 0.37620 to 0.39480, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 10.7677 - acc: 0.4201 - val_loss: 10.8011 - val_acc: 0.3948
+Learning rate:  0.001
+Epoch 62/200
+
+Epoch 00062: val_acc did not improve
+ - 37s - loss: 10.6697 - acc: 0.4254 - val_loss: 10.8389 - val_acc: 0.3380
+Learning rate:  0.001
+Epoch 63/200
+
+Epoch 00063: val_acc did not improve
+ - 38s - loss: 10.5829 - acc: 0.4283 - val_loss: 10.6833 - val_acc: 0.3710
+Learning rate:  0.001
+Epoch 64/200
+
+Epoch 00064: val_acc improved from 0.39480 to 0.41300, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 10.4983 - acc: 0.4300 - val_loss: 10.5014 - val_acc: 0.4130
+Learning rate:  0.001
+Epoch 65/200
+
+Epoch 00065: val_acc did not improve
+ - 37s - loss: 10.3956 - acc: 0.4362 - val_loss: 10.5866 - val_acc: 0.3624
+Learning rate:  0.001
+Epoch 66/200
+
+Epoch 00066: val_acc did not improve
+ - 38s - loss: 10.3044 - acc: 0.4407 - val_loss: 10.4444 - val_acc: 0.3756
+Learning rate:  0.001
+Epoch 67/200
+
+Epoch 00067: val_acc did not improve
+ - 38s - loss: 10.2201 - acc: 0.4449 - val_loss: 10.5376 - val_acc: 0.3520
+Learning rate:  0.001
+Epoch 68/200
+
+Epoch 00068: val_acc improved from 0.41300 to 0.41660, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 10.1496 - acc: 0.4445 - val_loss: 10.2044 - val_acc: 0.4166
+Learning rate:  0.001
+Epoch 69/200
+
+Epoch 00069: val_acc did not improve
+ - 38s - loss: 10.0544 - acc: 0.4525 - val_loss: 10.0843 - val_acc: 0.4162
+Learning rate:  0.001
+Epoch 70/200
+
+Epoch 00070: val_acc did not improve
+ - 38s - loss: 9.9725 - acc: 0.4553 - val_loss: 10.0546 - val_acc: 0.4108
+Learning rate:  0.001
+Epoch 71/200
+
+Epoch 00071: val_acc did not improve
+ - 38s - loss: 9.8989 - acc: 0.4570 - val_loss: 10.0925 - val_acc: 0.3886
+Learning rate:  0.001
+Epoch 72/200
+
+Epoch 00072: val_acc did not improve
+ - 37s - loss: 9.8158 - acc: 0.4626 - val_loss: 9.9036 - val_acc: 0.4114
+Learning rate:  0.001
+Epoch 73/200
+
+Epoch 00073: val_acc improved from 0.41660 to 0.44580, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 9.7320 - acc: 0.4685 - val_loss: 9.7867 - val_acc: 0.4458
+Learning rate:  0.001
+Epoch 74/200
+
+Epoch 00074: val_acc did not improve
+ - 38s - loss: 9.6712 - acc: 0.4656 - val_loss: 9.7809 - val_acc: 0.4126
+Learning rate:  0.001
+Epoch 75/200
+
+Epoch 00075: val_acc did not improve
+ - 38s - loss: 9.6136 - acc: 0.4615 - val_loss: 9.8551 - val_acc: 0.3528
+Learning rate:  0.001
+Epoch 76/200
+
+Epoch 00076: val_acc did not improve
+ - 38s - loss: 9.5413 - acc: 0.4639 - val_loss: 9.5930 - val_acc: 0.4350
+Learning rate:  0.001
+Epoch 77/200
+
+Epoch 00077: val_acc did not improve
+ - 38s - loss: 9.4598 - acc: 0.4738 - val_loss: 9.5173 - val_acc: 0.4396
+Learning rate:  0.001
+Epoch 78/200
+
+Epoch 00078: val_acc did not improve
+ - 38s - loss: 9.3955 - acc: 0.4744 - val_loss: 9.5999 - val_acc: 0.4004
+Learning rate:  0.001
+Epoch 79/200
+
+Epoch 00079: val_acc did not improve
+ - 38s - loss: 9.3217 - acc: 0.4791 - val_loss: 9.4568 - val_acc: 0.4198
+Learning rate:  0.001
+Epoch 80/200
+
+Epoch 00080: val_acc did not improve
+ - 38s - loss: 9.2597 - acc: 0.4782 - val_loss: 9.7858 - val_acc: 0.3448
+Learning rate:  0.001
+Epoch 81/200
+
+Epoch 00081: val_acc did not improve
+ - 37s - loss: 9.1833 - acc: 0.4857 - val_loss: 9.2618 - val_acc: 0.4434
+Learning rate:  0.0001
+Epoch 82/200
+
+Epoch 00082: val_acc improved from 0.44580 to 0.47280, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 9.1021 - acc: 0.5055 - val_loss: 9.1735 - val_acc: 0.4728
+Learning rate:  0.0001
+Epoch 83/200
+
+Epoch 00083: val_acc improved from 0.47280 to 0.48600, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 9.0846 - acc: 0.5084 - val_loss: 9.1447 - val_acc: 0.4860
+Learning rate:  0.0001
+Epoch 84/200
+
+Epoch 00084: val_acc did not improve
+ - 37s - loss: 9.0725 - acc: 0.5109 - val_loss: 9.1282 - val_acc: 0.4824
+Learning rate:  0.0001
+Epoch 85/200
+
+Epoch 00085: val_acc did not improve
+ - 38s - loss: 9.0554 - acc: 0.5131 - val_loss: 9.1269 - val_acc: 0.4790
+Learning rate:  0.0001
+Epoch 86/200
+
+Epoch 00086: val_acc improved from 0.48600 to 0.49000, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 9.0483 - acc: 0.5148 - val_loss: 9.1242 - val_acc: 0.4900
+Learning rate:  0.0001
+Epoch 87/200
+
+Epoch 00087: val_acc did not improve
+ - 37s - loss: 9.0381 - acc: 0.5177 - val_loss: 9.1804 - val_acc: 0.4656
+Learning rate:  0.0001
+Epoch 88/200
+
+Epoch 00088: val_acc improved from 0.49000 to 0.49180, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 9.0251 - acc: 0.5181 - val_loss: 9.0880 - val_acc: 0.4918
+Learning rate:  0.0001
+Epoch 89/200
+
+Epoch 00089: val_acc did not improve
+ - 37s - loss: 9.0176 - acc: 0.5218 - val_loss: 9.0927 - val_acc: 0.4862
+Learning rate:  0.0001
+Epoch 90/200
+
+Epoch 00090: val_acc did not improve
+ - 37s - loss: 9.0063 - acc: 0.5220 - val_loss: 9.0921 - val_acc: 0.4882
+Learning rate:  0.0001
+Epoch 91/200
+
+Epoch 00091: val_acc improved from 0.49180 to 0.49340, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 8.9993 - acc: 0.5181 - val_loss: 9.0597 - val_acc: 0.4934
+Learning rate:  0.0001
+Epoch 92/200
+
+Epoch 00092: val_acc did not improve
+ - 37s - loss: 8.9891 - acc: 0.5200 - val_loss: 9.0692 - val_acc: 0.4888
+Learning rate:  0.0001
+Epoch 93/200
+
+Epoch 00093: val_acc did not improve
+ - 38s - loss: 8.9804 - acc: 0.5210 - val_loss: 9.1233 - val_acc: 0.4750
+Learning rate:  0.0001
+Epoch 94/200
+
+Epoch 00094: val_acc did not improve
+ - 38s - loss: 8.9687 - acc: 0.5252 - val_loss: 9.0370 - val_acc: 0.4898
+Learning rate:  0.0001
+Epoch 95/200
+
+Epoch 00095: val_acc did not improve
+ - 37s - loss: 8.9645 - acc: 0.5225 - val_loss: 9.0580 - val_acc: 0.4930
+Learning rate:  0.0001
+Epoch 96/200
+
+Epoch 00096: val_acc did not improve
+ - 38s - loss: 8.9609 - acc: 0.5221 - val_loss: 9.0764 - val_acc: 0.4722
+Learning rate:  0.0001
+Epoch 97/200
+
+Epoch 00097: val_acc did not improve
+ - 38s - loss: 8.9537 - acc: 0.5228 - val_loss: 9.0514 - val_acc: 0.4854
+Learning rate:  0.0001
+Epoch 98/200
+
+Epoch 00098: val_acc improved from 0.49340 to 0.49500, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 8.9456 - acc: 0.5231 - val_loss: 9.0153 - val_acc: 0.4950
+Learning rate:  0.0001
+Epoch 99/200
+
+Epoch 00099: val_acc did not improve
+ - 37s - loss: 8.9334 - acc: 0.5241 - val_loss: 9.0014 - val_acc: 0.4904
+Learning rate:  0.0001
+Epoch 100/200
+
+Epoch 00100: val_acc did not improve
+ - 38s - loss: 8.9248 - acc: 0.5258 - val_loss: 9.0112 - val_acc: 0.4928
+Learning rate:  0.0001
+Epoch 101/200
+
+Epoch 00101: val_acc did not improve
+ - 37s - loss: 8.9196 - acc: 0.5249 - val_loss: 9.0329 - val_acc: 0.4796
+Learning rate:  0.0001
+Epoch 102/200
+
+Epoch 00102: val_acc did not improve
+ - 37s - loss: 8.9079 - acc: 0.5295 - val_loss: 9.0426 - val_acc: 0.4834
+Learning rate:  0.0001
+Epoch 103/200
+
+Epoch 00103: val_acc did not improve
+ - 38s - loss: 8.8989 - acc: 0.5266 - val_loss: 9.0318 - val_acc: 0.4740
+Learning rate:  0.0001
+Epoch 104/200
+
+Epoch 00104: val_acc did not improve
+ - 37s - loss: 8.8921 - acc: 0.5254 - val_loss: 8.9763 - val_acc: 0.4922
+Learning rate:  0.0001
+Epoch 105/200
+
+Epoch 00105: val_acc did not improve
+ - 38s - loss: 8.8858 - acc: 0.5271 - val_loss: 9.0685 - val_acc: 0.4658
+Learning rate:  0.0001
+Epoch 106/200
+
+Epoch 00106: val_acc did not improve
+ - 37s - loss: 8.8761 - acc: 0.5339 - val_loss: 8.9761 - val_acc: 0.4898
+Learning rate:  0.0001
+Epoch 107/200
+
+Epoch 00107: val_acc improved from 0.49500 to 0.49640, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 8.8650 - acc: 0.5329 - val_loss: 8.9706 - val_acc: 0.4964
+Learning rate:  0.0001
+Epoch 108/200
+
+Epoch 00108: val_acc did not improve
+ - 37s - loss: 8.8563 - acc: 0.5331 - val_loss: 8.9830 - val_acc: 0.4834
+Learning rate:  0.0001
+Epoch 109/200
+
+Epoch 00109: val_acc did not improve
+ - 38s - loss: 8.8510 - acc: 0.5340 - val_loss: 8.9939 - val_acc: 0.4866
+Learning rate:  0.0001
+Epoch 110/200
+
+Epoch 00110: val_acc did not improve
+ - 37s - loss: 8.8462 - acc: 0.5303 - val_loss: 8.9348 - val_acc: 0.4918
+Learning rate:  0.0001
+Epoch 111/200
+
+Epoch 00111: val_acc did not improve
+ - 37s - loss: 8.8374 - acc: 0.5329 - val_loss: 9.0269 - val_acc: 0.4662
+Learning rate:  0.0001
+Epoch 112/200
+
+Epoch 00112: val_acc did not improve
+ - 37s - loss: 8.8290 - acc: 0.5368 - val_loss: 8.9717 - val_acc: 0.4880
+Learning rate:  0.0001
+Epoch 113/200
+
+Epoch 00113: val_acc did not improve
+ - 37s - loss: 8.8255 - acc: 0.5354 - val_loss: 8.9348 - val_acc: 0.4900
+Learning rate:  0.0001
+Epoch 114/200
+
+Epoch 00114: val_acc did not improve
+ - 37s - loss: 8.8135 - acc: 0.5364 - val_loss: 8.9266 - val_acc: 0.4920
+Learning rate:  0.0001
+Epoch 115/200
+
+Epoch 00115: val_acc did not improve
+ - 37s - loss: 8.8078 - acc: 0.5369 - val_loss: 8.9598 - val_acc: 0.4738
+Learning rate:  0.0001
+Epoch 116/200
+
+Epoch 00116: val_acc did not improve
+ - 37s - loss: 8.8005 - acc: 0.5366 - val_loss: 8.9362 - val_acc: 0.4836
+Learning rate:  0.0001
+Epoch 117/200
+
+Epoch 00117: val_acc did not improve
+ - 38s - loss: 8.7969 - acc: 0.5352 - val_loss: 8.9389 - val_acc: 0.4752
+Learning rate:  0.0001
+Epoch 118/200
+
+Epoch 00118: val_acc did not improve
+ - 38s - loss: 8.7918 - acc: 0.5373 - val_loss: 8.9212 - val_acc: 0.4850
+Learning rate:  0.0001
+Epoch 119/200
+
+Epoch 00119: val_acc did not improve
+ - 38s - loss: 8.7817 - acc: 0.5390 - val_loss: 8.9319 - val_acc: 0.4746
+Learning rate:  0.0001
+Epoch 120/200
+
+Epoch 00120: val_acc did not improve
+ - 38s - loss: 8.7730 - acc: 0.5377 - val_loss: 8.8753 - val_acc: 0.4956
+Learning rate:  0.0001
+Epoch 121/200
+
+Epoch 00121: val_acc did not improve
+ - 38s - loss: 8.7668 - acc: 0.5402 - val_loss: 8.8770 - val_acc: 0.4892
+Learning rate:  1e-05
+Epoch 122/200
+
+Epoch 00122: val_acc improved from 0.49640 to 0.50640, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 8.7447 - acc: 0.5454 - val_loss: 8.8437 - val_acc: 0.5064
+Learning rate:  1e-05
+Epoch 123/200
+
+Epoch 00123: val_acc did not improve
+ - 38s - loss: 8.7432 - acc: 0.5453 - val_loss: 8.8459 - val_acc: 0.5002
+Learning rate:  1e-05
+Epoch 124/200
+
+Epoch 00124: val_acc did not improve
+ - 38s - loss: 8.7430 - acc: 0.5465 - val_loss: 8.8429 - val_acc: 0.5026
+Learning rate:  1e-05
+Epoch 125/200
+
+Epoch 00125: val_acc did not improve
+ - 38s - loss: 8.7402 - acc: 0.5471 - val_loss: 8.8525 - val_acc: 0.5032
+Learning rate:  1e-05
+Epoch 126/200
+
+Epoch 00126: val_acc improved from 0.50640 to 0.50740, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 8.7366 - acc: 0.5486 - val_loss: 8.8449 - val_acc: 0.5074
+Learning rate:  1e-05
+Epoch 127/200
+
+Epoch 00127: val_acc improved from 0.50740 to 0.50960, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 8.7392 - acc: 0.5483 - val_loss: 8.8364 - val_acc: 0.5096
+Learning rate:  1e-05
+Epoch 128/200
+
+Epoch 00128: val_acc did not improve
+ - 37s - loss: 8.7369 - acc: 0.5486 - val_loss: 8.8684 - val_acc: 0.4966
+Learning rate:  1e-05
+Epoch 129/200
+
+Epoch 00129: val_acc did not improve
+ - 38s - loss: 8.7342 - acc: 0.5502 - val_loss: 8.8614 - val_acc: 0.4996
+Learning rate:  1e-05
+Epoch 130/200
+
+Epoch 00130: val_acc did not improve
+ - 38s - loss: 8.7334 - acc: 0.5486 - val_loss: 8.8475 - val_acc: 0.4988
+Learning rate:  1e-05
+Epoch 131/200
+
+Epoch 00131: val_acc did not improve
+ - 37s - loss: 8.7354 - acc: 0.5494 - val_loss: 8.8986 - val_acc: 0.4864
+Learning rate:  1e-05
+Epoch 132/200
+
+Epoch 00132: val_acc did not improve
+ - 38s - loss: 8.7354 - acc: 0.5492 - val_loss: 8.8480 - val_acc: 0.4988
+Learning rate:  1e-05
+Epoch 133/200
+
+Epoch 00133: val_acc did not improve
+ - 38s - loss: 8.7353 - acc: 0.5475 - val_loss: 8.8503 - val_acc: 0.4964
+Learning rate:  1e-05
+Epoch 134/200
+
+Epoch 00134: val_acc did not improve
+ - 37s - loss: 8.7329 - acc: 0.5483 - val_loss: 8.8527 - val_acc: 0.4934
+Learning rate:  1e-05
+Epoch 135/200
+
+Epoch 00135: val_acc did not improve
+ - 37s - loss: 8.7287 - acc: 0.5482 - val_loss: 8.8761 - val_acc: 0.4978
+Learning rate:  1e-05
+Epoch 136/200
+
+Epoch 00136: val_acc did not improve
+ - 37s - loss: 8.7287 - acc: 0.5487 - val_loss: 8.8515 - val_acc: 0.5036
+Learning rate:  1e-05
+Epoch 137/200
+
+Epoch 00137: val_acc did not improve
+ - 37s - loss: 8.7324 - acc: 0.5462 - val_loss: 8.8375 - val_acc: 0.5078
+Learning rate:  1e-05
+Epoch 138/200
+
+Epoch 00138: val_acc did not improve
+ - 37s - loss: 8.7300 - acc: 0.5476 - val_loss: 8.8735 - val_acc: 0.4926
+Learning rate:  1e-05
+Epoch 139/200
+
+Epoch 00139: val_acc did not improve
+ - 38s - loss: 8.7312 - acc: 0.5496 - val_loss: 8.8502 - val_acc: 0.5008
+Learning rate:  1e-05
+Epoch 140/200
+
+Epoch 00140: val_acc did not improve
+ - 38s - loss: 8.7305 - acc: 0.5495 - val_loss: 8.8784 - val_acc: 0.5000
+Learning rate:  1e-05
+Epoch 141/200
+
+Epoch 00141: val_acc did not improve
+ - 37s - loss: 8.7265 - acc: 0.5493 - val_loss: 8.8495 - val_acc: 0.4966
+Learning rate:  1e-05
+Epoch 142/200
+
+Epoch 00142: val_acc did not improve
+ - 37s - loss: 8.7243 - acc: 0.5490 - val_loss: 8.8911 - val_acc: 0.4858
+Learning rate:  1e-05
+Epoch 143/200
+
+Epoch 00143: val_acc did not improve
+ - 38s - loss: 8.7273 - acc: 0.5476 - val_loss: 8.8492 - val_acc: 0.5054
+Learning rate:  1e-05
+Epoch 144/200
+
+Epoch 00144: val_acc did not improve
+ - 37s - loss: 8.7257 - acc: 0.5495 - val_loss: 8.8434 - val_acc: 0.5046
+Learning rate:  1e-05
+Epoch 145/200
+
+Epoch 00145: val_acc did not improve
+ - 38s - loss: 8.7262 - acc: 0.5481 - val_loss: 8.8381 - val_acc: 0.5042
+Learning rate:  1e-05
+Epoch 146/200
+
+Epoch 00146: val_acc did not improve
+ - 38s - loss: 8.7231 - acc: 0.5508 - val_loss: 8.8476 - val_acc: 0.4980
+Learning rate:  1e-05
+Epoch 147/200
+
+Epoch 00147: val_acc did not improve
+ - 38s - loss: 8.7230 - acc: 0.5488 - val_loss: 8.8652 - val_acc: 0.4932
+Learning rate:  1e-05
+Epoch 148/200
+
+Epoch 00148: val_acc did not improve
+ - 37s - loss: 8.7232 - acc: 0.5481 - val_loss: 8.8359 - val_acc: 0.5088
+Learning rate:  1e-05
+Epoch 149/200
+
+Epoch 00149: val_acc did not improve
+ - 37s - loss: 8.7203 - acc: 0.5504 - val_loss: 8.9086 - val_acc: 0.4796
+Learning rate:  1e-05
+Epoch 150/200
+
+Epoch 00150: val_acc did not improve
+ - 37s - loss: 8.7212 - acc: 0.5510 - val_loss: 8.8391 - val_acc: 0.5036
+Learning rate:  1e-05
+Epoch 151/200
+
+Epoch 00151: val_acc did not improve
+ - 38s - loss: 8.7209 - acc: 0.5482 - val_loss: 8.8455 - val_acc: 0.4942
+Learning rate:  1e-05
+Epoch 152/200
+
+Epoch 00152: val_acc did not improve
+ - 38s - loss: 8.7205 - acc: 0.5492 - val_loss: 8.9117 - val_acc: 0.4828
+Learning rate:  1e-05
+Epoch 153/200
+
+Epoch 00153: val_acc did not improve
+ - 38s - loss: 8.7164 - acc: 0.5508 - val_loss: 8.8357 - val_acc: 0.5016
+Learning rate:  1e-05
+Epoch 154/200
+
+Epoch 00154: val_acc did not improve
+ - 37s - loss: 8.7161 - acc: 0.5507 - val_loss: 8.8410 - val_acc: 0.5040
+Learning rate:  1e-05
+Epoch 155/200
+
+Epoch 00155: val_acc did not improve
+ - 38s - loss: 8.7156 - acc: 0.5504 - val_loss: 8.8409 - val_acc: 0.4998
+Learning rate:  1e-05
+Epoch 156/200
+
+Epoch 00156: val_acc did not improve
+ - 37s - loss: 8.7183 - acc: 0.5496 - val_loss: 8.8789 - val_acc: 0.4936
+Learning rate:  1e-05
+Epoch 157/200
+
+Epoch 00157: val_acc did not improve
+ - 38s - loss: 8.7146 - acc: 0.5517 - val_loss: 8.8241 - val_acc: 0.5094
+Learning rate:  1e-05
+Epoch 158/200
+
+Epoch 00158: val_acc did not improve
+ - 37s - loss: 8.7126 - acc: 0.5498 - val_loss: 8.8197 - val_acc: 0.5044
+Learning rate:  1e-05
+Epoch 159/200
+
+Epoch 00159: val_acc did not improve
+ - 37s - loss: 8.7109 - acc: 0.5504 - val_loss: 8.8834 - val_acc: 0.4866
+Learning rate:  1e-05
+Epoch 160/200
+
+Epoch 00160: val_acc did not improve
+ - 37s - loss: 8.7096 - acc: 0.5518 - val_loss: 8.8318 - val_acc: 0.4972
+Learning rate:  1e-05
+Epoch 161/200
+
+Epoch 00161: val_acc did not improve
+ - 37s - loss: 8.7114 - acc: 0.5510 - val_loss: 8.8347 - val_acc: 0.5034
+Learning rate:  1e-06
+Epoch 162/200
+
+Epoch 00162: val_acc did not improve
+ - 37s - loss: 8.6980 - acc: 0.5564 - val_loss: 8.8023 - val_acc: 0.5084
+Learning rate:  1e-06
+Epoch 163/200
+
+Epoch 00163: val_acc improved from 0.50960 to 0.51460, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 39s - loss: 8.7014 - acc: 0.5570 - val_loss: 8.8051 - val_acc: 0.5146
+Learning rate:  1e-06
+Epoch 164/200
+
+Epoch 00164: val_acc improved from 0.51460 to 0.52220, saving model to ./weights/RESNET_CIFAR-10_qbnn_4b_4b_5.hdf5
+ - 38s - loss: 8.6992 - acc: 0.5542 - val_loss: 8.8020 - val_acc: 0.5222
+Learning rate:  1e-06
+Epoch 165/200
+
+Epoch 00165: val_acc did not improve
+ - 37s - loss: 8.6975 - acc: 0.5571 - val_loss: 8.8180 - val_acc: 0.5176
+Learning rate:  1e-06
+Epoch 166/200
+
+Epoch 00166: val_acc did not improve
+ - 37s - loss: 8.7032 - acc: 0.5555 - val_loss: 8.8191 - val_acc: 0.5104
+Learning rate:  1e-06
+Epoch 167/200
+
+Epoch 00167: val_acc did not improve
+ - 38s - loss: 8.6999 - acc: 0.5574 - val_loss: 8.8136 - val_acc: 0.5110
+Learning rate:  1e-06
+Epoch 168/200
+
+Epoch 00168: val_acc did not improve
+ - 38s - loss: 8.7008 - acc: 0.5558 - val_loss: 8.8167 - val_acc: 0.5058
+Learning rate:  1e-06
+Epoch 169/200
+
+Epoch 00169: val_acc did not improve
+ - 37s - loss: 8.6992 - acc: 0.5544 - val_loss: 8.8223 - val_acc: 0.5056
+Learning rate:  1e-06
+Epoch 170/200
+
+Epoch 00170: val_acc did not improve
+ - 38s - loss: 8.6995 - acc: 0.5564 - val_loss: 8.8086 - val_acc: 0.5120
+Learning rate:  1e-06
+Epoch 171/200
+
+Epoch 00171: val_acc did not improve
+ - 37s - loss: 8.6989 - acc: 0.5547 - val_loss: 8.8054 - val_acc: 0.5148
+Learning rate:  1e-06
+Epoch 172/200
+
+Epoch 00172: val_acc did not improve
+ - 38s - loss: 8.6995 - acc: 0.5548 - val_loss: 8.8061 - val_acc: 0.5146
+Learning rate:  1e-06
+Epoch 173/200
+
+Epoch 00173: val_acc did not improve
+ - 38s - loss: 8.7009 - acc: 0.5555 - val_loss: 8.8080 - val_acc: 0.5118
+Learning rate:  1e-06
+Epoch 174/200
+
+Epoch 00174: val_acc did not improve
+ - 38s - loss: 8.7019 - acc: 0.5541 - val_loss: 8.8220 - val_acc: 0.5022
+Learning rate:  1e-06
+Epoch 175/200
+
+Epoch 00175: val_acc did not improve
+ - 37s - loss: 8.6979 - acc: 0.5563 - val_loss: 8.8470 - val_acc: 0.5024
+Learning rate:  1e-06
+Epoch 176/200
+
+Epoch 00176: val_acc did not improve
+ - 37s - loss: 8.6996 - acc: 0.5566 - val_loss: 8.8216 - val_acc: 0.5068
+Learning rate:  1e-06
+Epoch 177/200
+
+Epoch 00177: val_acc did not improve
+ - 37s - loss: 8.7015 - acc: 0.5567 - val_loss: 8.8153 - val_acc: 0.5088
+Learning rate:  1e-06
+Epoch 178/200
+
+Epoch 00178: val_acc did not improve
+ - 38s - loss: 8.7006 - acc: 0.5546 - val_loss: 8.8126 - val_acc: 0.5098
+Learning rate:  1e-06
+Epoch 179/200
+
+Epoch 00179: val_acc did not improve
+ - 37s - loss: 8.6975 - acc: 0.5560 - val_loss: 8.8165 - val_acc: 0.5066
+Learning rate:  1e-06
+Epoch 180/200
+
+Epoch 00180: val_acc did not improve
+ - 37s - loss: 8.7018 - acc: 0.5544 - val_loss: 8.8038 - val_acc: 0.5152
+Learning rate:  1e-06
+Epoch 181/200
+
+Epoch 00181: val_acc did not improve
+ - 37s - loss: 8.7036 - acc: 0.5524 - val_loss: 8.8082 - val_acc: 0.5130
+Learning rate:  5e-07
+Epoch 182/200
+
+Epoch 00182: val_acc did not improve
+ - 37s - loss: 8.6977 - acc: 0.5544 - val_loss: 8.8046 - val_acc: 0.5092
+Learning rate:  5e-07
+Epoch 183/200
+
+Epoch 00183: val_acc did not improve
+ - 37s - loss: 8.6978 - acc: 0.5557 - val_loss: 8.8123 - val_acc: 0.5108
+Learning rate:  5e-07
+Epoch 184/200
+
+Epoch 00184: val_acc did not improve
+ - 38s - loss: 8.6982 - acc: 0.5571 - val_loss: 8.8284 - val_acc: 0.5068
+Learning rate:  5e-07
+Epoch 185/200
+
+Epoch 00185: val_acc did not improve
+ - 37s - loss: 8.7022 - acc: 0.5511 - val_loss: 8.8210 - val_acc: 0.5026
+Learning rate:  5e-07
+Epoch 186/200
+
+Epoch 00186: val_acc did not improve
+ - 38s - loss: 8.6973 - acc: 0.5544 - val_loss: 8.8041 - val_acc: 0.5136
+Learning rate:  5e-07
+Epoch 187/200
+
+Epoch 00187: val_acc did not improve
+ - 37s - loss: 8.6992 - acc: 0.5560 - val_loss: 8.8301 - val_acc: 0.5038
+Learning rate:  5e-07
+Epoch 188/200
+
+Epoch 00188: val_acc did not improve
+ - 37s - loss: 8.7035 - acc: 0.5540 - val_loss: 8.8305 - val_acc: 0.5062
+Learning rate:  5e-07
+Epoch 189/200
+
+Epoch 00189: val_acc did not improve
+ - 37s - loss: 8.7021 - acc: 0.5537 - val_loss: 8.8277 - val_acc: 0.5050
+Learning rate:  5e-07
+Epoch 190/200
+
+Epoch 00190: val_acc did not improve
+ - 37s - loss: 8.7010 - acc: 0.5548 - val_loss: 8.8081 - val_acc: 0.5114
+Learning rate:  5e-07
+Epoch 191/200
+
+Epoch 00191: val_acc did not improve
+ - 37s - loss: 8.7006 - acc: 0.5543 - val_loss: 8.8146 - val_acc: 0.5006
+Learning rate:  5e-07
+Epoch 192/200
+
+Epoch 00192: val_acc did not improve
+ - 37s - loss: 8.7004 - acc: 0.5534 - val_loss: 8.8552 - val_acc: 0.4952
+Learning rate:  5e-07
+Epoch 193/200
+
+Epoch 00193: val_acc did not improve
+ - 37s - loss: 8.6960 - acc: 0.5567 - val_loss: 8.8123 - val_acc: 0.5126
+Learning rate:  5e-07
+Epoch 194/200
+
+Epoch 00194: val_acc did not improve
+ - 37s - loss: 8.6992 - acc: 0.5565 - val_loss: 8.8145 - val_acc: 0.5072
+Learning rate:  5e-07
+Epoch 195/200
+
+Epoch 00195: val_acc did not improve
+ - 37s - loss: 8.6956 - acc: 0.5575 - val_loss: 8.8327 - val_acc: 0.5070
+Learning rate:  5e-07
+Epoch 196/200
+
+Epoch 00196: val_acc did not improve
+ - 37s - loss: 8.6991 - acc: 0.5545 - val_loss: 8.8122 - val_acc: 0.5130
+Learning rate:  5e-07
+Epoch 197/200
+
+Epoch 00197: val_acc did not improve
+ - 37s - loss: 8.7012 - acc: 0.5515 - val_loss: 8.8239 - val_acc: 0.5010
+Learning rate:  5e-07
+Epoch 198/200
+
+Epoch 00198: val_acc did not improve
+ - 38s - loss: 8.6990 - acc: 0.5559 - val_loss: 8.8209 - val_acc: 0.5014
+Learning rate:  5e-07
+Epoch 199/200
+
+Epoch 00199: val_acc did not improve
+ - 38s - loss: 8.6975 - acc: 0.5571 - val_loss: 8.8248 - val_acc: 0.5060
+Learning rate:  5e-07
+Epoch 200/200
+
+Epoch 00200: val_acc did not improve
+ - 37s - loss: 8.6994 - acc: 0.5534 - val_loss: 8.8194 - val_acc: 0.5018
+Done
+

@@ -1,0 +1,1178 @@
+Construct the Network
+
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_2 (InputLayer)            (None, 32, 32, 3)    0                                            
+__________________________________________________________________________________________________
+ternary_conv2d_1 (TernaryConv2D (None, 32, 32, 16)   448         input_2[0][0]                    
+__________________________________________________________________________________________________
+batch_normalization_1 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_1[0][0]           
+__________________________________________________________________________________________________
+leaky_re_lu_1 (LeakyReLU)       (None, 32, 32, 16)   0           batch_normalization_1[0][0]      
+__________________________________________________________________________________________________
+ternary_conv2d_2 (TernaryConv2D (None, 32, 32, 16)   2320        leaky_re_lu_1[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_2 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_2[0][0]           
+__________________________________________________________________________________________________
+leaky_re_lu_2 (LeakyReLU)       (None, 32, 32, 16)   0           batch_normalization_2[0][0]      
+__________________________________________________________________________________________________
+ternary_conv2d_3 (TernaryConv2D (None, 32, 32, 16)   2320        leaky_re_lu_2[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_3 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_3[0][0]           
+__________________________________________________________________________________________________
+add_1 (Add)                     (None, 32, 32, 16)   0           leaky_re_lu_1[0][0]              
+                                                                 batch_normalization_3[0][0]      
+__________________________________________________________________________________________________
+leaky_re_lu_3 (LeakyReLU)       (None, 32, 32, 16)   0           add_1[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_4 (TernaryConv2D (None, 32, 32, 16)   2320        leaky_re_lu_3[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_4 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_4[0][0]           
+__________________________________________________________________________________________________
+leaky_re_lu_4 (LeakyReLU)       (None, 32, 32, 16)   0           batch_normalization_4[0][0]      
+__________________________________________________________________________________________________
+ternary_conv2d_5 (TernaryConv2D (None, 32, 32, 16)   2320        leaky_re_lu_4[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_5 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_5[0][0]           
+__________________________________________________________________________________________________
+add_2 (Add)                     (None, 32, 32, 16)   0           leaky_re_lu_3[0][0]              
+                                                                 batch_normalization_5[0][0]      
+__________________________________________________________________________________________________
+leaky_re_lu_5 (LeakyReLU)       (None, 32, 32, 16)   0           add_2[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_6 (TernaryConv2D (None, 32, 32, 16)   2320        leaky_re_lu_5[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_6 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_6[0][0]           
+__________________________________________________________________________________________________
+leaky_re_lu_6 (LeakyReLU)       (None, 32, 32, 16)   0           batch_normalization_6[0][0]      
+__________________________________________________________________________________________________
+ternary_conv2d_7 (TernaryConv2D (None, 32, 32, 16)   2320        leaky_re_lu_6[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_7 (BatchNor (None, 32, 32, 16)   64          ternary_conv2d_7[0][0]           
+__________________________________________________________________________________________________
+add_3 (Add)                     (None, 32, 32, 16)   0           leaky_re_lu_5[0][0]              
+                                                                 batch_normalization_7[0][0]      
+__________________________________________________________________________________________________
+leaky_re_lu_7 (LeakyReLU)       (None, 32, 32, 16)   0           add_3[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_8 (TernaryConv2D (None, 16, 16, 32)   4640        leaky_re_lu_7[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_8 (BatchNor (None, 16, 16, 32)   128         ternary_conv2d_8[0][0]           
+__________________________________________________________________________________________________
+leaky_re_lu_8 (LeakyReLU)       (None, 16, 16, 32)   0           batch_normalization_8[0][0]      
+__________________________________________________________________________________________________
+ternary_conv2d_9 (TernaryConv2D (None, 16, 16, 32)   9248        leaky_re_lu_8[0][0]              
+__________________________________________________________________________________________________
+ternary_conv2d_10 (TernaryConv2 (None, 16, 16, 32)   544         leaky_re_lu_7[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_9 (BatchNor (None, 16, 16, 32)   128         ternary_conv2d_9[0][0]           
+__________________________________________________________________________________________________
+add_4 (Add)                     (None, 16, 16, 32)   0           ternary_conv2d_10[0][0]          
+                                                                 batch_normalization_9[0][0]      
+__________________________________________________________________________________________________
+leaky_re_lu_9 (LeakyReLU)       (None, 16, 16, 32)   0           add_4[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_11 (TernaryConv2 (None, 16, 16, 32)   9248        leaky_re_lu_9[0][0]              
+__________________________________________________________________________________________________
+batch_normalization_10 (BatchNo (None, 16, 16, 32)   128         ternary_conv2d_11[0][0]          
+__________________________________________________________________________________________________
+leaky_re_lu_10 (LeakyReLU)      (None, 16, 16, 32)   0           batch_normalization_10[0][0]     
+__________________________________________________________________________________________________
+ternary_conv2d_12 (TernaryConv2 (None, 16, 16, 32)   9248        leaky_re_lu_10[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_11 (BatchNo (None, 16, 16, 32)   128         ternary_conv2d_12[0][0]          
+__________________________________________________________________________________________________
+add_5 (Add)                     (None, 16, 16, 32)   0           leaky_re_lu_9[0][0]              
+                                                                 batch_normalization_11[0][0]     
+__________________________________________________________________________________________________
+leaky_re_lu_11 (LeakyReLU)      (None, 16, 16, 32)   0           add_5[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_13 (TernaryConv2 (None, 16, 16, 32)   9248        leaky_re_lu_11[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_12 (BatchNo (None, 16, 16, 32)   128         ternary_conv2d_13[0][0]          
+__________________________________________________________________________________________________
+leaky_re_lu_12 (LeakyReLU)      (None, 16, 16, 32)   0           batch_normalization_12[0][0]     
+__________________________________________________________________________________________________
+ternary_conv2d_14 (TernaryConv2 (None, 16, 16, 32)   9248        leaky_re_lu_12[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_13 (BatchNo (None, 16, 16, 32)   128         ternary_conv2d_14[0][0]          
+__________________________________________________________________________________________________
+add_6 (Add)                     (None, 16, 16, 32)   0           leaky_re_lu_11[0][0]             
+                                                                 batch_normalization_13[0][0]     
+__________________________________________________________________________________________________
+leaky_re_lu_13 (LeakyReLU)      (None, 16, 16, 32)   0           add_6[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_15 (TernaryConv2 (None, 8, 8, 64)     18496       leaky_re_lu_13[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_14 (BatchNo (None, 8, 8, 64)     256         ternary_conv2d_15[0][0]          
+__________________________________________________________________________________________________
+leaky_re_lu_14 (LeakyReLU)      (None, 8, 8, 64)     0           batch_normalization_14[0][0]     
+__________________________________________________________________________________________________
+ternary_conv2d_16 (TernaryConv2 (None, 8, 8, 64)     36928       leaky_re_lu_14[0][0]             
+__________________________________________________________________________________________________
+ternary_conv2d_17 (TernaryConv2 (None, 8, 8, 64)     2112        leaky_re_lu_13[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_15 (BatchNo (None, 8, 8, 64)     256         ternary_conv2d_16[0][0]          
+__________________________________________________________________________________________________
+add_7 (Add)                     (None, 8, 8, 64)     0           ternary_conv2d_17[0][0]          
+                                                                 batch_normalization_15[0][0]     
+__________________________________________________________________________________________________
+leaky_re_lu_15 (LeakyReLU)      (None, 8, 8, 64)     0           add_7[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_18 (TernaryConv2 (None, 8, 8, 64)     36928       leaky_re_lu_15[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_16 (BatchNo (None, 8, 8, 64)     256         ternary_conv2d_18[0][0]          
+__________________________________________________________________________________________________
+leaky_re_lu_16 (LeakyReLU)      (None, 8, 8, 64)     0           batch_normalization_16[0][0]     
+__________________________________________________________________________________________________
+ternary_conv2d_19 (TernaryConv2 (None, 8, 8, 64)     36928       leaky_re_lu_16[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_17 (BatchNo (None, 8, 8, 64)     256         ternary_conv2d_19[0][0]          
+__________________________________________________________________________________________________
+add_8 (Add)                     (None, 8, 8, 64)     0           leaky_re_lu_15[0][0]             
+                                                                 batch_normalization_17[0][0]     
+__________________________________________________________________________________________________
+leaky_re_lu_17 (LeakyReLU)      (None, 8, 8, 64)     0           add_8[0][0]                      
+__________________________________________________________________________________________________
+ternary_conv2d_20 (TernaryConv2 (None, 8, 8, 64)     36928       leaky_re_lu_17[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_18 (BatchNo (None, 8, 8, 64)     256         ternary_conv2d_20[0][0]          
+__________________________________________________________________________________________________
+leaky_re_lu_18 (LeakyReLU)      (None, 8, 8, 64)     0           batch_normalization_18[0][0]     
+__________________________________________________________________________________________________
+ternary_conv2d_21 (TernaryConv2 (None, 8, 8, 64)     36928       leaky_re_lu_18[0][0]             
+__________________________________________________________________________________________________
+batch_normalization_19 (BatchNo (None, 8, 8, 64)     256         ternary_conv2d_21[0][0]          
+__________________________________________________________________________________________________
+add_9 (Add)                     (None, 8, 8, 64)     0           leaky_re_lu_17[0][0]             
+                                                                 batch_normalization_19[0][0]     
+__________________________________________________________________________________________________
+leaky_re_lu_19 (LeakyReLU)      (None, 8, 8, 64)     0           add_9[0][0]                      
+__________________________________________________________________________________________________
+average_pooling2d_1 (AveragePoo (None, 1, 1, 64)     0           leaky_re_lu_19[0][0]             
+__________________________________________________________________________________________________
+flatten_1 (Flatten)             (None, 64)           0           average_pooling2d_1[0][0]        
+__________________________________________________________________________________________________
+ternary_dense_1 (TernaryDense)  (None, 10)           650         flatten_1[0][0]                  
+==================================================================================================
+Total params: 274,442
+Trainable params: 273,066
+Non-trainable params: 1,376
+__________________________________________________________________________________________________
+loading data
+
+Loading CIFAR-10 dataset...
+(45000, 32, 32, 3)
+setting up the network and creating callbacks
+
+Learning rate:  0.001
+compiling the network
+
+No weights preloaded, training from scratch
+
+(re)training the network
+
+Train on 45000 samples, validate on 5000 samples
+Learning rate:  0.001
+Epoch 1/200
+
+Epoch 00001: val_acc improved from -inf to 0.22880, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 22s - loss: 14.9462 - acc: 0.2422 - val_loss: 11.5598 - val_acc: 0.2288
+Learning rate:  0.001
+Epoch 2/200
+
+Epoch 00002: val_acc did not improve
+ - 18s - loss: 9.0199 - acc: 0.3167 - val_loss: 8.7288 - val_acc: 0.2188
+Learning rate:  0.001
+Epoch 3/200
+
+Epoch 00003: val_acc improved from 0.22880 to 0.39400, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 7.1710 - acc: 0.3850 - val_loss: 6.6292 - val_acc: 0.3940
+Learning rate:  0.001
+Epoch 4/200
+
+Epoch 00004: val_acc did not improve
+ - 18s - loss: 6.1749 - acc: 0.4322 - val_loss: 6.4382 - val_acc: 0.3346
+Learning rate:  0.001
+Epoch 5/200
+
+Epoch 00005: val_acc improved from 0.39400 to 0.47240, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 5.4135 - acc: 0.4577 - val_loss: 5.0949 - val_acc: 0.4724
+Learning rate:  0.001
+Epoch 6/200
+
+Epoch 00006: val_acc did not improve
+ - 18s - loss: 4.7942 - acc: 0.4837 - val_loss: 6.3437 - val_acc: 0.2328
+Learning rate:  0.001
+Epoch 7/200
+
+Epoch 00007: val_acc did not improve
+ - 18s - loss: 4.2698 - acc: 0.5087 - val_loss: 4.3218 - val_acc: 0.4316
+Learning rate:  0.001
+Epoch 8/200
+
+Epoch 00008: val_acc did not improve
+ - 18s - loss: 3.8390 - acc: 0.5291 - val_loss: 4.0990 - val_acc: 0.4250
+Learning rate:  0.001
+Epoch 9/200
+
+Epoch 00009: val_acc improved from 0.47240 to 0.49980, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 3.4871 - acc: 0.5454 - val_loss: 3.5215 - val_acc: 0.4998
+Learning rate:  0.001
+Epoch 10/200
+
+Epoch 00010: val_acc did not improve
+ - 18s - loss: 3.1899 - acc: 0.5590 - val_loss: 3.3449 - val_acc: 0.4894
+Learning rate:  0.001
+Epoch 11/200
+
+Epoch 00011: val_acc did not improve
+ - 18s - loss: 2.9210 - acc: 0.5787 - val_loss: 3.1673 - val_acc: 0.4814
+Learning rate:  0.001
+Epoch 12/200
+
+Epoch 00012: val_acc improved from 0.49980 to 0.52760, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 2.7024 - acc: 0.5869 - val_loss: 2.9035 - val_acc: 0.5276
+Learning rate:  0.001
+Epoch 13/200
+
+Epoch 00013: val_acc did not improve
+ - 18s - loss: 2.5039 - acc: 0.6037 - val_loss: 2.8047 - val_acc: 0.4598
+Learning rate:  0.001
+Epoch 14/200
+
+Epoch 00014: val_acc improved from 0.52760 to 0.53540, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 2.3198 - acc: 0.6193 - val_loss: 2.6008 - val_acc: 0.5354
+Learning rate:  0.001
+Epoch 15/200
+
+Epoch 00015: val_acc improved from 0.53540 to 0.56700, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 2.1679 - acc: 0.6324 - val_loss: 2.3585 - val_acc: 0.5670
+Learning rate:  0.001
+Epoch 16/200
+
+Epoch 00016: val_acc improved from 0.56700 to 0.61000, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 2.0435 - acc: 0.6419 - val_loss: 2.1002 - val_acc: 0.6100
+Learning rate:  0.001
+Epoch 17/200
+
+Epoch 00017: val_acc did not improve
+ - 18s - loss: 1.9125 - acc: 0.6534 - val_loss: 2.1550 - val_acc: 0.5808
+Learning rate:  0.001
+Epoch 18/200
+
+Epoch 00018: val_acc did not improve
+ - 18s - loss: 1.7949 - acc: 0.6678 - val_loss: 2.0064 - val_acc: 0.5936
+Learning rate:  0.001
+Epoch 19/200
+
+Epoch 00019: val_acc did not improve
+ - 18s - loss: 1.7171 - acc: 0.6671 - val_loss: 2.3640 - val_acc: 0.5118
+Learning rate:  0.001
+Epoch 20/200
+
+Epoch 00020: val_acc did not improve
+ - 18s - loss: 1.6285 - acc: 0.6784 - val_loss: 1.9890 - val_acc: 0.5764
+Learning rate:  0.001
+Epoch 21/200
+
+Epoch 00021: val_acc did not improve
+ - 18s - loss: 1.5559 - acc: 0.6803 - val_loss: 2.4759 - val_acc: 0.4780
+Learning rate:  0.001
+Epoch 22/200
+
+Epoch 00022: val_acc did not improve
+ - 18s - loss: 1.4827 - acc: 0.6865 - val_loss: 1.8023 - val_acc: 0.6034
+Learning rate:  0.001
+Epoch 23/200
+
+Epoch 00023: val_acc improved from 0.61000 to 0.64520, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 1.4129 - acc: 0.6970 - val_loss: 1.5636 - val_acc: 0.6452
+Learning rate:  0.001
+Epoch 24/200
+
+Epoch 00024: val_acc did not improve
+ - 18s - loss: 1.3740 - acc: 0.6956 - val_loss: 1.5437 - val_acc: 0.6362
+Learning rate:  0.001
+Epoch 25/200
+
+Epoch 00025: val_acc improved from 0.64520 to 0.66540, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 1.3094 - acc: 0.7061 - val_loss: 1.4356 - val_acc: 0.6654
+Learning rate:  0.001
+Epoch 26/200
+
+Epoch 00026: val_acc did not improve
+ - 18s - loss: 1.2610 - acc: 0.7109 - val_loss: 1.4175 - val_acc: 0.6580
+Learning rate:  0.001
+Epoch 27/200
+
+Epoch 00027: val_acc improved from 0.66540 to 0.68500, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 1.2170 - acc: 0.7122 - val_loss: 1.2972 - val_acc: 0.6850
+Learning rate:  0.001
+Epoch 28/200
+
+Epoch 00028: val_acc did not improve
+ - 18s - loss: 1.1661 - acc: 0.7193 - val_loss: 2.2477 - val_acc: 0.4752
+Learning rate:  0.001
+Epoch 29/200
+
+Epoch 00029: val_acc did not improve
+ - 18s - loss: 1.1196 - acc: 0.7270 - val_loss: 1.3779 - val_acc: 0.6570
+Learning rate:  0.001
+Epoch 30/200
+
+Epoch 00030: val_acc did not improve
+ - 18s - loss: 1.0878 - acc: 0.7295 - val_loss: 1.4340 - val_acc: 0.6196
+Learning rate:  0.001
+Epoch 31/200
+
+Epoch 00031: val_acc did not improve
+ - 18s - loss: 1.0493 - acc: 0.7357 - val_loss: 1.2346 - val_acc: 0.6732
+Learning rate:  0.001
+Epoch 32/200
+
+Epoch 00032: val_acc did not improve
+ - 18s - loss: 1.0266 - acc: 0.7348 - val_loss: 1.3879 - val_acc: 0.6294
+Learning rate:  0.001
+Epoch 33/200
+
+Epoch 00033: val_acc did not improve
+ - 18s - loss: 1.0006 - acc: 0.7382 - val_loss: 1.2533 - val_acc: 0.6708
+Learning rate:  0.001
+Epoch 34/200
+
+Epoch 00034: val_acc did not improve
+ - 18s - loss: 0.9716 - acc: 0.7403 - val_loss: 1.2582 - val_acc: 0.6468
+Learning rate:  0.001
+Epoch 35/200
+
+Epoch 00035: val_acc did not improve
+ - 18s - loss: 0.9423 - acc: 0.7462 - val_loss: 1.2274 - val_acc: 0.6510
+Learning rate:  0.001
+Epoch 36/200
+
+Epoch 00036: val_acc did not improve
+ - 18s - loss: 0.9258 - acc: 0.7480 - val_loss: 1.6111 - val_acc: 0.5618
+Learning rate:  0.001
+Epoch 37/200
+
+Epoch 00037: val_acc did not improve
+ - 18s - loss: 0.9124 - acc: 0.7477 - val_loss: 1.5442 - val_acc: 0.5792
+Learning rate:  0.001
+Epoch 38/200
+
+Epoch 00038: val_acc did not improve
+ - 18s - loss: 0.8809 - acc: 0.7555 - val_loss: 1.1332 - val_acc: 0.6744
+Learning rate:  0.001
+Epoch 39/200
+
+Epoch 00039: val_acc improved from 0.68500 to 0.69880, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 0.8692 - acc: 0.7551 - val_loss: 1.0166 - val_acc: 0.6988
+Learning rate:  0.001
+Epoch 40/200
+
+Epoch 00040: val_acc did not improve
+ - 18s - loss: 0.8452 - acc: 0.7597 - val_loss: 1.3846 - val_acc: 0.6056
+Learning rate:  0.001
+Epoch 41/200
+
+Epoch 00041: val_acc did not improve
+ - 18s - loss: 0.8371 - acc: 0.7597 - val_loss: 1.3448 - val_acc: 0.6116
+Learning rate:  0.001
+Epoch 42/200
+
+Epoch 00042: val_acc did not improve
+ - 18s - loss: 0.8241 - acc: 0.7594 - val_loss: 1.1693 - val_acc: 0.6460
+Learning rate:  0.001
+Epoch 43/200
+
+Epoch 00043: val_acc did not improve
+ - 18s - loss: 0.8082 - acc: 0.7645 - val_loss: 1.0510 - val_acc: 0.6746
+Learning rate:  0.001
+Epoch 44/200
+
+Epoch 00044: val_acc did not improve
+ - 18s - loss: 0.8030 - acc: 0.7628 - val_loss: 1.2765 - val_acc: 0.6314
+Learning rate:  0.001
+Epoch 45/200
+
+Epoch 00045: val_acc did not improve
+ - 18s - loss: 0.7894 - acc: 0.7661 - val_loss: 1.7836 - val_acc: 0.5674
+Learning rate:  0.001
+Epoch 46/200
+
+Epoch 00046: val_acc did not improve
+ - 18s - loss: 0.7827 - acc: 0.7632 - val_loss: 1.0370 - val_acc: 0.6838
+Learning rate:  0.001
+Epoch 47/200
+
+Epoch 00047: val_acc did not improve
+ - 18s - loss: 0.7780 - acc: 0.7655 - val_loss: 1.2282 - val_acc: 0.6012
+Learning rate:  0.001
+Epoch 48/200
+
+Epoch 00048: val_acc did not improve
+ - 18s - loss: 0.7620 - acc: 0.7686 - val_loss: 1.1224 - val_acc: 0.6510
+Learning rate:  0.001
+Epoch 49/200
+
+Epoch 00049: val_acc did not improve
+ - 18s - loss: 0.7466 - acc: 0.7710 - val_loss: 1.1163 - val_acc: 0.6554
+Learning rate:  0.001
+Epoch 50/200
+
+Epoch 00050: val_acc improved from 0.69880 to 0.70100, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 0.7412 - acc: 0.7750 - val_loss: 1.0117 - val_acc: 0.7010
+Learning rate:  0.001
+Epoch 51/200
+
+Epoch 00051: val_acc did not improve
+ - 18s - loss: 0.7306 - acc: 0.7760 - val_loss: 1.2697 - val_acc: 0.6516
+Learning rate:  0.001
+Epoch 52/200
+
+Epoch 00052: val_acc did not improve
+ - 18s - loss: 0.7285 - acc: 0.7761 - val_loss: 1.3166 - val_acc: 0.6068
+Learning rate:  0.001
+Epoch 53/200
+
+Epoch 00053: val_acc did not improve
+ - 18s - loss: 0.7089 - acc: 0.7786 - val_loss: 0.9852 - val_acc: 0.6872
+Learning rate:  0.001
+Epoch 54/200
+
+Epoch 00054: val_acc did not improve
+ - 18s - loss: 0.7109 - acc: 0.7798 - val_loss: 1.9159 - val_acc: 0.5014
+Learning rate:  0.001
+Epoch 55/200
+
+Epoch 00055: val_acc did not improve
+ - 18s - loss: 0.7028 - acc: 0.7802 - val_loss: 1.1426 - val_acc: 0.6266
+Learning rate:  0.001
+Epoch 56/200
+
+Epoch 00056: val_acc did not improve
+ - 18s - loss: 0.7030 - acc: 0.7796 - val_loss: 0.9499 - val_acc: 0.6982
+Learning rate:  0.001
+Epoch 57/200
+
+Epoch 00057: val_acc improved from 0.70100 to 0.73620, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 0.6946 - acc: 0.7800 - val_loss: 0.8695 - val_acc: 0.7362
+Learning rate:  0.001
+Epoch 58/200
+
+Epoch 00058: val_acc did not improve
+ - 18s - loss: 0.6815 - acc: 0.7846 - val_loss: 0.9001 - val_acc: 0.7110
+Learning rate:  0.001
+Epoch 59/200
+
+Epoch 00059: val_acc did not improve
+ - 18s - loss: 0.6775 - acc: 0.7856 - val_loss: 1.3165 - val_acc: 0.6130
+Learning rate:  0.001
+Epoch 60/200
+
+Epoch 00060: val_acc did not improve
+ - 18s - loss: 0.6743 - acc: 0.7839 - val_loss: 1.2682 - val_acc: 0.6426
+Learning rate:  0.001
+Epoch 61/200
+
+Epoch 00061: val_acc did not improve
+ - 18s - loss: 0.6738 - acc: 0.7862 - val_loss: 1.2972 - val_acc: 0.6252
+Learning rate:  0.001
+Epoch 62/200
+
+Epoch 00062: val_acc did not improve
+ - 18s - loss: 0.6726 - acc: 0.7839 - val_loss: 1.2180 - val_acc: 0.6690
+Learning rate:  0.001
+Epoch 63/200
+
+Epoch 00063: val_acc improved from 0.73620 to 0.75420, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 0.6630 - acc: 0.7880 - val_loss: 0.7762 - val_acc: 0.7542
+Learning rate:  0.001
+Epoch 64/200
+
+Epoch 00064: val_acc did not improve
+ - 18s - loss: 0.6667 - acc: 0.7854 - val_loss: 1.1917 - val_acc: 0.6230
+Learning rate:  0.001
+Epoch 65/200
+
+Epoch 00065: val_acc did not improve
+ - 18s - loss: 0.6523 - acc: 0.7909 - val_loss: 1.0471 - val_acc: 0.6628
+Learning rate:  0.001
+Epoch 66/200
+
+Epoch 00066: val_acc did not improve
+ - 18s - loss: 0.6487 - acc: 0.7915 - val_loss: 1.0965 - val_acc: 0.6596
+Learning rate:  0.001
+Epoch 67/200
+
+Epoch 00067: val_acc did not improve
+ - 18s - loss: 0.6512 - acc: 0.7896 - val_loss: 1.0410 - val_acc: 0.6792
+Learning rate:  0.001
+Epoch 68/200
+
+Epoch 00068: val_acc did not improve
+ - 18s - loss: 0.6423 - acc: 0.7948 - val_loss: 0.9755 - val_acc: 0.6774
+Learning rate:  0.001
+Epoch 69/200
+
+Epoch 00069: val_acc did not improve
+ - 18s - loss: 0.6461 - acc: 0.7939 - val_loss: 1.1472 - val_acc: 0.6396
+Learning rate:  0.001
+Epoch 70/200
+
+Epoch 00070: val_acc did not improve
+ - 18s - loss: 0.6381 - acc: 0.7936 - val_loss: 1.0544 - val_acc: 0.6578
+Learning rate:  0.001
+Epoch 71/200
+
+Epoch 00071: val_acc did not improve
+ - 18s - loss: 0.6405 - acc: 0.7928 - val_loss: 0.9477 - val_acc: 0.6876
+Learning rate:  0.001
+Epoch 72/200
+
+Epoch 00072: val_acc did not improve
+ - 18s - loss: 0.6325 - acc: 0.7966 - val_loss: 1.2690 - val_acc: 0.6254
+Learning rate:  0.001
+Epoch 73/200
+
+Epoch 00073: val_acc did not improve
+ - 18s - loss: 0.6268 - acc: 0.7981 - val_loss: 1.0139 - val_acc: 0.6866
+Learning rate:  0.001
+Epoch 74/200
+
+Epoch 00074: val_acc did not improve
+ - 18s - loss: 0.6272 - acc: 0.7974 - val_loss: 1.0111 - val_acc: 0.6712
+Learning rate:  0.001
+Epoch 75/200
+
+Epoch 00075: val_acc did not improve
+ - 18s - loss: 0.6293 - acc: 0.7967 - val_loss: 0.9065 - val_acc: 0.7196
+Learning rate:  0.001
+Epoch 76/200
+
+Epoch 00076: val_acc improved from 0.75420 to 0.75680, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 0.6188 - acc: 0.7982 - val_loss: 0.7555 - val_acc: 0.7568
+Learning rate:  0.001
+Epoch 77/200
+
+Epoch 00077: val_acc did not improve
+ - 18s - loss: 0.6148 - acc: 0.8001 - val_loss: 0.9672 - val_acc: 0.7018
+Learning rate:  0.001
+Epoch 78/200
+
+Epoch 00078: val_acc did not improve
+ - 18s - loss: 0.6130 - acc: 0.8008 - val_loss: 1.0865 - val_acc: 0.6718
+Learning rate:  0.001
+Epoch 79/200
+
+Epoch 00079: val_acc did not improve
+ - 18s - loss: 0.6130 - acc: 0.8000 - val_loss: 0.9947 - val_acc: 0.6778
+Learning rate:  0.001
+Epoch 80/200
+
+Epoch 00080: val_acc did not improve
+ - 18s - loss: 0.6185 - acc: 0.7991 - val_loss: 0.9428 - val_acc: 0.6970
+Learning rate:  0.001
+Epoch 81/200
+
+Epoch 00081: val_acc did not improve
+ - 18s - loss: 0.6155 - acc: 0.8003 - val_loss: 0.8150 - val_acc: 0.7380
+Learning rate:  0.0001
+Epoch 82/200
+
+Epoch 00082: val_acc improved from 0.75680 to 0.82420, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 18s - loss: 0.4369 - acc: 0.8620 - val_loss: 0.5490 - val_acc: 0.8242
+Learning rate:  0.0001
+Epoch 83/200
+
+Epoch 00083: val_acc did not improve
+ - 18s - loss: 0.3935 - acc: 0.8757 - val_loss: 0.5829 - val_acc: 0.8112
+Learning rate:  0.0001
+Epoch 84/200
+
+Epoch 00084: val_acc did not improve
+ - 18s - loss: 0.3767 - acc: 0.8829 - val_loss: 0.5679 - val_acc: 0.8242
+Learning rate:  0.0001
+Epoch 85/200
+
+Epoch 00085: val_acc did not improve
+ - 18s - loss: 0.3685 - acc: 0.8847 - val_loss: 0.6297 - val_acc: 0.8072
+Learning rate:  0.0001
+Epoch 86/200
+
+Epoch 00086: val_acc did not improve
+ - 18s - loss: 0.3650 - acc: 0.8849 - val_loss: 0.5752 - val_acc: 0.8200
+Learning rate:  0.0001
+Epoch 87/200
+
+Epoch 00087: val_acc did not improve
+ - 18s - loss: 0.3536 - acc: 0.8874 - val_loss: 0.6517 - val_acc: 0.7944
+Learning rate:  0.0001
+Epoch 88/200
+
+Epoch 00088: val_acc did not improve
+ - 18s - loss: 0.3517 - acc: 0.8890 - val_loss: 0.6331 - val_acc: 0.7978
+Learning rate:  0.0001
+Epoch 89/200
+
+Epoch 00089: val_acc did not improve
+ - 18s - loss: 0.3419 - acc: 0.8925 - val_loss: 0.7757 - val_acc: 0.7710
+Learning rate:  0.0001
+Epoch 90/200
+
+Epoch 00090: val_acc did not improve
+ - 18s - loss: 0.3434 - acc: 0.8916 - val_loss: 0.6822 - val_acc: 0.7832
+Learning rate:  0.0001
+Epoch 91/200
+
+Epoch 00091: val_acc did not improve
+ - 18s - loss: 0.3399 - acc: 0.8926 - val_loss: 0.6876 - val_acc: 0.8054
+Learning rate:  0.0001
+Epoch 92/200
+
+Epoch 00092: val_acc did not improve
+ - 18s - loss: 0.3356 - acc: 0.8937 - val_loss: 0.6039 - val_acc: 0.8200
+Learning rate:  0.0001
+Epoch 93/200
+
+Epoch 00093: val_acc did not improve
+ - 18s - loss: 0.3328 - acc: 0.8940 - val_loss: 0.6578 - val_acc: 0.7948
+Learning rate:  0.0001
+Epoch 94/200
+
+Epoch 00094: val_acc did not improve
+ - 18s - loss: 0.3260 - acc: 0.8963 - val_loss: 0.7227 - val_acc: 0.7790
+Learning rate:  0.0001
+Epoch 95/200
+
+Epoch 00095: val_acc did not improve
+ - 18s - loss: 0.3322 - acc: 0.8935 - val_loss: 0.7833 - val_acc: 0.7802
+Learning rate:  0.0001
+Epoch 96/200
+
+Epoch 00096: val_acc did not improve
+ - 18s - loss: 0.3208 - acc: 0.8978 - val_loss: 0.6440 - val_acc: 0.8090
+Learning rate:  0.0001
+Epoch 97/200
+
+Epoch 00097: val_acc did not improve
+ - 18s - loss: 0.3249 - acc: 0.8973 - val_loss: 0.6843 - val_acc: 0.8004
+Learning rate:  0.0001
+Epoch 98/200
+
+Epoch 00098: val_acc did not improve
+ - 18s - loss: 0.3195 - acc: 0.8977 - val_loss: 0.6145 - val_acc: 0.8138
+Learning rate:  0.0001
+Epoch 99/200
+
+Epoch 00099: val_acc did not improve
+ - 18s - loss: 0.3170 - acc: 0.9006 - val_loss: 0.6591 - val_acc: 0.8036
+Learning rate:  0.0001
+Epoch 100/200
+
+Epoch 00100: val_acc did not improve
+ - 18s - loss: 0.3155 - acc: 0.8988 - val_loss: 0.6996 - val_acc: 0.7916
+Learning rate:  0.0001
+Epoch 101/200
+
+Epoch 00101: val_acc did not improve
+ - 18s - loss: 0.3168 - acc: 0.9002 - val_loss: 0.7111 - val_acc: 0.7906
+Learning rate:  0.0001
+Epoch 102/200
+
+Epoch 00102: val_acc did not improve
+ - 18s - loss: 0.3151 - acc: 0.8996 - val_loss: 0.7220 - val_acc: 0.7966
+Learning rate:  0.0001
+Epoch 103/200
+
+Epoch 00103: val_acc did not improve
+ - 18s - loss: 0.3136 - acc: 0.8990 - val_loss: 0.6265 - val_acc: 0.8134
+Learning rate:  0.0001
+Epoch 104/200
+
+Epoch 00104: val_acc did not improve
+ - 18s - loss: 0.3073 - acc: 0.9022 - val_loss: 0.6917 - val_acc: 0.7890
+Learning rate:  0.0001
+Epoch 105/200
+
+Epoch 00105: val_acc did not improve
+ - 18s - loss: 0.3079 - acc: 0.9014 - val_loss: 0.8941 - val_acc: 0.7480
+Learning rate:  0.0001
+Epoch 106/200
+
+Epoch 00106: val_acc did not improve
+ - 18s - loss: 0.3098 - acc: 0.9006 - val_loss: 0.8763 - val_acc: 0.7466
+Learning rate:  0.0001
+Epoch 107/200
+
+Epoch 00107: val_acc did not improve
+ - 18s - loss: 0.3112 - acc: 0.9006 - val_loss: 0.6987 - val_acc: 0.7898
+Learning rate:  0.0001
+Epoch 108/200
+
+Epoch 00108: val_acc did not improve
+ - 18s - loss: 0.3085 - acc: 0.9000 - val_loss: 0.7505 - val_acc: 0.7878
+Learning rate:  0.0001
+Epoch 109/200
+
+Epoch 00109: val_acc did not improve
+ - 18s - loss: 0.3077 - acc: 0.9001 - val_loss: 0.7399 - val_acc: 0.7888
+Learning rate:  0.0001
+Epoch 110/200
+
+Epoch 00110: val_acc did not improve
+ - 18s - loss: 0.3000 - acc: 0.9044 - val_loss: 0.7239 - val_acc: 0.7816
+Learning rate:  0.0001
+Epoch 111/200
+
+Epoch 00111: val_acc did not improve
+ - 18s - loss: 0.3028 - acc: 0.9019 - val_loss: 0.6572 - val_acc: 0.8154
+Learning rate:  0.0001
+Epoch 112/200
+
+Epoch 00112: val_acc did not improve
+ - 18s - loss: 0.3029 - acc: 0.9024 - val_loss: 0.7291 - val_acc: 0.7828
+Learning rate:  0.0001
+Epoch 113/200
+
+Epoch 00113: val_acc did not improve
+ - 18s - loss: 0.3112 - acc: 0.9001 - val_loss: 0.6095 - val_acc: 0.8110
+Learning rate:  0.0001
+Epoch 114/200
+
+Epoch 00114: val_acc did not improve
+ - 18s - loss: 0.3086 - acc: 0.8990 - val_loss: 0.6555 - val_acc: 0.8084
+Learning rate:  0.0001
+Epoch 115/200
+
+Epoch 00115: val_acc did not improve
+ - 18s - loss: 0.3058 - acc: 0.9014 - val_loss: 0.7031 - val_acc: 0.7954
+Learning rate:  0.0001
+Epoch 116/200
+
+Epoch 00116: val_acc did not improve
+ - 18s - loss: 0.3011 - acc: 0.9024 - val_loss: 0.8703 - val_acc: 0.7514
+Learning rate:  0.0001
+Epoch 117/200
+
+Epoch 00117: val_acc did not improve
+ - 18s - loss: 0.3035 - acc: 0.9024 - val_loss: 0.7423 - val_acc: 0.7754
+Learning rate:  0.0001
+Epoch 118/200
+
+Epoch 00118: val_acc did not improve
+ - 18s - loss: 0.3023 - acc: 0.9020 - val_loss: 0.7179 - val_acc: 0.7844
+Learning rate:  0.0001
+Epoch 119/200
+
+Epoch 00119: val_acc did not improve
+ - 18s - loss: 0.3007 - acc: 0.9025 - val_loss: 0.7036 - val_acc: 0.7998
+Learning rate:  0.0001
+Epoch 120/200
+
+Epoch 00120: val_acc did not improve
+ - 18s - loss: 0.3087 - acc: 0.8993 - val_loss: 0.8925 - val_acc: 0.7578
+Learning rate:  0.0001
+Epoch 121/200
+
+Epoch 00121: val_acc did not improve
+ - 18s - loss: 0.2990 - acc: 0.9046 - val_loss: 0.9980 - val_acc: 0.7330
+Learning rate:  1e-05
+Epoch 122/200
+
+Epoch 00122: val_acc improved from 0.82420 to 0.83560, saving model to ./weights/RESNET_CIFAR-10_tnn_8b_4b_3.hdf5
+ - 19s - loss: 0.2098 - acc: 0.9382 - val_loss: 0.5513 - val_acc: 0.8356
+Learning rate:  1e-05
+Epoch 123/200
+
+Epoch 00123: val_acc did not improve
+ - 18s - loss: 0.1892 - acc: 0.9451 - val_loss: 0.5718 - val_acc: 0.8310
+Learning rate:  1e-05
+Epoch 124/200
+
+Epoch 00124: val_acc did not improve
+ - 18s - loss: 0.1824 - acc: 0.9484 - val_loss: 0.6767 - val_acc: 0.8086
+Learning rate:  1e-05
+Epoch 125/200
+
+Epoch 00125: val_acc did not improve
+ - 18s - loss: 0.1845 - acc: 0.9472 - val_loss: 0.6629 - val_acc: 0.8202
+Learning rate:  1e-05
+Epoch 126/200
+
+Epoch 00126: val_acc did not improve
+ - 18s - loss: 0.1814 - acc: 0.9487 - val_loss: 0.6153 - val_acc: 0.8204
+Learning rate:  1e-05
+Epoch 127/200
+
+Epoch 00127: val_acc did not improve
+ - 18s - loss: 0.1822 - acc: 0.9478 - val_loss: 0.6028 - val_acc: 0.8232
+Learning rate:  1e-05
+Epoch 128/200
+
+Epoch 00128: val_acc did not improve
+ - 18s - loss: 0.1851 - acc: 0.9467 - val_loss: 0.7084 - val_acc: 0.8042
+Learning rate:  1e-05
+Epoch 129/200
+
+Epoch 00129: val_acc did not improve
+ - 18s - loss: 0.1856 - acc: 0.9459 - val_loss: 0.6223 - val_acc: 0.8210
+Learning rate:  1e-05
+Epoch 130/200
+
+Epoch 00130: val_acc did not improve
+ - 18s - loss: 0.1854 - acc: 0.9459 - val_loss: 0.6558 - val_acc: 0.8142
+Learning rate:  1e-05
+Epoch 131/200
+
+Epoch 00131: val_acc did not improve
+ - 18s - loss: 0.1863 - acc: 0.9450 - val_loss: 0.6197 - val_acc: 0.8236
+Learning rate:  1e-05
+Epoch 132/200
+
+Epoch 00132: val_acc did not improve
+ - 18s - loss: 0.1862 - acc: 0.9440 - val_loss: 0.7486 - val_acc: 0.8026
+Learning rate:  1e-05
+Epoch 133/200
+
+Epoch 00133: val_acc did not improve
+ - 18s - loss: 0.1883 - acc: 0.9439 - val_loss: 0.6243 - val_acc: 0.8134
+Learning rate:  1e-05
+Epoch 134/200
+
+Epoch 00134: val_acc did not improve
+ - 18s - loss: 0.1886 - acc: 0.9439 - val_loss: 0.6280 - val_acc: 0.8232
+Learning rate:  1e-05
+Epoch 135/200
+
+Epoch 00135: val_acc did not improve
+ - 18s - loss: 0.1864 - acc: 0.9450 - val_loss: 0.6568 - val_acc: 0.8124
+Learning rate:  1e-05
+Epoch 136/200
+
+Epoch 00136: val_acc did not improve
+ - 18s - loss: 0.1895 - acc: 0.9435 - val_loss: 0.6874 - val_acc: 0.8154
+Learning rate:  1e-05
+Epoch 137/200
+
+Epoch 00137: val_acc did not improve
+ - 18s - loss: 0.1877 - acc: 0.9448 - val_loss: 0.6354 - val_acc: 0.8172
+Learning rate:  1e-05
+Epoch 138/200
+
+Epoch 00138: val_acc did not improve
+ - 18s - loss: 0.1873 - acc: 0.9440 - val_loss: 0.7334 - val_acc: 0.7998
+Learning rate:  1e-05
+Epoch 139/200
+
+Epoch 00139: val_acc did not improve
+ - 18s - loss: 0.1861 - acc: 0.9453 - val_loss: 0.6836 - val_acc: 0.8188
+Learning rate:  1e-05
+Epoch 140/200
+
+Epoch 00140: val_acc did not improve
+ - 18s - loss: 0.1913 - acc: 0.9420 - val_loss: 0.6804 - val_acc: 0.8122
+Learning rate:  1e-05
+Epoch 141/200
+
+Epoch 00141: val_acc did not improve
+ - 18s - loss: 0.1898 - acc: 0.9429 - val_loss: 0.7195 - val_acc: 0.8066
+Learning rate:  1e-05
+Epoch 142/200
+
+Epoch 00142: val_acc did not improve
+ - 18s - loss: 0.1875 - acc: 0.9444 - val_loss: 0.7147 - val_acc: 0.8014
+Learning rate:  1e-05
+Epoch 143/200
+
+Epoch 00143: val_acc did not improve
+ - 18s - loss: 0.1893 - acc: 0.9428 - val_loss: 0.6651 - val_acc: 0.8246
+Learning rate:  1e-05
+Epoch 144/200
+
+Epoch 00144: val_acc did not improve
+ - 18s - loss: 0.1880 - acc: 0.9438 - val_loss: 0.7090 - val_acc: 0.8200
+Learning rate:  1e-05
+Epoch 145/200
+
+Epoch 00145: val_acc did not improve
+ - 18s - loss: 0.1904 - acc: 0.9428 - val_loss: 0.7150 - val_acc: 0.8016
+Learning rate:  1e-05
+Epoch 146/200
+
+Epoch 00146: val_acc did not improve
+ - 18s - loss: 0.1905 - acc: 0.9427 - val_loss: 0.6776 - val_acc: 0.8122
+Learning rate:  1e-05
+Epoch 147/200
+
+Epoch 00147: val_acc did not improve
+ - 18s - loss: 0.1932 - acc: 0.9408 - val_loss: 0.6884 - val_acc: 0.8104
+Learning rate:  1e-05
+Epoch 148/200
+
+Epoch 00148: val_acc did not improve
+ - 18s - loss: 0.1875 - acc: 0.9445 - val_loss: 0.7938 - val_acc: 0.7962
+Learning rate:  1e-05
+Epoch 149/200
+
+Epoch 00149: val_acc did not improve
+ - 18s - loss: 0.1894 - acc: 0.9426 - val_loss: 0.7985 - val_acc: 0.7930
+Learning rate:  1e-05
+Epoch 150/200
+
+Epoch 00150: val_acc did not improve
+ - 18s - loss: 0.1880 - acc: 0.9430 - val_loss: 0.6528 - val_acc: 0.8222
+Learning rate:  1e-05
+Epoch 151/200
+
+Epoch 00151: val_acc did not improve
+ - 18s - loss: 0.1893 - acc: 0.9434 - val_loss: 0.6977 - val_acc: 0.8034
+Learning rate:  1e-05
+Epoch 152/200
+
+Epoch 00152: val_acc did not improve
+ - 18s - loss: 0.1919 - acc: 0.9420 - val_loss: 0.7281 - val_acc: 0.8048
+Learning rate:  1e-05
+Epoch 153/200
+
+Epoch 00153: val_acc did not improve
+ - 18s - loss: 0.1888 - acc: 0.9431 - val_loss: 0.7686 - val_acc: 0.7922
+Learning rate:  1e-05
+Epoch 154/200
+
+Epoch 00154: val_acc did not improve
+ - 18s - loss: 0.1890 - acc: 0.9434 - val_loss: 0.7460 - val_acc: 0.8024
+Learning rate:  1e-05
+Epoch 155/200
+
+Epoch 00155: val_acc did not improve
+ - 18s - loss: 0.1912 - acc: 0.9420 - val_loss: 0.7131 - val_acc: 0.8028
+Learning rate:  1e-05
+Epoch 156/200
+
+Epoch 00156: val_acc did not improve
+ - 18s - loss: 0.1920 - acc: 0.9412 - val_loss: 0.7851 - val_acc: 0.7910
+Learning rate:  1e-05
+Epoch 157/200
+
+Epoch 00157: val_acc did not improve
+ - 18s - loss: 0.1906 - acc: 0.9428 - val_loss: 0.8051 - val_acc: 0.7802
+Learning rate:  1e-05
+Epoch 158/200
+
+Epoch 00158: val_acc did not improve
+ - 18s - loss: 0.1913 - acc: 0.9409 - val_loss: 0.6404 - val_acc: 0.8190
+Learning rate:  1e-05
+Epoch 159/200
+
+Epoch 00159: val_acc did not improve
+ - 18s - loss: 0.1899 - acc: 0.9416 - val_loss: 0.6703 - val_acc: 0.8176
+Learning rate:  1e-05
+Epoch 160/200
+
+Epoch 00160: val_acc did not improve
+ - 18s - loss: 0.1913 - acc: 0.9405 - val_loss: 0.6834 - val_acc: 0.8154
+Learning rate:  1e-05
+Epoch 161/200
+
+Epoch 00161: val_acc did not improve
+ - 18s - loss: 0.1922 - acc: 0.9418 - val_loss: 0.7685 - val_acc: 0.8020
+Learning rate:  1e-06
+Epoch 162/200
+
+Epoch 00162: val_acc did not improve
+ - 18s - loss: 0.1424 - acc: 0.9628 - val_loss: 0.5897 - val_acc: 0.8320
+Learning rate:  1e-06
+Epoch 163/200
+
+Epoch 00163: val_acc did not improve
+ - 18s - loss: 0.1341 - acc: 0.9662 - val_loss: 0.6102 - val_acc: 0.8338
+Learning rate:  1e-06
+Epoch 164/200
+
+Epoch 00164: val_acc did not improve
+ - 18s - loss: 0.1343 - acc: 0.9652 - val_loss: 0.6099 - val_acc: 0.8264
+Learning rate:  1e-06
+Epoch 165/200
+
+Epoch 00165: val_acc did not improve
+ - 18s - loss: 0.1356 - acc: 0.9650 - val_loss: 0.6107 - val_acc: 0.8282
+Learning rate:  1e-06
+Epoch 166/200
+
+Epoch 00166: val_acc did not improve
+ - 18s - loss: 0.1362 - acc: 0.9650 - val_loss: 0.6489 - val_acc: 0.8256
+Learning rate:  1e-06
+Epoch 167/200
+
+Epoch 00167: val_acc did not improve
+ - 18s - loss: 0.1392 - acc: 0.9641 - val_loss: 0.6152 - val_acc: 0.8292
+Learning rate:  1e-06
+Epoch 168/200
+
+Epoch 00168: val_acc did not improve
+ - 18s - loss: 0.1411 - acc: 0.9631 - val_loss: 0.6374 - val_acc: 0.8270
+Learning rate:  1e-06
+Epoch 169/200
+
+Epoch 00169: val_acc did not improve
+ - 18s - loss: 0.1414 - acc: 0.9624 - val_loss: 0.6838 - val_acc: 0.8224
+Learning rate:  1e-06
+Epoch 170/200
+
+Epoch 00170: val_acc did not improve
+ - 18s - loss: 0.1412 - acc: 0.9631 - val_loss: 0.6741 - val_acc: 0.8194
+Learning rate:  1e-06
+Epoch 171/200
+
+Epoch 00171: val_acc did not improve
+ - 18s - loss: 0.1420 - acc: 0.9622 - val_loss: 0.6951 - val_acc: 0.8134
+Learning rate:  1e-06
+Epoch 172/200
+
+Epoch 00172: val_acc did not improve
+ - 18s - loss: 0.1467 - acc: 0.9598 - val_loss: 0.6543 - val_acc: 0.8238
+Learning rate:  1e-06
+Epoch 173/200
+
+Epoch 00173: val_acc did not improve
+ - 18s - loss: 0.1453 - acc: 0.9600 - val_loss: 0.6621 - val_acc: 0.8082
+Learning rate:  1e-06
+Epoch 174/200
+
+Epoch 00174: val_acc did not improve
+ - 18s - loss: 0.1456 - acc: 0.9603 - val_loss: 0.6907 - val_acc: 0.8108
+Learning rate:  1e-06
+Epoch 175/200
+
+Epoch 00175: val_acc did not improve
+ - 18s - loss: 0.1470 - acc: 0.9592 - val_loss: 0.7126 - val_acc: 0.8096
+Learning rate:  1e-06
+Epoch 176/200
+
+Epoch 00176: val_acc did not improve
+ - 18s - loss: 0.1464 - acc: 0.9598 - val_loss: 0.6992 - val_acc: 0.8100
+Learning rate:  1e-06
+Epoch 177/200
+
+Epoch 00177: val_acc did not improve
+ - 18s - loss: 0.1497 - acc: 0.9583 - val_loss: 0.7108 - val_acc: 0.8078
+Learning rate:  1e-06
+Epoch 178/200
+
+Epoch 00178: val_acc did not improve
+ - 18s - loss: 0.1496 - acc: 0.9581 - val_loss: 0.6857 - val_acc: 0.8164
+Learning rate:  1e-06
+Epoch 179/200
+
+Epoch 00179: val_acc did not improve
+ - 18s - loss: 0.1506 - acc: 0.9579 - val_loss: 0.6493 - val_acc: 0.8300
+Learning rate:  1e-06
+Epoch 180/200
+
+Epoch 00180: val_acc did not improve
+ - 18s - loss: 0.1504 - acc: 0.9586 - val_loss: 0.6383 - val_acc: 0.8166
+Learning rate:  1e-06
+Epoch 181/200
+
+Epoch 00181: val_acc did not improve
+ - 18s - loss: 0.1497 - acc: 0.9579 - val_loss: 0.6227 - val_acc: 0.8264
+Learning rate:  5e-07
+Epoch 182/200
+
+Epoch 00182: val_acc did not improve
+ - 18s - loss: 0.1370 - acc: 0.9632 - val_loss: 0.6278 - val_acc: 0.8278
+Learning rate:  5e-07
+Epoch 183/200
+
+Epoch 00183: val_acc did not improve
+ - 18s - loss: 0.1405 - acc: 0.9625 - val_loss: 0.6526 - val_acc: 0.8308
+Learning rate:  5e-07
+Epoch 184/200
+
+Epoch 00184: val_acc did not improve
+ - 18s - loss: 0.1439 - acc: 0.9615 - val_loss: 0.6075 - val_acc: 0.8306
+Learning rate:  5e-07
+Epoch 185/200
+
+Epoch 00185: val_acc did not improve
+ - 18s - loss: 0.1449 - acc: 0.9602 - val_loss: 0.6659 - val_acc: 0.8170
+Learning rate:  5e-07
+Epoch 186/200
+
+Epoch 00186: val_acc did not improve
+ - 18s - loss: 0.1454 - acc: 0.9599 - val_loss: 0.6405 - val_acc: 0.8216
+Learning rate:  5e-07
+Epoch 187/200
+
+Epoch 00187: val_acc did not improve
+ - 18s - loss: 0.1471 - acc: 0.9592 - val_loss: 0.6523 - val_acc: 0.8278
+Learning rate:  5e-07
+Epoch 188/200
+
+Epoch 00188: val_acc did not improve
+ - 18s - loss: 0.1470 - acc: 0.9598 - val_loss: 0.6752 - val_acc: 0.8224
+Learning rate:  5e-07
+Epoch 189/200
+
+Epoch 00189: val_acc did not improve
+ - 18s - loss: 0.1481 - acc: 0.9586 - val_loss: 0.6322 - val_acc: 0.8234
+Learning rate:  5e-07
+Epoch 190/200
+
+Epoch 00190: val_acc did not improve
+ - 18s - loss: 0.1516 - acc: 0.9581 - val_loss: 0.6979 - val_acc: 0.8188
+Learning rate:  5e-07
+Epoch 191/200
+
+Epoch 00191: val_acc did not improve
+ - 18s - loss: 0.1519 - acc: 0.9570 - val_loss: 0.6889 - val_acc: 0.8146
+Learning rate:  5e-07
+Epoch 192/200
+
+Epoch 00192: val_acc did not improve
+ - 18s - loss: 0.1495 - acc: 0.9592 - val_loss: 0.6249 - val_acc: 0.8306
+Learning rate:  5e-07
+Epoch 193/200
+
+Epoch 00193: val_acc did not improve
+ - 18s - loss: 0.1506 - acc: 0.9574 - val_loss: 0.7027 - val_acc: 0.8108
+Learning rate:  5e-07
+Epoch 194/200
+
+Epoch 00194: val_acc did not improve
+ - 18s - loss: 0.1492 - acc: 0.9589 - val_loss: 0.7859 - val_acc: 0.8056
+Learning rate:  5e-07
+Epoch 195/200
+
+Epoch 00195: val_acc did not improve
+ - 18s - loss: 0.1493 - acc: 0.9600 - val_loss: 0.7469 - val_acc: 0.8040
+Learning rate:  5e-07
+Epoch 196/200
+
+Epoch 00196: val_acc did not improve
+ - 18s - loss: 0.1508 - acc: 0.9573 - val_loss: 0.6864 - val_acc: 0.8164
+Learning rate:  5e-07
+Epoch 197/200
+
+Epoch 00197: val_acc did not improve
+ - 18s - loss: 0.1515 - acc: 0.9572 - val_loss: 0.7214 - val_acc: 0.8048
+Learning rate:  5e-07
+Epoch 198/200
+
+Epoch 00198: val_acc did not improve
+ - 18s - loss: 0.1521 - acc: 0.9576 - val_loss: 0.7287 - val_acc: 0.8036
+Learning rate:  5e-07
+Epoch 199/200
+
+Epoch 00199: val_acc did not improve
+ - 18s - loss: 0.1530 - acc: 0.9565 - val_loss: 0.6326 - val_acc: 0.8250
+Learning rate:  5e-07
+Epoch 200/200
+
+Epoch 00200: val_acc did not improve
+ - 18s - loss: 0.1496 - acc: 0.9586 - val_loss: 0.6475 - val_acc: 0.8140
+Done
+
