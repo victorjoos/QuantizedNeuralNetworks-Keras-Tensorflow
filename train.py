@@ -52,9 +52,9 @@ callbacks = [checkpoint, tensorboard]
 if True:
     def lr_schedule(epoch, lr):
         if epoch < 80:
-            lr += epoch/80.0 * lr
+            lr += 1/80.0 * lr
         elif epoch < 120:
-            lr += lr - (40-(epoch-80))/40.0 * lr
+            lr += lr - 1/40.0 * lr
 
         print('Learning rate: ', lr)
         return lr
