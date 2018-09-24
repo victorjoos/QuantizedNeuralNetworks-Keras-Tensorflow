@@ -1,5 +1,4 @@
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau, LearningRateScheduler
-# from utils.keras_utils import LearningRateScheduler
 from keras.optimizers import SGD, Adam
 from keras.losses import squared_hinge
 import os

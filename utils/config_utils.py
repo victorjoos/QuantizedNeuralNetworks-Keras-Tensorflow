@@ -102,7 +102,7 @@ class Config:
                 self.dataset,self.network_type, self.abits, self.wbits, self.nla,
                 self.nfa, self.nlb,self.nfb, self.nlc, self.nfc)
         else:
-            self.out_wght_path = './'+self.date+'/weights/{}_{}_{}_{}b_{}b_{}.hdf5'.format(
+            self.out_wght_path = './'+self.date+'/{}_{}_{}_{}b_{}b_{}.hdf5'.format(
                 self.architecture, self.dataset,self.network_type, self.abits,
                 self.wbits, self.nres)
             self.tensorboard_name = './'+self.date + '/{}_{}_{}_{}b_{}b_{}.tsb'.format(

@@ -52,7 +52,7 @@ batch_size = 128
 lr = 0.1
 decay = 0.000025
 
-data="00/00/0000"
+date="00/00/0000"
 
 # important paths
 out_wght_path = './weights/{}_{}_{}b_{}b_{}_{}_{}_{}_{}_{}.hdf5'.format(dataset,network_type,abits,wbits,nla,nfa,nlb,nfb,nlc,nfc)
