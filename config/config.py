@@ -49,7 +49,7 @@ kernel_lr_multiplier = 10
 progress_logging = 2 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
 epochs = 200
 batch_size = 128
-lr = 0.001
+lr = 0.1
 decay = 0.000025
 
 

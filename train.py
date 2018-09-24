@@ -1,4 +1,5 @@
-from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, LearningRateScheduler, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau, LearningRateScheduler
+# from utils.keras_utils import LearningRateScheduler
 from keras.optimizers import SGD, Adam
 from keras.losses import squared_hinge
 import os
@@ -48,7 +49,25 @@ print('setting up the network and creating callbacks\n')
 checkpoint = ModelCheckpoint(cf.out_wght_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max', period=1)
 tensorboard = TensorBoard(log_dir='./logs/' + str(cf.tensorboard_name), histogram_freq=0, write_graph=True, write_images=False)
 callbacks = [checkpoint, tensorboard]
-if cf.architecture == "VGG":
+if True:
+    def lr_schedule(epoch, lr):
+        if epoch < 80:
+            lr += epoch/80.0 * lr
+        elif epoch < 120:
+            lr += lr - (40-(epoch-80))/40.0 * lr
+
+        print('Learning rate: ', lr)
+        return lr
+    lr_scheduler = LearningRateScheduler(lr_schedule)
+    lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
+                                   cooldown=0,
+                                   patience=5,
+                                   min_lr=0.5e-6)
+    callbacks += [lr_scheduler, lr_reducer]
+    adam = Adam(lr=cf.lr)
+    loss = 'categorical_crossentropy'
+
+elif cf.architecture == "VGG":
     early_stop = EarlyStopping(monitor='loss', min_delta=0.001, patience=10, mode='min', verbose=1)
 
     def scheduler(epoch):
@@ -143,6 +162,9 @@ else:
                         verbose=cf.progress_logging,
                         callbacks=callbacks,
                         validation_data=(val_data.X,val_data.y))
+    score = model.evaluate(test_data.X, test_data.y, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
 
 
 print('Done\n')
