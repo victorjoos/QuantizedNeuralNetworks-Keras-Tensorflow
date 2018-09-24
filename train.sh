@@ -6,6 +6,7 @@ GPU=$2
 CONFIG=config
 TIME=$(date +"%Y-%m-%d_%H-%M-%S")
 mkdir "logs/$TIME"
+mkdir "$TIME"
 # standard float
 # python3 train.py -c "$CONFIG" -o  nres="$NRES" date="$TIME" cuda="$GPU" network_type='float' | tee "logs/$TIME/ff.out"
 
