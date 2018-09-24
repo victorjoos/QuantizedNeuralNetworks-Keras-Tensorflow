@@ -1,4 +1,5 @@
-from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau, LearningRateScheduler
+from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
+from utils.keras_utils import LearningRateScheduler # for V2 compatibility on v1 server
 from keras.optimizers import SGD, Adam
 from keras.losses import squared_hinge
 import os
@@ -46,7 +47,7 @@ train_data, val_data, test_data = load_dataset(cf.dataset, cf)
 
 print('setting up the network and creating callbacks\n')
 checkpoint = ModelCheckpoint(cf.out_wght_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max', period=1)
-tensorboard = TensorBoard(log_dir='./logs/' + str(cf.tensorboard_name), histogram_freq=0, write_graph=True, write_images=False)
+tensorboard = TensorBoard(log_dir=str(cf.tensorboard_name), histogram_freq=0, write_graph=True, write_images=False)
 callbacks = [checkpoint, tensorboard]
 if True:
     def lr_schedule(epoch, lr):
