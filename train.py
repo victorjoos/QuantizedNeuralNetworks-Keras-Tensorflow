@@ -51,11 +51,8 @@ tensorboard = TensorBoard(log_dir=str(cf.tensorboard_name), histogram_freq=0, wr
 callbacks = [checkpoint, tensorboard]
 if True:
     def lr_schedule(epoch, lr):
-        if epoch < 80:
-            lr += 1/80.0 * lr
-        elif epoch < 120:
-            lr += lr - 1/40.0 * lr
-
+        if epoch in [20, 80, 120]:
+            lr = lr/10
         print('Learning rate: ', lr)
         return lr
     lr_scheduler = LearningRateScheduler(lr_schedule)
