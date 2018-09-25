@@ -159,9 +159,9 @@ else:
                         verbose=cf.progress_logging,
                         callbacks=callbacks,
                         validation_data=(val_data.X,val_data.y))
-    score = model.evaluate(test_data.X, test_data.y, verbose=0)
-    print('Test loss:', score[0])
-    print('Test accuracy:', score[1])
+score = model.evaluate(test_data.X, test_data.y, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 
 
 print('Done\n')
