@@ -51,7 +51,7 @@ tensorboard = TensorBoard(log_dir=str(cf.tensorboard_name), histogram_freq=0, wr
 callbacks = [checkpoint, tensorboard]
 if True:
     def lr_schedule(epoch, lr):
-        if epoch in [20, 80, 120]:
+        if epoch in [100, 160]:
             lr = lr/10
         print('Learning rate: ', lr)
         return lr
@@ -60,8 +60,8 @@ if True:
                                    cooldown=0,
                                    patience=5,
                                    min_lr=0.5e-6)
-    callbacks += [lr_scheduler, lr_reducer]
-    adam = Adam(lr=cf.lr)
+    callbacks += [lr_scheduler]
+    adam = SGD(lr=cf.lr, momentum=0.9, decay=1e-4)
     loss = 'categorical_crossentropy'
 
 elif cf.architecture == "VGG":
