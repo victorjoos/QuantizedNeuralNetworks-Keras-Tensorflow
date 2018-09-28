@@ -49,9 +49,10 @@ kernel_lr_multiplier = 10
 progress_logging = 2 # can be 0 = no std logging, 1 = progress bar logging, 2 = one log line per epoch
 epochs = 200
 batch_size = 128
-lr = 0.001
+lr = 0.1
 decay = 0.000025
 
+date="00/00/0000"
 
 # important paths
 out_wght_path = './weights/{}_{}_{}b_{}b_{}_{}_{}_{}_{}_{}.hdf5'.format(dataset,network_type,abits,wbits,nla,nfa,nlb,nfb,nlc,nfc)

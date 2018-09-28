@@ -4,7 +4,7 @@ Taken from https://github.com/keras-team/keras/blob/master/examples/cifar10_resn
 
 from __future__ import print_function
 import keras
-from keras.layers import BatchNormalization
+from keras.layers import BatchNormalization, Dense
 from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
@@ -17,7 +17,7 @@ from keras.datasets import cifar10
 import numpy as np
 import os
 
-def ResNet18(Conv2D, Activation, Dense, cf):
+def ResNet18(Conv2D, Activation, _Dense, cf):
 
     input_shape = (cf.dim,cf.dim,cf.channels)
     classes = cf.classes
