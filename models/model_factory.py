@@ -6,7 +6,7 @@ from keras.regularizers import l2
 import numpy as np
 
 from layers.quantized_layers import QuantizedConv2D,QuantizedDense
-from layers.quantized_ops import quantized_relu as quantize_op
+from layers.quantized_ops import quantized_tanh as quantize_op
 from layers.binary_layers import BinaryConv2D, BinaryDense
 from layers.binary_ops import binary_tanh
 from layers.ternary_layers import TernaryConv2D, TernaryDense
