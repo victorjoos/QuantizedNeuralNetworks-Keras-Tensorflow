@@ -62,7 +62,7 @@ if True:
                                    min_lr=0.5e-6)
     callbacks += [lr_scheduler]
     adam = SGD(lr=cf.lr, momentum=0.9, decay=1e-4)
-    loss = 'categorical_crossentropy'
+    loss = squared_hinge#'categorical_crossentropy'
 
 elif cf.architecture == "VGG":
     early_stop = EarlyStopping(monitor='loss', min_delta=0.001, patience=10, mode='min', verbose=1)
