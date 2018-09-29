@@ -138,9 +138,9 @@ def ResNet18(Conv2D, Activation, Dense, cf):
         x = AveragePooling2D(pool_size=8)(x)
         y = Flatten()(x)
         outputs = Dense(classes,
-                        # activation='softmax',
+                        activation='softmax',
                         kernel_initializer='he_normal')(y)
-        outputs = BatchNormalization(momentum=0.1, epsilon=1e-4)
+        # outputs = BatchNormalization(momentum=0.1, epsilon=1e-4)(outputs)
         # Instantiate model.
         model = Model(inputs=inputs, outputs=outputs)
         return model

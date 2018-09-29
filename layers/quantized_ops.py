@@ -20,7 +20,7 @@ def clip_through(x, min_val, max_val):
     '''
     clipped = K.clip(x, min_val, max_val)
     clipped_through= x + K.stop_gradient(clipped-x)
-    return clipped_through 
+    return clipped_through
 
 
 def clip_through(x, min, max):
@@ -40,12 +40,15 @@ def _hard_sigmoid(x):
     '''
     return K.clip((x+1)/2, 0, 1)
 
+def _hard_tanh(x):
+    return K.clip(x, -1, 1)
+
 
 
 
 def quantize(W, nb = 16, clip_through=False):
 
-    '''The weights' binarization function, 
+    '''The weights' binarization function,
 
     # Reference:
     - [QuantizedNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1, Courbariaux et al. 2016](http://arxiv.org/abs/1602.02830}
@@ -65,7 +68,7 @@ def quantize(W, nb = 16, clip_through=False):
 
 def quantized_relu(W, nb=16):
 
-    '''The weights' binarization function, 
+    '''The weights' binarization function,
 
     # Reference:
     - [QuantizedNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1, Courbariaux et al. 2016](http://arxiv.org/abs/1602.02830}
@@ -92,13 +95,13 @@ def quantized_tanh(W, nb=16):
     non_sign_bits = nb-1
     m = pow(2,non_sign_bits)
     #W = tf.Print(W,[W],summarize=20)
-    Wq = K.clip(round_through(W*m),-m,m-1)/m
+    Wq = K.clip(round_through(_hard_tanh(W*m)),-m,m-1)/m
     #Wq = tf.Print(Wq,[Wq],summarize=20)
     return Wq
 
 def quantized_leakyrelu(W, nb=16, alpha=0.1):
 
-    '''The weights' binarization function, 
+    '''The weights' binarization function,
 
     # Reference:
     - [QuantizedNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1, Courbariaux et al. 2016](http://arxiv.org/abs/1602.02830}
@@ -121,7 +124,7 @@ def quantized_leakyrelu(W, nb=16, alpha=0.1):
 
 def quantized_maxrelu(W, nb=16):
 
-    '''The weights' binarization function, 
+    '''The weights' binarization function,
 
     # Reference:
     - [QuantizedNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1, Courbariaux et al. 2016](http://arxiv.org/abs/1602.02830}
@@ -141,7 +144,7 @@ def quantized_maxrelu(W, nb=16):
 
 def quantized_leakymaxrelu(W, nb=16, alpha=0.1):
 
-    '''The weights' binarization function, 
+    '''The weights' binarization function,
 
     # Reference:
     - [QuantizedNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1, Courbariaux et al. 2016](http://arxiv.org/abs/1602.02830}
@@ -172,9 +175,9 @@ def quantized_leakymaxrelu(W, nb=16, alpha=0.1):
 def _mean_abs(x, axis=None, keepdims=False):
     return K.stop_gradient(K.mean(K.abs(x), axis=axis, keepdims=keepdims))
 
-    
+
 def xnorize(W, H=1., axis=None, keepdims=False):
     Wb = quantize(W, H)
     Wa = _mean_abs(W, axis, keepdims)
-    
+
     return Wa, Wb
