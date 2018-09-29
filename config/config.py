@@ -12,8 +12,8 @@ finetune = False
 
 architecture = 'RESNET'
 # architecture = 'VGG'
-# dataset='CIFAR-10'
-dataset='MNIST'
+dataset='CIFAR-10'
+# dataset='MNIST'
 
 if dataset == 'CIFAR-10':
     dim=32

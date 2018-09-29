@@ -29,7 +29,7 @@ mkdir "$TIME/logs"
 #
 #
 # # qnn
-python3 train.py -c "$CONFIG" -o date="$TIME" lr="$LR" nres="$NRES" cuda="$GPU" network_type='full-qnn' wbits=4 abits=2 #| tee "$LOGDIR/42.out"
+python3 train.py -c "$CONFIG" -o date="$TIME" lr="$LR" nres="$NRES" cuda="$GPU" network_type='full-qnn' wbits=4 abits=2 | tee "$LOGDIR/42.out"
 # python3 train.py -c "$CONFIG" -o date="$TIME" lr="$LR" nres="$NRES" cuda="$GPU" network_type='full-qnn' wbits=4 abits=4 | tee "$LOGDIR/44.out"
 # python3 train.py -c "$CONFIG" -o date="$TIME" lr="$LR" nres="$NRES" cuda="$GPU" network_type='full-qnn' wbits=4 abits=8 | tee "$LOGDIR/48.out"
 # # python3 train.py -c "$CONFIG" -o date="$TIME" lr="$LR" nres="$NRES" cuda="$GPU" network_type='qnn' wbits=4 | tee "$LOGDIR/4f.out"
