@@ -12,16 +12,7 @@ class obj(object):
             else:
                 setattr(self, a, obj(b) if isinstance(b, dict) else b)
 
-
-def get_netw_type_wbits_abits(name):
-    regex = re.compile(r'(.*)_(.*)b_(.*)b')
-    m = regex.match(name)
-    return m.group(1), int(m.group(2)), int(m.group(3))
-
-
-def build_with(filename):
-    match = re.match(r'.*RESNET(\d*).*weights_(..).hdf5', filename)
-    size = int(match.group(1))
+def convert_netw_type(type):
     all_poss = {
         "bf":"bnn_8b_4b",
         "ff":"float_4b_4b",
@@ -39,7 +30,16 @@ def build_with(filename):
         "t8":"qtnn_8b_4b",
         "tf":"tnn_8b_4b"
     }
-    np = all_poss[match.group(2)]
+    return all_poss[type]
+
+def get_netw_type_wbits_abits(name):
+    regex = re.compile(r'(.*)_(.*)b_(.*)b')
+    m = regex.match(name)
+    return m.group(1), int(m.group(2)), int(m.group(3))
+
+
+def build_with(filename, oldtype ,nres):
+    np = convert_netw_type(oldtype)
     type, wbits, abits = get_netw_type_wbits_abits(np)
     print(type, wbits, abits)
     cf = {
@@ -47,7 +47,7 @@ def build_with(filename):
         "dim": 32,
         "channels": 3,
         "classes": 10,
-        "nres": size,
+        "nres": nres,
         "kernel_initializer": 'he_normal',
         "kernel_regularizer": 1e-4,
         "dataset": "CIFAR-10",

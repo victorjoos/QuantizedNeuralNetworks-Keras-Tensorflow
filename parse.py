@@ -2,10 +2,10 @@ import os
 import re
 from math import sqrt, pow
 from glob import glob
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import random
 from collections import defaultdict, Counter
-from test_resnet import build_with
+from test_resnet import build_with, convert_netw_type
 import keras
 """from layers.quantized_layers import QuantizedConv2D,QuantizedDense
 from layers.quantized_ops import quantized_relu as quantize_op
@@ -45,11 +45,6 @@ models = {
     '42': (4, 2),
     '44': (4, 4),
     '48': (4, 8),
-}
-
-resnet = {
-    'a': (470218,16384),
-    'b': (372330,16384)
 }
 
 
@@ -144,10 +139,9 @@ def rreplace(s, old, new, occurrence=1):
     return new.join(li)
 
 
-def compute_estimate(wbit, abit, log, weights):
-    print(weights, wbit, abit)
-    accuracy = build_with(weights)
-    match = re.match(r'.*RESNET(\d*).*weights_(..).hdf5', weights)
+def compute_estimate(wbit, abit, log, wname, type, nres):
+    print(wname, wbit, abit)
+    accuracy = build_with(wname, type, nres)
     Q = wbit
     As = get_acts(log)
     Ns = get_weights(log)
@@ -169,39 +163,45 @@ def compute_estimate(wbit, abit, log, weights):
     Edram = get_Edram(Ed, s_in, c_in, Q, fr, wr)
     Ehw = get_Ehw(Emac, Nc, Ns, As, p)
     print("Energy [uJ] : ", Edram, Ehw)
-    outfile.write("{}, {}, {}, {}\n".format(match.group(2), match.group(1), accuracy, Edram + Ehw))
+    outfile.write("{}, {}, {}, {}\n".format(type, nres, accuracy, Edram + Ehw))
     return accuracy, Edram + Ehw
 
 
 def parse_models(dir, accs, energy):
-    logs = os.path.join(dir, "*.out")
-    # accs = defaultdict(list)
-    # energy = defaultdict(list)
+    logs_dir = os.path.join(dir, "logs/")
+    logs = os.path.join(logs_dir, "*.out")
+
     for log in glob(logs):
-        weights = log.replace(".out", ".hdf5")
-        weights = rreplace(weights, "/", "/weights_")
-        if os.path.exists(weights):
-            type = log[-6:-4]
-            acc, ener = compute_estimate(*models[type], log, weights)
+        type = log[-6:-4]
+        wname = os.path.join(dir, "RESNET_CIFAR-10_"+convert_netw_type(type)+"_*.hdf5")
+        for x in glob(wname):
+            wname = x
+            match = re.match(r'(.*)b_(.*)b_(\d*).hdf5', wname)
+            nres = int(match.group(3))
+            print(nres)
+            break
+        if os.path.exists(wname):
+            acc, ener = compute_estimate(*models[type], log, wname, type, nres)
             accs[type].append(acc)
             energy[type].append(ener)
         else:
             print("log file has no weights !")
 
-def parse_dir(directory):
+def parse_dir(dir_list):
     accs = defaultdict(list)
     energy = defaultdict(list)
-    for o in glob(os.path.join(directory, "RESNET*")):
-        parse_models(o, accs, energy)
+    for dir in dir_list:
+        parse_models(dir, accs, energy)
 
-    for key, value in accs.items():
-        plt.semilogy(value, energy[key])
+    # for key, value in accs.items():
+    #     plt.semilogy(value, energy[key])
+    #
+    # plt.show()
 
-    plt.show()
 
-
-
+import sys
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = 1
-    outfile = open("results.ou", 'w')
-    parse_dir("results")
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    dir_list = sys.argv[1:len(sys.argv)]
+    outfile = open("results.csv", 'w')
+    parse_dir(dir_list)

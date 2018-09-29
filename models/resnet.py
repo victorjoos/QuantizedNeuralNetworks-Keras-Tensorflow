@@ -6,14 +6,9 @@ from __future__ import print_function
 import keras
 from keras.layers import BatchNormalization
 from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
-from keras.optimizers import Adam
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler
-from keras.callbacks import ReduceLROnPlateau
-from keras.preprocessing.image import ImageDataGenerator
 from keras.regularizers import l2
 from keras import backend as K
 from keras.models import Model
-from keras.datasets import cifar10
 import numpy as np
 import os
 
@@ -102,7 +97,6 @@ def ResNet18(Conv2D, Activation, Dense, cf):
         num_res_blocks = int((depth - 2) / 6)
 
         inputs = Input(shape=input_shape)
-        inputs = Input(shape=input_shape)
         if cf.dataset == "MNIST" or cf.dataset == "FASHION":
             inputs_ = ZeroPadding2D(padding=(2,2))(inputs)
         else:
@@ -130,6 +124,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                                      activation=None,
                                      batch_normalization=False)
                 x = keras.layers.add([x, y])
+                x = BatchNormalization()(x)
                 x = Activation()(x)
             num_filters *= 2
 
@@ -138,10 +133,10 @@ def ResNet18(Conv2D, Activation, Dense, cf):
         x = AveragePooling2D(pool_size=8)(x)
         y = Flatten()(x)
         outputs = Dense(classes,
-                        # activation='softmax',
-                        # kernel_initializer='he_normal'
+                        activation='softmax',
+                        kernel_initializer='he_normal'
                         )(y)
-        outputs = BatchNormalization(momentum=0.1, epsilon=1e-4)(outputs)
+        # outputs = BatchNormalization(momentum=0.1, epsilon=1e-4)(outputs)
         # Instantiate model.
         model = Model(inputs=inputs, outputs=outputs)
         return model

@@ -95,7 +95,7 @@ def quantized_tanh(W, nb=16):
     non_sign_bits = nb-1
     m = pow(2,non_sign_bits)
     #W = tf.Print(W,[W],summarize=20)
-    Wq = K.clip(round_through(_hard_tanh(W*m)),-m,m-1)/m
+    Wq = K.clip(round_through(W*m),-m,m-1)/m
     #Wq = tf.Print(Wq,[Wq],summarize=20)
     return Wq
 
