@@ -124,7 +124,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                                      activation=None,
                                      batch_normalization=False)
                 x = keras.layers.add([x, y])
-                x = BatchNormalization()(x)
+                x = Lambda(lambda _x: _x * 0.5)(x)
                 x = Activation()(x)
             num_filters *= 2
 
