@@ -4,7 +4,7 @@ Taken from https://github.com/keras-team/keras/blob/master/examples/cifar10_resn
 
 from __future__ import print_function
 import keras
-from keras.layers import BatchNormalization
+from keras.layers import BatchNormalization, Lambdas
 from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
 from keras.regularizers import l2
 from keras import backend as K
