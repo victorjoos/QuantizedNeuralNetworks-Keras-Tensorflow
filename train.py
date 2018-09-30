@@ -49,22 +49,22 @@ print('setting up the network and creating callbacks\n')
 checkpoint = ModelCheckpoint(cf.out_wght_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max', period=1)
 tensorboard = TensorBoard(log_dir=str(cf.tensorboard_name), histogram_freq=0, write_graph=True, write_images=False)
 callbacks = [checkpoint, tensorboard]
-if True:
-    def lr_schedule(epoch, lr):
-        if epoch in [100, 160]:
-            lr = lr/10
-        print('Learning rate: ', lr)
-        return lr
-    lr_scheduler = LearningRateScheduler(lr_schedule)
-    lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
-                                   cooldown=0,
-                                   patience=5,
-                                   min_lr=0.5e-6)
-    callbacks += [lr_scheduler]
-    adam = SGD(lr=cf.lr, momentum=0.9, decay=1e-4)
-    loss = 'categorical_crossentropy'
+# if True:
+#     def lr_schedule(epoch, lr):
+#         if epoch in [100, 160]:
+#             lr = lr/10
+#         print('Learning rate: ', lr)
+#         return lr
+#     lr_scheduler = LearningRateScheduler(lr_schedule)
+#     lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
+#                                    cooldown=0,
+#                                    patience=5,
+#                                    min_lr=0.5e-6)
+#     callbacks += [lr_scheduler]
+#     adam = SGD(lr=cf.lr, momentum=0.9, decay=1e-4)
+#     loss = 'categorical_crossentropy'
 
-elif cf.architecture == "VGG":
+if cf.architecture == "VGG":
     early_stop = EarlyStopping(monitor='loss', min_delta=0.001, patience=10, mode='min', verbose=1)
 
     def scheduler(epoch):
