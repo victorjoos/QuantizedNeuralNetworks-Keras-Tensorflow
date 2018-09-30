@@ -29,7 +29,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                      strides=1,
                      batch_normalization=True,
                      activation="relu",
-                     conv_first=True):
+                     conv_first=False):
         """2D Convolution-Batch Normalization-Activation stack builder
 
         # Arguments
@@ -101,7 +101,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
             inputs_ = ZeroPadding2D(padding=(2,2))(inputs)
         else:
             inputs_ = inputs
-        x = resnet_layer(inputs=inputs_)
+        x = resnet_layer(inputs=inputs_, conv_first=True, activation=None, batch_normalization=False)
         # Instantiate the stack of residual units
         for stack in range(3):
             for res_block in range(num_res_blocks):
@@ -113,7 +113,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                                  strides=strides)
                 y = resnet_layer(inputs=y,
                                  num_filters=num_filters,
-                                 activation=None)
+                                 batch_normalization=False)
                 if stack > 0 and res_block == 0:  # first layer but not first stack
                     # linear projection residual shortcut connection to match
                     # changed dims
@@ -124,8 +124,8 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                                      activation=None,
                                      batch_normalization=False)
                 x = keras.layers.add([x, y])
-                x = Lambda(lambda _x: _x * 0.5)(x)
-                x = Activation()(x)
+                # x = Lambda(lambda _x: _x * 0.5)(x)
+                # x = Activation()(x)
             num_filters *= 2
 
         # Add classifier on top.
