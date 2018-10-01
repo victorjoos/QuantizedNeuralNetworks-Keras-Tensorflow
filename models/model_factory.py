@@ -70,36 +70,3 @@ def build_model(cf):
     model.summary()
 
     return model
-
-
-
-
-def load_weights(model, weight_reader):
-    weight_reader.reset()
-
-    for i in range(len(model.layers)):
-        if 'conv' in model.layers[i].name:
-            if 'batch' in model.layers[i + 1].name:
-                norm_layer = model.layers[i + 1]
-                size = np.prod(norm_layer.get_weights()[0].shape)
-
-                beta = weight_reader.read_bytes(size)
-                gamma = weight_reader.read_bytes(size)
-                mean = weight_reader.read_bytes(size)
-                var = weight_reader.read_bytes(size)
-
-                weights = norm_layer.set_weights([gamma, beta, mean, var])
-
-            conv_layer = model.layers[i]
-            if len(conv_layer.get_weights()) > 1:
-                bias = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
-                kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-                kernel = kernel.transpose([2, 3, 1, 0])
-                conv_layer.set_weights([kernel, bias])
-            else:
-                kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-                kernel = kernel.transpose([2, 3, 1, 0])
-                conv_layer.set_weights([kernel])
-    return model
