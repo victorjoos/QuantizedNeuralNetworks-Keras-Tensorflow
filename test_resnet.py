@@ -3,6 +3,9 @@ import argparse
 import re
 from utils.load_data import load_dataset
 from models.model_factory import build_model
+import sys
+from keras.models import Model
+import numpy as np
 
 class obj(object):
     def __init__(self, d):
@@ -39,8 +42,8 @@ def get_netw_type_wbits_abits(name):
 
 
 def build_with(filename, oldtype ,nres):
-    np = convert_netw_type(oldtype)
-    type, wbits, abits = get_netw_type_wbits_abits(np)
+    newp = convert_netw_type(oldtype)
+    type, wbits, abits = get_netw_type_wbits_abits(newp)
     print(type, wbits, abits)
     cf = {
         "architecture": "RESNET",
@@ -60,11 +63,29 @@ def build_with(filename, oldtype ,nres):
 
     wname = filename
     model.load_weights(wname)
-    loss = 'categorical_crossentropy'
-    model.compile(loss=loss, optimizer='Adam', metrics=['accuracy'])
+    # loss = 'categorical_crossentropy'
+    # model.compile(loss=loss, optimizer='Adam', metrics=['accuracy'])
+    layer_name = "conv2d_1"
+    intermediate_layer_model = Model(inputs=model.input,
+                                 outputs=model.get_layer(layer_name).output)
 
     train_data, val_data, test_data = load_dataset("CIFAR-10", cf)
-    score = model.evaluate(test_data.X, test_data.y, verbose=0)
-    print('Test loss:', score[0])
-    print('Test accuracy:', score[1])
-    return score[1]
+    import matplotlib.pyplot as plt
+    import matplotlib.image as mpimg
+
+    imgplot = plt.imshow(test_data.X[0])
+    # plt.show()
+    score = intermediate_layer_model.predict(np.array([np.ones(test_data.X[0].shape)]), verbose=0)
+    # print(score[0])
+    for i in range(32):
+        for j in range(32):
+        print(score[0][i][j][0], end='')
+        print('')
+    print(score.shape)
+    # print('Test loss:', score[0])
+    # print('Test accuracy:', score[1])
+    # print(score)
+    return score#[1]
+
+if __name__ == "__main__":
+    build_with(sys.argv[1], "ff", 3)
