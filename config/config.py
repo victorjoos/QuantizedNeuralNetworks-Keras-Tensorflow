@@ -22,11 +22,11 @@ else:
     dim=28
     channels=1
 classes=10
-data_augmentation=False
+data_augmentation=True
 
 #regularization
 kernel_regularizer=1e-4
-kernel_initializer='he_normal'
+kernel_initializer='glorot_uniform'
 activity_regularizer=0.
 
 # width and depth
