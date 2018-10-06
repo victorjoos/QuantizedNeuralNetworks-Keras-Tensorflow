@@ -25,7 +25,7 @@ classes=10
 data_augmentation=True
 
 #regularization
-kernel_regularizer=1e-4
+kernel_regularizer=0.
 kernel_initializer='glorot_uniform'
 activity_regularizer=0.
 
