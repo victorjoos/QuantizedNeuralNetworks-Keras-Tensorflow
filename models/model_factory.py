@@ -24,7 +24,7 @@ def build_model(cf):
     if cf.network_type =='float':
         Conv = Conv2D
         Fc = Dense
-        Act = lambda: Activation('tanh')
+        Act = lambda: LeakyReLU()
 
     elif cf.network_type in ['qnn', 'full-qnn']:
         Conv = lambda **kwargs: QuantizedConv2D(H=1, nb=cf.wbits, **kwargs)
