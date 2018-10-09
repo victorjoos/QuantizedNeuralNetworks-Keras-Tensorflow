@@ -45,9 +45,15 @@ models = {
     '42': (4, 2),
     '44': (4, 4),
     '48': (4, 8),
+    '4f': (4, 32),
 }
 
-
+def get_acc(filename):
+    with open(filename) as fp:
+        for line in fp:
+            match = re.match(r'Test accuracy2: (0.\d*)', line)
+            if match is not None:
+                return float(match.groups()[0])*100
 def get_acts(filename):
     """Gets activations from file."""
     with open(filename) as input_file:
@@ -141,7 +147,7 @@ def rreplace(s, old, new, occurrence=1):
 
 def compute_estimate(wbit, abit, log, wname, type, nres):
     print(wname, wbit, abit)
-    accuracy = build_with(wname, type, nres)
+    accuracy = get_acc(log)#build_with(wname, type, nres)
     Q = wbit
     As = get_acts(log)
     Ns = get_weights(log)
@@ -201,7 +207,7 @@ def parse_dir(dir_list):
 
 import sys
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     dir_list = sys.argv[1:len(sys.argv)]
     outfile = open("results.csv", 'w')
     parse_dir(dir_list)
