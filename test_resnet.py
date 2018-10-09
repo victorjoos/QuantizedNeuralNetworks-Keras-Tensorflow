@@ -15,7 +15,7 @@ class obj(object):
             else:
                 setattr(self, a, obj(b) if isinstance(b, dict) else b)
 
-def convert_netw_type(type):
+def convert_netw_type(_type):
     all_poss = {
         "bf":"bnn_8b_4b",
         "ff":"float_4b_4b",
@@ -33,7 +33,7 @@ def convert_netw_type(type):
         "t8":"qtnn_8b_4b",
         "tf":"tnn_8b_4b"
     }
-    return all_poss[type]
+    return all_poss[_type]
 
 def get_netw_type_wbits_abits(name):
     regex = re.compile(r'(.*)_(.*)b_(.*)b')
@@ -43,8 +43,8 @@ def get_netw_type_wbits_abits(name):
 
 def build_with(filename, oldtype ,nres):
     newp = convert_netw_type(oldtype)
-    type, wbits, abits = get_netw_type_wbits_abits(newp)
-    print(type, wbits, abits)
+    _type, wbits, abits = get_netw_type_wbits_abits(newp)
+    print(_type, wbits, abits)
     cf = {
         "architecture": "RESNET",
         "dim": 32,
@@ -54,7 +54,7 @@ def build_with(filename, oldtype ,nres):
         "kernel_initializer": 'he_normal',
         "kernel_regularizer": 1e-4,
         "dataset": "CIFAR-10",
-        "network_type": type,
+        "network_type": _type,
         "wbits": wbits,
         "abits": abits
     }
@@ -63,24 +63,25 @@ def build_with(filename, oldtype ,nres):
 
     wname = filename
     model.load_weights(wname)
-    # loss = 'categorical_crossentropy'
-    # model.compile(loss=loss, optimizer='Adam', metrics=['accuracy'])
-    layer_name = "conv2d_1"
+    loss = 'categorical_crossentropy'
+    model.compile(loss=loss, optimizer='Adam', metrics=['accuracy'])
+    layer_name = "dense_1"
     intermediate_layer_model = Model(inputs=model.input,
                                  outputs=model.get_layer(layer_name).output)
 
     train_data, val_data, test_data = load_dataset("CIFAR-10", cf)
-    import matplotlib.pyplot as plt
-    import matplotlib.image as mpimg
+    # import matplotlib.pyplot as plt
+    # import matplotlib.image as mpimg
 
-    imgplot = plt.imshow(test_data.X[0])
+    # imgplot = plt.imshow(test_data.X[0])
     # plt.show()
-    score = intermediate_layer_model.predict(np.array([np.ones(test_data.X[0].shape)]), verbose=0)
-    # print(score[0])
-    for i in range(32):
-        for j in range(32):
-        print(score[0][i][j][0], end='')
-        print('')
+    # print(test_data.X[0].flatten())
+    score = model.evaluate(test_data.X, test_data.y) # intermediate_layer_model.predict(np.array([test_data.X[0]]), verbose=0)
+    print(score)
+    """for i in range(len(score[0])):
+        for j in range(len(score[0][i])):
+            print("{0: .5f} ".format(score[0][i][j][0]), end='')
+        print('')"""
     print(score.shape)
     # print('Test loss:', score[0])
     # print('Test accuracy:', score[1])
