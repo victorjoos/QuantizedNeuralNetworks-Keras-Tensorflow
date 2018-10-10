@@ -10,6 +10,7 @@ LOGDIR="$TIME/logs"
 PARAMS="date=${TIME} lr=${LR} nres=${NRES} cuda=${GPU}"
 mkdir "$TIME"
 mkdir "$TIME/logs"
+echo $PARAMS > "$LOGDIR/config.txt"
 
 # standard float
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' | tee "$LOGDIR/ff.out"

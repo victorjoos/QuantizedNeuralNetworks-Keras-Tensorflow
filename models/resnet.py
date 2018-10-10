@@ -50,7 +50,8 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                       strides=strides,
                       padding='same',
                       kernel_initializer=cf.kernel_initializer,
-                      kernel_regularizer=l2(cf.kernel_regularizer)
+                      kernel_regularizer=l2(cf.kernel_regularizer),
+                      use_bias=False
                       )
 
         x = inputs
@@ -134,7 +135,8 @@ def ResNet18(Conv2D, Activation, Dense, cf):
         y = Flatten()(x)
         outputs = Dense(classes,
                         activation='softmax',
-                        kernel_initializer='he_normal'
+                        kernel_initializer=cf.kernel_initializer,
+                        use_bias=False
                         )(y)
         # outputs = BatchNormalization(momentum=0.1, epsilon=1e-4)(outputs)
         # Instantiate model.
