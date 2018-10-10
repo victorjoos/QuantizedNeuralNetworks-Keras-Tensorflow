@@ -1,5 +1,5 @@
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ReduceLROnPlateau
-from utils.keras_utils import LearningRateScheduler # for V2 compatibility on v1 server
+from utils.keras_utils import LearningRateScheduler, MyEarlyStopping # for V2 compatibility on v1 server
 from keras.optimizers import SGD, Adam
 from keras.losses import squared_hinge
 from keras.preprocessing.image import ImageDataGenerator
@@ -49,7 +49,7 @@ train_data, val_data, test_data = load_dataset(cf.dataset, cf)
 print('setting up the network and creating callbacks\n')
 checkpoint = ModelCheckpoint(cf.out_wght_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max', period=1)
 tensorboard = TensorBoard(log_dir=str(cf.tensorboard_name), histogram_freq=0, write_graph=True, write_images=False)
-callbacks = [checkpoint, tensorboard]
+callbacks = [checkpoint, tensorboard, MyEarlyStopping()]
 # if True:
 #     def lr_schedule(epoch, lr):
 #         if epoch in [100, 160]:
@@ -88,9 +88,9 @@ elif cf.architecture=="RESNET":
     def lr_schedule(epoch, lr):
         lr = cf.lr
         if epoch > 180:
-            lr *= 0.5e-3
-        elif epoch > 160:
             lr *= 1e-3
+        elif epoch > 160:
+            lr *= 5e-3
         elif epoch > 120:
             lr *= 1e-2
         elif epoch > 80:
@@ -147,8 +147,8 @@ else:
         vertical_flip=False, # randomly flip images
         rescale=None, # set rescaling factor (applied before any other transformation)
         preprocessing_function=None, # set function that will be applied on each input
-        data_format=None, # image data format, either "channels_first" or "channels_last"
-        validation_split=0.0) # fraction of images reserved for validation (strictly between 0 and 1)
+        data_format=None,) # image data format, either "channels_first" or "channels_last"
+        # validation_split=0.0) # fraction of images reserved for validation (strictly between 0 and 1)
 
     # Compute quantities required for featurewise normalization
     # (std, mean, and principal components if ZCA whitening is applied).
