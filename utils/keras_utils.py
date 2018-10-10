@@ -73,7 +73,7 @@ class MyEarlyStopping(Callback):
                  mode='auto',
                  baseline=None,
                  restore_best_weights=False):
-        super(EarlyStopping, self).__init__()
+        super(MyEarlyStopping, self).__init__()
 
         self.monitor = monitor
         self.baseline = baseline
