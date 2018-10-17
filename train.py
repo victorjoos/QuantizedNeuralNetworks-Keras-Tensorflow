@@ -100,7 +100,7 @@ elif cf.architecture=="RESNET":
     def lr_sched2(epoch, lr):
         ll = lr
         rr = 3e-4
-        repochs = cf.epochs - epochs
+        repochs = cf.epochs - epoch
         alpha = pow(rr/ll, 1/repochs) if repochs>0 else 1
         return lr*alpha
     lr_scheduler = LearningRateScheduler(lr_sched2)
