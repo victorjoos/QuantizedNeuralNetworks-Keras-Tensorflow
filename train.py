@@ -98,14 +98,15 @@ elif cf.architecture=="RESNET":
         print('Learning rate: ', lr)
         return lr
     def lr_sched2(epoch, lr):
-        ll = cf.lr
+        ll = lr
         rr = 3e-4
-        alpha = pow(rr/ll, 1/cf.epochs)
+        repochs = cf.epochs - epochs
+        alpha = pow(rr/ll, 1/repochs) if repochs>0 else 1
         return lr*alpha
     lr_scheduler = LearningRateScheduler(lr_sched2)
     lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
-                                   cooldown=0,
-                                   patience=5,
+                                   cooldown=3,
+                                   patience=7,
                                    min_lr=0.5e-6)
     callbacks += [lr_scheduler, lr_reducer]
     adam = Adam(lr=cf.lr)
