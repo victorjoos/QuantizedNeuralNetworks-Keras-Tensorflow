@@ -38,6 +38,7 @@ nlc=1
 nfc=256
 
 nres=3
+pfilt=1
 cuda="0"
 
 #learning rate decay, factor => LR *= factor

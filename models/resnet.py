@@ -45,7 +45,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
         # Returns
             x (tensor): tensor as input to the next layer
         """
-        conv = Conv2D(filters=num_filters,
+        conv = Conv2D(filters=num_filters*cf.pfilt,
                       kernel_size=kernel_size,
                       strides=strides,
                       padding='same',

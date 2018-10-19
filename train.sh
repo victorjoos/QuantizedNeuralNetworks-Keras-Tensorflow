@@ -4,10 +4,12 @@
 NRES=$1
 LR=$2
 GPU=$3
+PFI=$4
+
 CONFIG=config
 TIME=$(date +"%Y-%m-%d_%H-%M-%S")
 LOGDIR="$TIME/logs"
-PARAMS="date=${TIME} lr=${LR} nres=${NRES} cuda=${GPU}"
+PARAMS="date=${TIME} lr=${LR} nres=${NRES} pfilt=${PFI} cuda=${GPU}"
 mkdir "$TIME"
 mkdir "$TIME/logs"
 echo $PARAMS > "$LOGDIR/config.txt"

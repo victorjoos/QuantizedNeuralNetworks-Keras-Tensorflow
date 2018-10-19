@@ -28,6 +28,7 @@ parameter_specs = {
     'bits'                     :[False, None, int],
     'wbits'                    :[False, None, int],
     'abits'                    :[False, None, int],
+    'pfilt'                    :[False, None, int],
     'nla'                      :[False, None, int],
     'nfa'                      :[False, None, int],
     'nlb'                      :[False, None, int],

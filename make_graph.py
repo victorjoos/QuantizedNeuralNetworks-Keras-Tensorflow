@@ -1,17 +1,15 @@
 import matplotlib.pyplot as plt
-import re
 from collections import defaultdict
 import itertools
+import sys
 
-
-with open("results.out") as results:
-    regex = re.compile(r'(.*), (.*), (.*), (.*)')
+with open(sys.argv[1]) as results:
     accs = defaultdict(list)
     Es = defaultdict(list)
     for line in results:
-        match = regex.match(line)
-        type = match.group(1)
-        acc, energy = float(match.group(3)), float(match.group(4))
+        vals = line.split(", ")
+        type = vals[0]
+        acc, energy = float(vals[2]), float(vals[3])
         accs[type].append(acc)
         Es[type].append(energy)
     print(accs)
