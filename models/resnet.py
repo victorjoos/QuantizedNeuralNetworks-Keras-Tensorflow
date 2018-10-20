@@ -12,7 +12,7 @@ from keras.models import Model
 import numpy as np
 import os
 
-def ResNet18(Conv2D, Activation, Dense, cf):
+def ResNet18(Conv2D, Conv2D1, Activation, Dense, cf):
 
     input_shape = (cf.dim,cf.dim,cf.channels)
     classes = cf.classes
@@ -29,7 +29,8 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                      strides=1,
                      batch_normalization=True,
                      activation="relu",
-                     conv_first=True):
+                     conv_first=True,
+                     first_ever=False):
         """2D Convolution-Batch Normalization-Activation stack builder
 
         # Arguments
@@ -52,7 +53,17 @@ def ResNet18(Conv2D, Activation, Dense, cf):
                       kernel_initializer=cf.kernel_initializer,
                       kernel_regularizer=l2(cf.kernel_regularizer),
                       use_bias=False
-                      )
+                      )\
+                      if not first_ever else\
+                      Conv2D1(filters=num_filters*cf.pfilt,
+                                    kernel_size=kernel_size,
+                                    strides=strides,
+                                    padding='same',
+                                    kernel_initializer=cf.kernel_initializer,
+                                    kernel_regularizer=l2(cf.kernel_regularizer),
+                                    use_bias=False
+                                    )\
+
 
         x = inputs
         if conv_first:
@@ -102,7 +113,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
             inputs_ = ZeroPadding2D(padding=(2,2))(inputs)
         else:
             inputs_ = inputs
-        x = resnet_layer(inputs=inputs_)
+        x = resnet_layer(inputs=inputs_, first_ever=True)
         # Instantiate the stack of residual units
         for stack in range(3):
             for res_block in range(num_res_blocks):

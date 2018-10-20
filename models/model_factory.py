@@ -63,7 +63,9 @@ def build_model(cf):
     if cf.architecture=="VGG":
         model = Vgg(Conv, Act, Fc, cf)
     elif cf.architecture=="RESNET":
-        model = ResNet18(Conv, Act, Fc, cf)
+        Conv1 = Conv # lambda **kwargs: QuantizedConv2D(H=1, nb=2, **kwargs)
+        Fc = Dense
+        model = ResNet18(Conv, Conv1, Act, Fc, cf)
     else:
         raise ValueError("Error: type " + str(cf.architecture) + " is not supported")
 
