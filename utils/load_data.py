@@ -31,8 +31,8 @@ def split_train(train_set, size, add_dim=False):
     valid = []
     train.append(train_set[0][0:size])
     train.append(train_set[1][0:size])
-    valid.append(train_set[0][size:])
-    valid.append(train_set[1][size:])
+    valid.append(train_set[0][size:size+500])
+    valid.append(train_set[1][size:size+500])
     return Dataset(train, add_dim), Dataset(valid, add_dim)
 
 class Dataset:
@@ -48,7 +48,7 @@ def load_dataset(dataset, cf):
         print('Loading CIFAR-10 dataset...')
 
 
-        train_set_size = 45000
+        train_set_size = 5000
         train_init, test_init = cifar10.load_data()
         train_set, valid_set = split_train(train_init, train_set_size)
         test_set = Dataset(test_init)
