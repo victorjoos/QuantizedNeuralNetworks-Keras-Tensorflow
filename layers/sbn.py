@@ -82,7 +82,7 @@ class MySBN(BatchNormalization):
                         inputs)
 
         # Pick the normalized form corresponding to the training phase.
-        return K.in_train_phase(normed_training,
+        return in_train_phase(normed_training,
                                 normalize_inference,
                                 training=training)
 
@@ -110,3 +110,28 @@ def _fused_normalize_batch_in_training(x, gamma, beta, reduction_axes,
         beta,
         epsilon=epsilon,
         data_format=tf_data_format)
+def in_train_phase(x, alt, training=None):
+    x = alt
+    if training is None:
+        training = K.learning_phase()
+        uses_learning_phase = True
+    else:
+        uses_learning_phase = False
+
+    if training is 1 or training is True:
+        if callable(x):
+            return x()
+        else:
+            return x
+
+    elif training is 0 or training is False:
+        if callable(alt):
+            return alt()
+        else:
+            return alt
+
+    # else: assume learning phase is a placeholder tensor.
+    x = K.switch(training, x, alt)
+    if uses_learning_phase:
+        x._uses_learning_phase = True
+    return x
