@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # cuDNN
 
-NRES=1
-LR="0.01"
-GPU=""
+NRES="3"
+LR="0.1"
+GPU="1"
 PFI="1"
 
 CONFIG=config
