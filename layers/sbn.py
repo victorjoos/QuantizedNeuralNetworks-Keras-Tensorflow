@@ -36,7 +36,7 @@ class MySBN(BatchNormalization):
 
         def normalize_inference():
             def round_to_n(tensor):
-                return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
+                return tf.scalar_mul(1/16, tf.round(tf.scalar_mul(16, tensor)))
             return tf.add(
                         tf.multiply(
                                 tf.subtract(inputs, self.moving_mean),
@@ -50,6 +50,7 @@ class MySBN(BatchNormalization):
                               ),
                         round_to_n(self.beta)
                         )
+
 
             # return K.batch_normalization(
             #     inputs,
@@ -86,6 +87,7 @@ class MySBN(BatchNormalization):
                         inputs)
 
         # Pick the normalized form corresponding to the training phase.
-        return K.in_train_phase(normed_training,
-                                normalize_inference,
-                                training=training)
+        return normalize_inference()
+        # return K.in_train_phase(normed_training,
+        #                         normalize_inference,
+        #                         training=training)
