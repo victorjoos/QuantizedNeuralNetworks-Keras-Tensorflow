@@ -35,14 +35,28 @@ class MySBN(BatchNormalization):
         needs_broadcasting = (sorted(reduction_axes) != list(range(ndim))[:-1])
 
         def normalize_inference():
-            return K.batch_normalization(
-                inputs,
-                self.moving_mean,
-                tf.ones_like(self.moving_variance),
-                self.beta,
-                tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tf.div(self.gamma, tf.sqrt(tf.add(self.moving_variance, tf.scalar_mul(1e-3, tf.ones_like(self.moving_variance)))))))),
-                axis=self.axis,
-                epsilon=self.epsilon)
+            return tf.add(
+                        tf.multiply(
+                                tf.subtract(inputs, self.moving_mean),
+                                tf.div(
+                                        self.gamma,
+                                        tf.sqrt(tf.add(
+                                                        self.moving_variance,
+                                                        tf.scalar_mul(1e-3, tf.ones_like(self.moving_variance))
+                                                ))
+                                       )
+                              ),
+                        self.beta
+                        )
+
+            # return K.batch_normalization(
+            #     inputs,
+            #     self.moving_mean,
+            #     tf.ones_like(self.moving_variance),
+            #     self.beta,
+            #     tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tf.div(self.gamma, tf.sqrt(tf.add(self.moving_variance, tf.scalar_mul(1e-3, tf.ones_like(self.moving_variance)))))))),
+            #     axis=self.axis,
+            #     epsilon=0)
 
         # If the learning phase is *static* and set to inference:
         if training in {0, False}:
