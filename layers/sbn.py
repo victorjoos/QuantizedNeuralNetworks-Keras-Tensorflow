@@ -35,18 +35,20 @@ class MySBN(BatchNormalization):
         needs_broadcasting = (sorted(reduction_axes) != list(range(ndim))[:-1])
 
         def normalize_inference():
+            def round_to_n(tensor):
+                return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
             return tf.add(
                         tf.multiply(
                                 tf.subtract(inputs, self.moving_mean),
-                                tf.div(
+                                round_to_n(tf.div(
                                         self.gamma,
                                         tf.sqrt(tf.add(
                                                         self.moving_variance,
                                                         tf.scalar_mul(1e-3, tf.ones_like(self.moving_variance))
                                                 ))
-                                       )
+                                       ))
                               ),
-                        self.beta
+                        round_to_n(self.beta)
                         )
 
             # return K.batch_normalization(
