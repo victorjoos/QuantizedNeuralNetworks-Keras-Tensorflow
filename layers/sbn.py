@@ -36,37 +36,32 @@ class MySBN(BatchNormalization):
 
         def normalize_inference():
             def round_to_n(tensor):
-                return tf.scalar_mul(1/16, tf.round(tf.scalar_mul(16, tensor)))
+                return tensor#tf.scalar_mul(1/16, tf.round(tf.scalar_mul(16, tensor)))
+
+            beta = zeros_like(mean) if self.beta is None else self.beta
+            gamma = zeros_like(mean) if self.gamma is None else self.gamma
+
             return tf.add(
                         tf.multiply(
                                 tf.subtract(inputs, self.moving_mean),
                                 round_to_n(tf.div(
-                                        self.gamma,
+                                        gamma,
                                         tf.sqrt(tf.add(
                                                         self.moving_variance,
                                                         tf.scalar_mul(1e-3, tf.ones_like(self.moving_variance))
                                                 ))
                                        ))
                               ),
-                        round_to_n(self.beta)
+                        round_to_n(beta)
                         )
 
-
-            # return K.batch_normalization(
-            #     inputs,
-            #     self.moving_mean,
-            #     tf.ones_like(self.moving_variance),
-            #     self.beta,
-            #     tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tf.div(self.gamma, tf.sqrt(tf.add(self.moving_variance, tf.scalar_mul(1e-3, tf.ones_like(self.moving_variance)))))))),
-            #     axis=self.axis,
-            #     epsilon=0)
 
         # If the learning phase is *static* and set to inference:
         if training in {0, False}:
             return normalize_inference()
 
         # If the learning is either dynamic, or set to training:
-        normed_training, mean, variance = K.normalize_batch_in_training(
+        normed_training, mean, variance = _fused_normalize_batch_in_training(
             inputs, self.gamma, self.beta, reduction_axes,
             epsilon=self.epsilon)
 
@@ -87,7 +82,31 @@ class MySBN(BatchNormalization):
                         inputs)
 
         # Pick the normalized form corresponding to the training phase.
-        return normalize_inference()
-        # return K.in_train_phase(normed_training,
-        #                         normalize_inference,
-        #                         training=training)
+        return K.in_train_phase(normed_training,
+                                normalize_inference,
+                                training=training)
+
+def _fused_normalize_batch_in_training(x, gamma, beta, reduction_axes,
+                                       epsilon=1e-3):
+    if list(reduction_axes) == [0, 1, 2]:
+        normalization_axis = 3
+        tf_data_format = 'NHWC'
+    else:
+        normalization_axis = 1
+        tf_data_format = 'NCHW'
+
+    if gamma is None:
+        gamma = tf.constant(1.0,
+                            dtype=x.dtype,
+                            shape=[x.get_shape()[normalization_axis]])
+    if beta is None:
+        beta = tf.constant(0.0,
+                           dtype=x.dtype,
+                           shape=[x.get_shape()[normalization_axis]])
+
+    return tf.nn.fused_batch_norm(
+        x,
+        gamma,
+        beta,
+        epsilon=epsilon,
+        data_format=tf_data_format)
