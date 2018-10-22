@@ -15,6 +15,7 @@ from layers.ternary_ops import ternary_tanh
 from models.resnet import ResNet18
 from models.vgg import Vgg
 from layers.sbn import MySBN
+from keras.preprocessing.image import ImageDataGenerator
 
 def build_model(cf):
     def quantized_relu(x):
