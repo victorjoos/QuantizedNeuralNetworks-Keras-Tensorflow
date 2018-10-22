@@ -17,7 +17,7 @@ import tensorflow as tf
 
 def my_bn(x, mean, var, beta, gamma, epsilon):
     def round_to_n(tensor):
-        return tensor#tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
+        return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
 
     beta = zeros_like(mean) if beta is None else beta
     gamma = zeros_like(mean) if gamma is None else gamma
