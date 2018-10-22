@@ -71,7 +71,7 @@ if __name__ == "__main__":
     model.fit_generator(datagen.flow(train_data.X,train_data.y, batch_size=128),
                         epochs=200,
                         verbose=1,
-                        callbacks=None,
+                        callbacks=callbacks,
                         validation_data=(val_data.X,val_data.y))
     score = model.evaluate(test_data.X, test_data.y)
     print(score)

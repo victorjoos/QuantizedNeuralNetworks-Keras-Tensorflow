@@ -36,7 +36,7 @@ class MySBN(BatchNormalization):
 
         def normalize_inference():
             def round_to_n(tensor):
-                return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
+                return tensor#tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
 
             beta = zeros_like(mean) if self.beta is None else self.beta
             gamma = zeros_like(mean) if self.gamma is None else self.gamma
