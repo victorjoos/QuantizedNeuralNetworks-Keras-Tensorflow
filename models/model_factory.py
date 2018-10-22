@@ -14,6 +14,7 @@ from layers.ternary_ops import ternary_tanh
 
 from models.resnet import ResNet18
 from models.vgg import Vgg
+from layers.sbn import MySBN
 
 def build_model(cf):
     def quantized_relu(x):
@@ -64,8 +65,9 @@ def build_model(cf):
         model = Vgg(Conv, Act, Fc, cf)
     elif cf.architecture=="RESNET":
         Conv1 = Conv # lambda **kwargs: QuantizedConv2D(H=1, nb=2, **kwargs)
-        Fc = Dense
-        model = ResNet18(Conv, Conv1, Act, Fc, cf)
+        # Fc = Dense
+        Bn = lambda **kwargs: MySBN(trainable=False, **kwargs)
+        model = ResNet18(Conv, Conv1, Act, Fc, Bn, cf)
     else:
         raise ValueError("Error: type " + str(cf.architecture) + " is not supported")
 
@@ -76,32 +78,19 @@ def build_model(cf):
 
 
 
-def load_weights(model, weight_reader):
-    weight_reader.reset()
+def load_bn_weights(model, weight_reader):
+    # weight_reader.reset()
 
     for i in range(len(model.layers)):
-        if 'conv' in model.layers[i].name:
-            if 'batch' in model.layers[i + 1].name:
-                norm_layer = model.layers[i + 1]
-                size = np.prod(norm_layer.get_weights()[0].shape)
+        if 'batch' in model.layers[i].name:
+            norm_layer = model.layers[i]
+            size = np.prod(norm_layer.get_weights()[0].shape)
 
-                beta = weight_reader.read_bytes(size)
-                gamma = weight_reader.read_bytes(size)
-                mean = weight_reader.read_bytes(size)
-                var = weight_reader.read_bytes(size)
+            beta = weight_reader.read_bytes(size)
+            gamma = weight_reader.read_bytes(size)
+            mean = weight_reader.read_bytes(size)
+            var = weight_reader.read_bytes(size)
 
-                weights = norm_layer.set_weights([gamma, beta, mean, var])
+            weights = norm_layer.set_weights([gamma, beta, mean, var])
 
-            conv_layer = model.layers[i]
-            if len(conv_layer.get_weights()) > 1:
-                bias = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
-                kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-                kernel = kernel.transpose([2, 3, 1, 0])
-                conv_layer.set_weights([kernel, bias])
-            else:
-                kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-                kernel = kernel.transpose([2, 3, 1, 0])
-                conv_layer.set_weights([kernel])
     return model

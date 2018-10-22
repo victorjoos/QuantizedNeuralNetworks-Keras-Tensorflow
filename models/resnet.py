@@ -3,7 +3,6 @@ Taken from https://github.com/keras-team/keras/blob/master/examples/cifar10_resn
 """
 
 from __future__ import print_function
-from layers.sbn import MySBN
 import keras
 from keras.layers import Lambda
 from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
@@ -13,8 +12,7 @@ from keras.models import Model
 import numpy as np
 import os
 
-def ResNet18(Conv2D, Conv2D1, Activation, Dense, cf):
-    BatchNormalization = MySBN
+def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
     input_shape = (cf.dim,cf.dim,cf.channels)
     classes = cf.classes
     n = cf.nres

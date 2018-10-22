@@ -36,7 +36,7 @@ class MySBN(BatchNormalization):
 
         def normalize_inference():
             def round_to_n(tensor):
-                return tensor#tf.scalar_mul(1/16, tf.round(tf.scalar_mul(16, tensor)))
+                return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
 
             beta = zeros_like(mean) if self.beta is None else self.beta
             gamma = zeros_like(mean) if self.gamma is None else self.gamma
@@ -61,7 +61,7 @@ class MySBN(BatchNormalization):
             return normalize_inference()
 
         # If the learning is either dynamic, or set to training:
-        normed_training, mean, variance = _fused_normalize_batch_in_training(
+        normed_training, mean, variance = K.normalize_batch_in_training(
             inputs, self.gamma, self.beta, reduction_axes,
             epsilon=self.epsilon)
 
@@ -82,56 +82,6 @@ class MySBN(BatchNormalization):
                         inputs)
 
         # Pick the normalized form corresponding to the training phase.
-        return in_train_phase(normed_training,
+        return K.in_train_phase(normed_training,
                                 normalize_inference,
                                 training=training)
-
-def _fused_normalize_batch_in_training(x, gamma, beta, reduction_axes,
-                                       epsilon=1e-3):
-    if list(reduction_axes) == [0, 1, 2]:
-        normalization_axis = 3
-        tf_data_format = 'NHWC'
-    else:
-        normalization_axis = 1
-        tf_data_format = 'NCHW'
-
-    if gamma is None:
-        gamma = tf.constant(1.0,
-                            dtype=x.dtype,
-                            shape=[x.get_shape()[normalization_axis]])
-    if beta is None:
-        beta = tf.constant(0.0,
-                           dtype=x.dtype,
-                           shape=[x.get_shape()[normalization_axis]])
-
-    return tf.nn.fused_batch_norm(
-        x,
-        gamma,
-        beta,
-        epsilon=epsilon,
-        data_format=tf_data_format)
-def in_train_phase(x, alt, training=None):
-    x = alt
-    if training is None:
-        training = K.learning_phase()
-        uses_learning_phase = True
-    else:
-        uses_learning_phase = False
-
-    if training is 1 or training is True:
-        if callable(x):
-            return x()
-        else:
-            return x
-
-    elif training is 0 or training is False:
-        if callable(alt):
-            return alt()
-        else:
-            return alt
-
-    # else: assume learning phase is a placeholder tensor.
-    x = K.switch(training, x, alt)
-    if uses_learning_phase:
-        x._uses_learning_phase = True
-    return x
