@@ -14,10 +14,15 @@ from keras import backend as K
 from keras.layers import interfaces
 from utils.new_bn import BatchNormalization
 import tensorflow as tf
+import math
 
 def my_bn(x, mean, var, beta, gamma, epsilon):
     def round_to_n(tensor):
         return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
+    def get_pow_round(tt):
+        # tt = tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
+        tt = tf.round(tf.scalar_mul(1/math.log(2) , tf.log(tt)))
+        return tf.exp(tf.scalar_mul(math.log(2), tt ))
 
     beta = zeros_like(mean) if beta is None else beta
     gamma = zeros_like(mean) if gamma is None else gamma
@@ -25,7 +30,7 @@ def my_bn(x, mean, var, beta, gamma, epsilon):
     return tf.add(
                 tf.multiply(
                         tf.subtract(x, mean),
-                        round_to_n(tf.div(
+                        get_pow_round(tf.div(
                                 gamma,
                                 tf.sqrt(tf.add(
                                                 var,
