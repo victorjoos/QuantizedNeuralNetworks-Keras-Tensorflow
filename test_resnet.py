@@ -56,7 +56,8 @@ def build_with(filename, oldtype ,nres):
         "dataset": "CIFAR-10",
         "network_type": type,
         "wbits": wbits,
-        "abits": abits
+        "abits": abits,
+        "pfilt": 1
     }
     cf = obj(cf)
     model = build_model(cf)
@@ -65,23 +66,29 @@ def build_with(filename, oldtype ,nres):
     model.load_weights(wname)
     # loss = 'categorical_crossentropy'
     # model.compile(loss=loss, optimizer='Adam', metrics=['accuracy'])
-    layer_name = "conv2d_1"
-    intermediate_layer_model = Model(inputs=model.input,
-                                 outputs=model.get_layer(layer_name).output)
-
     train_data, val_data, test_data = load_dataset("CIFAR-10", cf)
-    import matplotlib.pyplot as plt
-    import matplotlib.image as mpimg
+    for la in range(20,21):
+        layer_name = f"conv2d_{la+1}"
+        intermediate_layer_model = Model(inputs=model.input,
+                                     outputs=model.get_layer(layer_name).output)
 
-    imgplot = plt.imshow(test_data.X[0])
-    # plt.show()
-    score = intermediate_layer_model.predict(np.array([np.ones(test_data.X[0].shape)]), verbose=0)
-    # print(score[0])
-    for i in range(32):
-        for j in range(32):
-        print(score[0][i][j][0], end='')
-        print('')
-    print(score.shape)
+        # import matplotlib.pyplot as plt
+        # import matplotlib.image as mpimg
+
+        # imgplot = plt.imshow(test_data.X[0])
+        # plt.show()
+        # score = intermediate_layer_model.predict(np.array([np.ones(test_data.X[0].shape)]), verbose=0)
+        score = intermediate_layer_model.predict(test_data.X, verbose=1)
+        # print(score[0])
+        for elem in range(score.shape[0]):
+            for i in range(score.shape[1]):
+                for j in range(score.shape[2]):
+                    for k in range(score.shape[3]):
+                        if abs(score[elem][i][j][k]) > 63:
+                            print(f"SO SAAAAAAAAAd: element:{elem} layer:{la+1} value:{abs(score[elem][i][j][k])}")
+                            break
+                    # print(f"{score[0][i][j][k]:2.1}", end=' ')
+            # print('')
     # print('Test loss:', score[0])
     # print('Test accuracy:', score[1])
     # print(score)
