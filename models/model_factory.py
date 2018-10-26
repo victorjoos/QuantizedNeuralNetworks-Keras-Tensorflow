@@ -69,7 +69,7 @@ def build_model(cf):
     elif cf.architecture=="RESNET":
         Conv1 = Conv # lambda **kwargs: QuantizedConv2D(H=1, nb=2, **kwargs)
         # Fc = Dense
-        Bn = lambda **kwargs: MySBN(**kwargs) # BatchNormalization
+        Bn = lambda **kwargs: MySBN(trainable=False, **kwargs) # BatchNormalization
 
         model = ResNet18(Conv, Conv1, Act, Fc, Bn, cf)
     else:

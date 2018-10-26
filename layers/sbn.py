@@ -17,11 +17,16 @@ import tensorflow as tf
 import math
 
 def my_bn(x, mean, var, beta, gamma, epsilon):
-    def round_to_n(tensor):
-        return tf.scalar_mul(1/32, tf.round(tf.scalar_mul(32, tensor)))
+    def round_to_n(tt):
+        tt = tf.scalar_mul(1/32, tf.round(tf.scalar_mul(32, tt)))
+        return tt
     def get_pow_round(tt):
+        tt_sign = tf.div(tt, tf.abs(tt))
+        tt = tf.abs(tt)
         tt = tf.round(tf.scalar_mul(1/math.log(2) , tf.log(tt)))
-        return tf.exp(tf.scalar_mul(math.log(2), tt ))
+        tt = tf.math.exp(tf.scalar_mul(math.log(2), tt))
+        tt = tf.multiply(tt_sign, tt)
+        return tt
 
     beta = zeros_like(mean) if beta is None else beta
     gamma = zeros_like(mean) if gamma is None else gamma

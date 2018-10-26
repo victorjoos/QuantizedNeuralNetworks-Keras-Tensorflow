@@ -16,7 +16,7 @@ class obj(object):
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"]="2"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
     wname = sys.argv[1]
     cf = {
         "architecture": "RESNET",
@@ -70,8 +70,8 @@ if __name__ == "__main__":
     callbacks = [tensorboard]
     model.fit_generator(datagen.flow(train_data.X,train_data.y, batch_size=128),
                         epochs=50,
-                        verbose=1,
+                        verbose=2,
                         callbacks=callbacks,
-                        validation_data=(val_data.X,val_data.y))
+                        validation_data=(test_data.X,test_data.y))
     score = model.evaluate(test_data.X, test_data.y)
     print(score)
