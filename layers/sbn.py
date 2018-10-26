@@ -24,7 +24,7 @@ def my_bn(x, mean, var, beta, gamma, epsilon):
         tt_sign = tf.div(tt, tf.abs(tt))
         tt = tf.abs(tt)
         tt = tf.round(tf.scalar_mul(1/math.log(2) , tf.log(tt)))
-        tt = tf.math.exp(tf.scalar_mul(math.log(2), tt))
+        tt = tf.exp(tf.scalar_mul(math.log(2), tt))
         tt = tf.multiply(tt_sign, tt)
         return tt
 
