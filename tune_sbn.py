@@ -35,7 +35,7 @@ if __name__ == "__main__":
     cf = obj(cf)
     train_data, val_data, test_data = load_dataset(cf.dataset, cf)
     model = build_model(cf)
-    adam = Adam(lr=1e-3)
+    adam = Adam(lr=1e-3, decay=0.9999)
     loss = 'categorical_crossentropy'
     model.compile(loss=loss, optimizer=adam, metrics=['accuracy'])
     model.load_weights(wname)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     tensorboard = TensorBoard(log_dir="test.tsb", histogram_freq=0, write_graph=True, write_images=False)
     callbacks = [tensorboard]
     model.fit_generator(datagen.flow(train_data.X,train_data.y, batch_size=128),
-                        epochs=200,
+                        epochs=50,
                         verbose=1,
                         callbacks=callbacks,
                         validation_data=(val_data.X,val_data.y))

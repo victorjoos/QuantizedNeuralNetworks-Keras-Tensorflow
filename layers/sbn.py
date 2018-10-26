@@ -18,9 +18,8 @@ import math
 
 def my_bn(x, mean, var, beta, gamma, epsilon):
     def round_to_n(tensor):
-        return tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
+        return tf.scalar_mul(1/32, tf.round(tf.scalar_mul(32, tensor)))
     def get_pow_round(tt):
-        # tt = tf.scalar_mul(1/8, tf.round(tf.scalar_mul(8, tensor)))
         tt = tf.round(tf.scalar_mul(1/math.log(2) , tf.log(tt)))
         return tf.exp(tf.scalar_mul(math.log(2), tt ))
 
