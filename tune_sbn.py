@@ -16,7 +16,7 @@ class obj(object):
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]="2"
     wname = sys.argv[1]
     cf = {
         "architecture": "RESNET",
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         "kernel_initializer": 'glorot_uniform',
         "kernel_regularizer": 0.0,
         "dataset": "CIFAR-10",
-        "network_type": "float",
+        "network_type": "full-bnn",
         "wbits": 4,
         "abits": 4
     }

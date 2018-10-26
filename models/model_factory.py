@@ -1,6 +1,8 @@
 from keras.models import Sequential, Model
 from keras import regularizers
-from keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda, concatenate
+from keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, Flatten, Dense, Lambda, concatenate
+from utils.new_bn import BatchNormalization
+
 from keras.layers.advanced_activations import LeakyReLU
 from keras.regularizers import l2
 import numpy as np
@@ -67,7 +69,8 @@ def build_model(cf):
     elif cf.architecture=="RESNET":
         Conv1 = Conv # lambda **kwargs: QuantizedConv2D(H=1, nb=2, **kwargs)
         # Fc = Dense
-        Bn = lambda **kwargs: MySBN(**kwargs)
+        Bn = lambda **kwargs: MySBN(**kwargs) # BatchNormalization
+
         model = ResNet18(Conv, Conv1, Act, Fc, Bn, cf)
     else:
         raise ValueError("Error: type " + str(cf.architecture) + " is not supported")
