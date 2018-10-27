@@ -41,12 +41,12 @@ def ternarize(W, H=1):
     return W + K.stop_gradient(Wt - W)
 
 def ternary_tanh_act(x):
-    x = K.clip(x, -1, 1)
+    W = K.clip(x, -1, 1)
     cutoff = 0.5
     ones = K.ones_like(W)
     zeros = K.zeros_like(W)
     Wt = switch(W > cutoff, ones, switch(W <= -cutoff, -ones, zeros))
-    return Wt
+    return W + K.stop_gradient(Wt - W)
 
 
 def ternarize_dot(x, W):

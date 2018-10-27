@@ -12,7 +12,7 @@ from keras import regularizers
 from keras import constraints
 from keras import backend as K
 from keras.layers import interfaces
-from utils.new_bn import BatchNormalization as bn2
+from utils.new_bn import BatchNormalization as FrozenBN
 import tensorflow as tf
 import math
 
@@ -47,7 +47,7 @@ def my_bn(x, mean, var, beta, gamma, epsilon):
     return tf.add(tf.multiply(k, x), h)
 
 
-class MySBN(BatchNormalization):
+class MySBN(FrozenBN):
 
     @interfaces.legacy_batchnorm_support
     def __init__(self,

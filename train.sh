@@ -18,7 +18,7 @@ echo $PARAMS > "$LOGDIR/config.txt"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' | tee "$LOGDIR/ff.out"
 #
 # # binary
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-bnn' | tee "$LOGDIR/bb.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-bnn' | tee "$LOGDIR/bb.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qbnn' abits=2 | tee "$LOGDIR/b2.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qbnn' abits=4 | tee "$LOGDIR/b4.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qbnn' abits=8 | tee "$LOGDIR/b8.out"
