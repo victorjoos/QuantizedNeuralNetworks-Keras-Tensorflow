@@ -19,7 +19,7 @@ from models.vgg import Vgg
 from layers.sbn import MySBN
 from keras.preprocessing.image import ImageDataGenerator
 
-def build_model(cf):
+def build_model(cf, tune=False):
     def quantized_relu(x):
         return quantize_op(x,nb=cf.abits)
 
@@ -69,7 +69,10 @@ def build_model(cf):
     elif cf.architecture=="RESNET":
         Conv1 = Conv # lambda **kwargs: QuantizedConv2D(H=1, nb=2, **kwargs)
         # Fc = Dense
-        Bn = lambda **kwargs: MySBN(trainable=False, **kwargs) # BatchNormalization
+        if tune:
+            Bn = lambda **kwargs: MySBN(trainable=False, **kwargs) # BatchNormalization
+        else:
+            Bn = BatchNormalization
 
         model = ResNet18(Conv, Conv1, Act, Fc, Bn, cf)
     else:

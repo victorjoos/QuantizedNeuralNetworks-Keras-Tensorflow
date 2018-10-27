@@ -123,17 +123,17 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
                                  num_filters=num_filters,
                                  strides=strides)
                 y = resnet_layer(inputs=y,
-                                 num_filters=num_filters,
-                                 activation=None)
+                                 num_filters=num_filters
+                                 )#activation=None)
                 if stack > 0 and res_block == 0:  # first layer but not first stack
                     # linear projection residual shortcut connection to match
                     # changed dims
                     x = resnet_layer(inputs=x,
                                      num_filters=num_filters,
                                      kernel_size=1,
-                                     strides=strides,
-                                     activation=None,
-                                     batch_normalization=False)
+                                     strides=strides)
+                                     # activation=None,
+                                     # batch_normalization=False)
                 x = keras.layers.add([x, y])
                 x = Lambda(lambda _x: _x * 0.5)(x)
                 x = Activation()(x)
