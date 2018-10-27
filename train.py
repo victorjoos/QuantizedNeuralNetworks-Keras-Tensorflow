@@ -97,7 +97,14 @@ elif cf.architecture=="RESNET":
             lr *= 1e-1
         print('Learning rate: ', lr)
         return lr
-    lr_scheduler = LearningRateScheduler(lr_schedule)
+    def lr_sched2(epoch, lr):
+        ll = lr
+        rr = 3e-4
+        repochs = cf.epochs - epoch
+        alpha = pow(rr/ll, 1/repochs) if repochs>0 else 1
+        return lr*alpha
+
+    lr_scheduler = LearningRateScheduler(lr_sched2)
     lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
                                    cooldown=0,
                                    patience=5,

@@ -20,7 +20,7 @@ def _ternarize(W, H=1):
     - [Ternary Weight Networks](http://arxiv.org/abs/1605.04711)
     '''
     W = W / H
-    cutoff = 0.7*K.mean(K.abs(W)) # # TODO: is this ok??  
+    cutoff = 0.7*K.mean(K.abs(W)) # # TODO: is this ok??
     ones = K.ones_like(W)
     zeros = K.zeros_like(W)
     Wt = switch(W > cutoff, ones, switch(W <= -cutoff, -ones, zeros))
@@ -39,6 +39,14 @@ def ternarize(W, H=1):
     '''
     Wt = _ternarize(W, H)
     return W + K.stop_gradient(Wt - W)
+
+def ternary_tanh_act(x):
+    x = K.clip(x, -1, 1)
+    cutoff = 0.5
+    ones = K.ones_like(W)
+    zeros = K.zeros_like(W)
+    Wt = switch(W > cutoff, ones, switch(W <= -cutoff, -ones, zeros))
+    return Wt
 
 
 def ternarize_dot(x, W):

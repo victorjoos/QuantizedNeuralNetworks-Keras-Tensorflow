@@ -1,7 +1,7 @@
 from keras.models import Sequential, Model
 from keras import regularizers
-from keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, Flatten, Dense, Lambda, concatenate
-from utils.new_bn import BatchNormalization
+from keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, Flatten, Dense, Lambda, concatenate, BatchNormalization
+from utils.new_bn import BatchNormalization as FrozenBN
 
 from keras.layers.advanced_activations import LeakyReLU
 from keras.regularizers import l2
@@ -12,7 +12,7 @@ from layers.quantized_ops import quantized_tanh as quantize_op
 from layers.binary_layers import BinaryConv2D, BinaryDense
 from layers.binary_ops import binary_tanh
 from layers.ternary_layers import TernaryConv2D, TernaryDense
-from layers.ternary_ops import ternary_tanh
+from layers.ternary_ops import ternary_tanh, ternary_tanh_act
 
 from models.resnet import ResNet18
 from models.vgg import Vgg
@@ -59,7 +59,7 @@ def build_model(cf, tune=False):
         elif cf.network_type=='qtnn':
             Act = lambda: Activation(quantized_relu)
         else: #full-tnn
-            Act = lambda: Activation(ternary_tanh)
+            Act = lambda: Activation(ternary_tanh_act)
 
     else:
         raise ValueError('wrong network type, the supported network types in this repo are float, qnn, full-qnn, bnn and full-bnn')

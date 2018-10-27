@@ -12,7 +12,7 @@ from keras import regularizers
 from keras import constraints
 from keras import backend as K
 from keras.layers import interfaces
-from utils.new_bn import BatchNormalization
+from utils.new_bn import BatchNormalization as bn2
 import tensorflow as tf
 import math
 
@@ -21,7 +21,7 @@ def my_bn(x, mean, var, beta, gamma, epsilon):
         # tt = tf.scalar_mul(1/32, tf.round(tf.scalar_mul(32, tt)))
         return tt
     def get_pow_round(tt):
-        tt_sign = tf.div(tt, tf.abs(tt))
+        tt_sign = tf.round(tf.div(tt, tf.abs(tt)))
         tt = tf.abs(tt)
         tt = tf.round(tf.scalar_mul(1/math.log(2) , tf.log(tt)))
         tt = tf.exp(tf.scalar_mul(math.log(2), tt))
