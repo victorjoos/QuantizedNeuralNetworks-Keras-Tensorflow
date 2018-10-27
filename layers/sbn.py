@@ -18,7 +18,7 @@ import math
 
 def my_bn(x, mean, var, beta, gamma, epsilon):
     def round_to_n(tt):
-        tt = tf.scalar_mul(1/32, tf.round(tf.scalar_mul(32, tt)))
+        # tt = tf.scalar_mul(1/32, tf.round(tf.scalar_mul(32, tt)))
         return tt
     def get_pow_round(tt):
         tt_sign = tf.div(tt, tf.abs(tt))
@@ -31,19 +31,20 @@ def my_bn(x, mean, var, beta, gamma, epsilon):
     beta = zeros_like(mean) if beta is None else beta
     gamma = zeros_like(mean) if gamma is None else gamma
 
-    return tf.add(
-                tf.multiply(
-                        tf.subtract(x, mean),
-                        get_pow_round(tf.div(
-                                gamma,
-                                tf.sqrt(tf.add(
-                                                var,
-                                                tf.scalar_mul(epsilon, tf.ones_like(var))
-                                        ))
-                               ))
-                      ),
-                round_to_n(beta)
-                )
+    # y = kx + h
+    # k = round_to_pow(gamma/sqrt(var+eps))
+    # h = beta - mean/sqrt(var+eps)
+
+    sve = tf.sqrt(tf.add(
+                    var,
+                    tf.scalar_mul(epsilon, tf.ones_like(var))
+                    ))
+    k = get_pow_round(tf.div(gamma, sve))
+    h = round_to_n(tf.subtract(
+            beta,
+            tf.div(tf.multiply(mean, gamma), sve)
+        ))
+    return tf.add(tf.multiply(k, x), h)
 
 
 class MySBN(BatchNormalization):

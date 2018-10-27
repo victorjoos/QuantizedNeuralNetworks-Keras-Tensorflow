@@ -6,6 +6,7 @@ from models.model_factory import build_model
 import sys
 from keras.models import Model
 import numpy as np
+from keras.optimizers import Adam
 
 class obj(object):
     def __init__(self, d):
@@ -56,16 +57,20 @@ def build_with(filename, oldtype ,nres):
         "dataset": "CIFAR-10",
         "network_type": type,
         "wbits": wbits,
-        "abits": abits
+        "abits": abits,
+        "pfilt":1
     }
     cf = obj(cf)
     model = build_model(cf)
+    adam = Adam(lr=1e-3, decay=0.9995)
+    loss = 'categorical_crossentropy'
+    model.compile(loss=loss, optimizer=adam, metrics=['accuracy'])
 
     wname = filename
     model.load_weights(wname)
     # loss = 'categorical_crossentropy'
     # model.compile(loss=loss, optimizer='Adam', metrics=['accuracy'])
-    layer_name = "conv2d_1"
+    layer_name = "binary_dense_2"#"binary_conv2d_1"
     intermediate_layer_model = Model(inputs=model.input,
                                  outputs=model.get_layer(layer_name).output)
 
@@ -75,17 +80,22 @@ def build_with(filename, oldtype ,nres):
 
     imgplot = plt.imshow(test_data.X[0])
     # plt.show()
-    score = intermediate_layer_model.predict(np.array([np.ones(test_data.X[0].shape)]), verbose=0)
-    # print(score[0])
-    for i in range(32):
-        for j in range(32):
-        print(score[0][i][j][0], end='')
-        print('')
+    # score = intermediate_layer_model.predict(np.array([np.ones(test_data.X[0].shape)]), verbose=0)
+    score = intermediate_layer_model.predict(np.array([
+            test_data.X[0]
+        ]), verbose=0)
+
     print(score.shape)
+    for i in range(score.shape[1]):
+        # for j in range(score.shape[2]):
+        print(f"{score[0][i]:.2}", end=' ')
+        print('')
+    # print(model.evaluate(test_data.X, test_data.y))
+
     # print('Test loss:', score[0])
     # print('Test accuracy:', score[1])
     # print(score)
     return score#[1]
 
 if __name__ == "__main__":
-    build_with(sys.argv[1], "ff", 3)
+    build_with(sys.argv[1], "bb", 3)
