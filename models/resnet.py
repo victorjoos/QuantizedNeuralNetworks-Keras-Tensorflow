@@ -133,7 +133,7 @@ def ResNet18(Conv2D, Activation, Dense, cf):
         # v1 does not use BN after last shortcut connection-ReLU
         x = AveragePooling2D(pool_size=8)(x)
         y = Flatten()(x)
-        outputs = Dense(num_classes=classes,
+        outputs = Dense(units=classes,
                         activation='softmax',
                         kernel_initializer=cf.kernel_initializer,
                         use_bias=False
