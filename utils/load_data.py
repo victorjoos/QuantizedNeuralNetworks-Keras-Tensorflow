@@ -37,7 +37,7 @@ def split_train(train_set, size, add_dim=False):
 
 class Dataset:
     def __init__(self, dset, add_dim=False):
-        normX = dset[0].astype('float32') / 255
+        normX = (dset[0].astype('float32') - 128) / 128
         self.X = np.reshape(normX, dset[0].shape+(1,)) if add_dim else normX
         self.y = dset[1]
 
