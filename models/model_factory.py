@@ -32,7 +32,7 @@ def build_model(cf, tune=False):
 
     elif cf.network_type in ['qnn', 'full-qnn']:
         Conv = lambda **kwargs: QuantizedConv2D(H=1, nb=cf.wbits, **kwargs)
-        Fc = QuantizedDense
+        Fc = lambda **kwargs: QuantizedDense(nb=cf.wbits, **kwargs)
 
         if cf.network_type=='qnn':
             Act = lambda: LeakyReLU()

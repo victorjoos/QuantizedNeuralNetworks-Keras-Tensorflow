@@ -109,7 +109,7 @@ elif cf.architecture=="RESNET":
                                    cooldown=0,
                                    patience=5,
                                    min_lr=0.5e-6)
-    callbacks += [lr_scheduler, lr_reducer]
+    callbacks += [lr_scheduler]#, lr_reducer]
     adam = Adam(lr=cf.lr)
     loss = 'categorical_crossentropy'
 
