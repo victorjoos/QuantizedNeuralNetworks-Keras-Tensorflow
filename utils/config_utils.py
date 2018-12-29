@@ -39,6 +39,7 @@ parameter_specs = {
     'dim'                      :[False, None, int],
     'channels'                 :[False, None, int],
     'classes'                  :[False, None, int],
+    'fold'                     :[True,  None, int],
     'data_augmentation'        :[True, None, bool],
     'nres'                     :[True, None, int],
     'cuda'                     :[True, None, str],

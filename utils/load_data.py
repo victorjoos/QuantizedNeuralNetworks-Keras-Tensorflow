@@ -34,6 +34,20 @@ def split_train(train_set, size, add_dim=False):
     valid.append(train_set[0][size:])
     valid.append(train_set[1][size:])
     return Dataset(train, add_dim), Dataset(valid, add_dim)
+def split_train2(train_set, size, ind, add_dim=False):
+    train = [0,0]
+    valid = []
+    train[0] = train_set[0][0:ind*size]
+    train[0] = np.append(train[0], train_set[0][(ind+1)*size:], axis=0)
+    print(train[0].shape)
+
+    train[1] = train_set[1][0:ind*size]
+    train[1] = np.append(train[1], train_set[1][(ind+1)*size:], axis=0)
+    print(train[1].shape)
+
+    valid.append(train_set[0][ind*size:(ind+1)*size])
+    valid.append(train_set[1][ind*size:(ind+1)*size])
+    return Dataset(train, add_dim), Dataset(valid, add_dim)
 
 class Dataset:
     def __init__(self, dset, add_dim=False):
@@ -48,9 +62,9 @@ def load_dataset(dataset, cf):
         print('Loading CIFAR-10 dataset...')
 
 
-        train_set_size = 45000
+        train_set_size = 5000#45000
         train_init, test_init = cifar10.load_data()
-        train_set, valid_set = split_train(train_init, train_set_size)
+        train_set, valid_set = split_train2(train_init, train_set_size, cf.fold)
         test_set = Dataset(test_init)
     elif (dataset == "MNIST" or dataset == "FASHION"):
 

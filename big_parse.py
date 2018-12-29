@@ -44,6 +44,10 @@ models = {
     '44': (4, 4),
     '48': (4, 8),
     '4f': (4, 32),
+    '22': (2, 2),
+    '24': (2, 4),
+    '28': (2, 8),
+    '2f': (2, 32),
 }
 
 def get_acc(filename):
@@ -69,9 +73,22 @@ def get_acts(filename):
         return activations
 
 
-def get_fmap_size():
-    return 32*32*16
+def get_fmap_size(filename):
+    with open(filename) as input_file:
+        for line in input_file:
+            match = re.match(r'.*conv2d.* \(None, (\d+), (\d+), (\d+)\).* (\d+) .*', line)
+            if match is not None:
+                gr = match.groups()
+                return int(gr[0])*int(gr[1])*int(gr[2])
 
+
+def get_depth(filename):
+    with open(filename) as input_file:
+        for line in input_file:
+            match = re.match(r'.*conv2d.* \(None, (\d+), (\d+), (\d+)\).* (\d+) .*', line)
+            if match is not None:
+                gr = match.groups()
+                return int(gr[2])
 
 def get_weights(filename):
     """Gets weights from file."""
@@ -80,6 +97,21 @@ def get_weights(filename):
             match = re.match(r'Total params: ([\d,]*)', line)
             if match is not None:
                 return int(match.group(1).replace(',',''))
+
+def get_macs(filename):
+    """Gets weights from file."""
+    with open(filename) as input_file:
+        macs = 0
+        for line in input_file:
+            match = re.match(r'.*conv2d.* \(None, (\d+), (\d+), \d+\).* (\d+) .*', line)
+            if match is not None:
+                gr = match.groups()
+                pr = (1,1)#prev.groups()
+                macs += (int(gr[0])*int(gr[1]))* (int(pr[0])*int(pr[1])) * int(gr[2])
+            # prev2 = re.match(r'.* \(None, (\d+), (\d+), \d+\).*', line)
+            # if prev2 is not None:
+            #     prev = prev2
+        return macs
 
 
 def get_input_size(filename):
@@ -118,7 +150,7 @@ def get_Ehw(Emac, Nc, Ns, As, p):
     :param p: ???
     :return: Ehw
     """
-    Ec = Emac * (Nc + 3 * As)
+    Ec = Emac * (Nc + 2 * As) # 3 * As when bias
     Ew = (2*Emac) * Ns + Emac * Nc / sqrt(p)
     Ea = 4 * Emac * As + Emac * Nc / sqrt(p)
     return Ec + Ew + Ea
@@ -135,7 +167,7 @@ def get_theoretical_Es(Q):
 
 def get_memory():
     """See https://www.intel.com/content/dam/www/programmable/us/en/pdfs/literature/hb/cyclone-v/cv_51001.pdf."""
-    return 13917*10**3  # maybe should be * 1024
+    return 10000*1024*8# 13917*10**3  # maybe should be * 1024
 
 
 def rreplace(s, old, new, occurrence=1):
@@ -146,14 +178,14 @@ def rreplace(s, old, new, occurrence=1):
 def compute_estimate(log, ktype, nres):
     wbit, abit = models[ktype]
     accuracy = get_acc(log)
-    Q = wbit#0.6*wbit+0.4*abit
+    Q = wbit#+0.4*abit
     As = get_acts(log)
     Ns = get_weights(log)
-    Nc = Ns
+    Nc = get_macs(log)
     s_in, c_in = get_input_size(log)
 
     mem = get_memory()
-    fmap = get_fmap_size()
+    fmap = get_fmap_size(log)*abit
 
     if mem//2 - fmap < 0:
         fr = fmap - mem//2
@@ -179,34 +211,115 @@ def compute_simple(log, ktype, nres):
     #     print(ktype, log)
     return accuracy, wbit*Ns + abit*As#*1.5
 
+def compute_locmem(log, ktype, nres, pfi):
+    wbit, abit = models[ktype]
+    accuracy = get_acc(log)
+    As = get_acts(log)
+    Ns = get_weights(log)
+    Nc = get_macs(log)
 
-def parse_dir(direc):
+    import math
+
+    Pk = Pl = 1 # typically to take multiple kernels into account
+    Po = 8
+    Pr  = 4
+    Pc  = 4
+    Tr = 8
+    Tc = 8
+    To = 16
+    Tk = Tl = 3
+    Ti = 16 # if ktype!="bb" else 32
+
+    penalty = 0 if abit == 32 else math.ceil(math.log2(64*9*pfi))
+    # print(pfi, penalty)
+    # accesses to local memory
+    tot1 = (abit+penalty)*Nc/(Pk*Pl*Po*Ti)#*(abit+wbit)/64
+    tot2 = abit * Nc/(To*Tk*Tl)
+    tot3 = wbit * Nc/(Tr*Tc)
+    totloc = tot1+tot2+tot3
+    # print(tot1/totloc, tot2/totloc, tot3/totloc)
+
+    # accesses to global memory
+    totglob = Ns*wbit +  1.9*As*abit
+    tot = (totloc*2 + totglob*5)
+    print(totloc*2/ (totglob*5) )
+    return accuracy, tot
+
+def compute_locmem2(log, ktype, nres, pfi):
+    wbit, abit = models[ktype]
+    accuracy = get_acc(log)
+    As = get_acts(log)
+    Ns = get_weights(log)
+    Nc = get_macs(log)
+
+    import math
+
+    Pk = Pl = 1 # typically to take multiple kernels into account
+    Po = 8
+    Pr  = 4
+    Pc  = 4
+    Tr = 8
+    Tc = 8
+    To = 16
+    Tk = Tl = 3
+    Ti = 16 # if ktype!="bb" else 32
+
+    penalty = 0 if abit == 32 else math.ceil(math.log2(64*9*pfi))
+    print(pfi, penalty)
+    # accesses to local memory
+    tot1 = (abit+penalty)*Nc/(Pk*Pl*To*Ti)
+    tot2 = abit * Nc/(To*Tk*Tl)
+    tot3 = wbit * Nc/(Tr*Tc)
+    totloc = 2*tot1+tot2+tot3
+    totglob = Ns*wbit +  1.9*As*abit
+    totmac = Nc/2 if wbit <= 2 else Nc
+    Q = wbit
+    QQ   = Q/16
+    Emac = 3.4*1e-12*(QQ)**-1.25
+    Ed   = 640*(QQ)
+    El   = 5*(QQ)
+    tot = totloc*El + totmac*Emac + totglob*Ed
+    return accuracy, tot
+
+
+
+def parse_dir(direc, all_keys, outfiles):
     for pfi in [1, 2, 4]:
-        for nres in [3, 5]:
-            for key in models.keys():
-                sol = None
-                for subdir in [sd for sd in os.listdir(direc) if os.path.isdir(os.path.join(direc, sd))]:
-                    conf = os.path.join(direc, subdir, "logs", "config.txt")
-                    kfile = os.path.join(direc, subdir, "logs", key+".out")
-                    with open(conf, 'r') as fd:
-                        for line in fd:
-                            reg = re.match(".* lr=(.*) nres=(.*) pfilt=(.*) cuda", line)
-                            if not reg:
-                                reg = re.match(".* lr=(.*) nres=(.*) cuda", line)
-                                fpfi = 1
-                            else:
-                                fpfi = int(reg.group(3))
-                            fnres = int(reg.group(2))
-                            lr = float(reg.group(1))
-                            if fnres == nres and fpfi==pfi and os.path.isfile(kfile):
-                                acc, en = compute_simple(kfile, key, nres)
-                                if acc and (not sol or sol[0] < acc):
-                                    sol = (acc, en, lr)
-                            break
-                if sol:
-                    outfile.write("{}, {}, {}, {}, {}\n".format(key, nres, sol[0], sol[1], sol[2]))
+        for nres in [2, 3]:
+            # if pfi == 2 and nres == 2:
+            #     continue
+            for akeys, outfile in zip(all_keys, outfiles):
+                for key in akeys:
+                    sol = None
+                    for subdir in [sd for sd in os.listdir(direc) if os.path.isdir(os.path.join(direc, sd))]:
+                        conf = os.path.join(direc, subdir, "logs", "config.txt")
+                        kfile = os.path.join(direc, subdir, "logs", key+".out")
+                        with open(conf, 'r') as fd:
+                            for line in fd:
+                                reg = re.match(".* lr=(.*) nres=(.*) pfilt=(.*) cuda", line)
+                                if not reg:
+                                    reg = re.match(".* lr=(.*) nres=(.*) cuda", line)
+                                    fpfi = 1
+                                else:
+                                    fpfi = int(reg.group(3))
+                                fnres = int(reg.group(2))
+                                lr = float(reg.group(1))
+                                if fnres == nres and fpfi==pfi and os.path.isfile(kfile):
+                                    acc, en = compute_locmem(kfile, key, nres, pfi)
+                                    if acc and (not sol or sol[0] < acc):
+                                        sol = (acc, en, lr)
+                                break
+                    if sol:
+                        outfile.write("{}, {}, {}, {}, {}\n".format(key, nres, sol[0], sol[1], sol[2]))
 
 import sys
 if __name__ == '__main__':
-    outfile = open("results.csv", 'w')
-    parse_dir(sys.argv[1])
+    keys = [
+        ['bb','b2','b4','b8','bf','ff'],['tt','t2','t4','t8','tf','ff'],['22','24','28','2f','ff'],['42','44','48','4f', 'ff'],
+        ['bf','tf','2f','4f','ff'],['tt','b2','t2','22','42'],['b4','t4','24','44'],['b8','t8','28','48'],
+        ['b4', 'tt', 't4', '24', '42', '44'] # TODO: more to compare
+    ]
+    outfiles = []
+    for i in range(len(keys)):
+        outfiles.append(open(f"results{i+1}.csv", 'w'))
+    parse_dir(sys.argv[1], keys, outfiles)

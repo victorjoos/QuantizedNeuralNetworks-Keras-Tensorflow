@@ -151,7 +151,7 @@ def compute_estimate(wbit, abit, log, wname, type, nres):
     Q = wbit
     As = get_acts(log)
     Ns = get_weights(log)
-    Nc = Ns
+    Nc = Ns # error here
     s_in, c_in = get_input_size(log)
 
     mem = get_memory()
