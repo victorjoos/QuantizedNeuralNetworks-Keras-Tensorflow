@@ -92,10 +92,11 @@ def quantized_tanh(W, nb=16):
     - [QuantizedNet: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1, Courbariaux et al. 2016](http://arxiv.org/abs/1602.02830}
 
     '''
-    non_sign_bits = nb-1
+    non_sign_bits = nb
     m = pow(2,non_sign_bits)
+    m2 = m/2
     #W = tf.Print(W,[W],summarize=20)
-    Wq = K.clip(round_through(W*m),-m,m-1)/m
+    Wq = K.clip(round_through(W*m),0,m-1)/m2
     #Wq = tf.Print(Wq,[Wq],summarize=20)
     return Wq
 

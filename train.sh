@@ -26,10 +26,10 @@ echo $PARAMS > "$LOGDIR/config.txt"
 #
 #
 # # ternary
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-tnn' | tee "$LOGDIR/tt.out"
-# python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=2 | tee "$LOGDIR/t2.out"
-# python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 | tee "$LOGDIR/t4.out"
-# python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=8 | tee "$LOGDIR/t8.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-tnn' | tee "$LOGDIR/tt.out"
+python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=2 | tee "$LOGDIR/t2.out"
+python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 | tee "$LOGDIR/t4.out"
+python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=8 | tee "$LOGDIR/t8.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='tnn' abits=8 | tee "$LOGDIR/tf.out"
 #
 #

@@ -53,7 +53,7 @@ batch_size = 128
 lr = 0.1
 decay = 0.000025
 
-fold = 0
+fold = 9
 
 date="00/00/0000"
 
