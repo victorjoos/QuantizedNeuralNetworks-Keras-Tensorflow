@@ -104,7 +104,7 @@ elif cf.architecture=="RESNET":
         alpha = pow(rr/ll, 1/repochs) if repochs>0 else 1
         return lr*alpha
 
-    lr_scheduler = LearningRateScheduler(lr_sched2)
+    lr_scheduler = LearningRateScheduler(lr_schedule)
     lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
                                    cooldown=0,
                                    patience=5,
