@@ -7,6 +7,7 @@ GPU=$3
 PFI=$4
 
 CONFIG=config
+CONFIG2=config0
 TIME=$(date +"%Y-%m-%d_%H-%M-%S")
 LOGDIR="$TIME/logs"
 PARAMS="date=${TIME} lr=${LR} nres=${NRES} pfilt=${PFI} cuda=${GPU}"
@@ -15,7 +16,7 @@ mkdir "$TIME/logs"
 echo $PARAMS > "$LOGDIR/config.txt"
 
 # standard float
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' data_augmentation=False | tee "$LOGDIR/ff_noda.out"
+python3 train.py -c "$CONFIG2" -o $PARAMS network_type='float' | tee "$LOGDIR/ff_noda.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' | tee "$LOGDIR/ff.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' kernel_regularizer=0.0001 | tee "$LOGDIR/ff_kr_4.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' kernel_regularizer=0.01 | tee "$LOGDIR/ff_kr_2.out"
@@ -32,7 +33,7 @@ python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' kernel_regularizer
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-tnn' | tee "$LOGDIR/tt.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=2 | tee "$LOGDIR/t2.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 | tee "$LOGDIR/t4.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 data_augmentation=False | tee "$LOGDIR/t4_noda.out"
+python3 train.py -c "$CONFIG2" -o $PARAMS network_type='qtnn' abits=4 | tee "$LOGDIR/t4_noda.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 kernel_regularizer=0.0001 | tee "$LOGDIR/t4_kr_4.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 kernel_regularizer=0.01 | tee "$LOGDIR/t4_kr_2.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=8 | tee "$LOGDIR/t8.out"
@@ -42,7 +43,7 @@ python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 kernel_regu
 # # qnn
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=2 | tee "$LOGDIR/42.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 | tee "$LOGDIR/44.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 data_augmentation=False | tee "$LOGDIR/44_noda.out"
+python3 train.py -c "$CONFIG2" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 | tee "$LOGDIR/44_noda.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 kernel_regularizer=0.0001 | tee "$LOGDIR/44_kr_4.out"
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 kernel_regularizer=0.01 | tee "$LOGDIR/44_kr_2.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=8 | tee "$LOGDIR/48.out"
