@@ -9,8 +9,10 @@ from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
 from keras.regularizers import l2
 from keras import backend as K
 from keras.models import Model
+from layers.pool_layers import OrdinalPooling2D
 import numpy as np
 import os
+
 
 def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
     input_shape = (cf.dim,cf.dim,cf.channels)
@@ -56,7 +58,8 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
                       if not first_ever else\
                       Conv2D1(filters=num_filters*cf.pfilt,
                                     kernel_size=kernel_size,
-                                    strides=strides,
+                                    # strides=strides,
+                                    strides=1,
                                     padding='same',
                                     kernel_initializer=cf.kernel_initializer,
                                     kernel_regularizer=l2(cf.kernel_regularizer),
@@ -77,6 +80,8 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
             if activation is not None:
                 x = Activation()(x)
             x = conv(x)
+        if strides == 2:
+            x = OrdinalPooling2D()(x)
         return x
 
     def resnet_v1(input_shape, depth):
