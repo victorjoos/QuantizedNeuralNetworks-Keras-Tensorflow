@@ -107,7 +107,7 @@ def get_macs(filename):
             if match is not None:
                 gr = match.groups()
                 pr = (1,1)#prev.groups()
-                macs += (int(gr[0])*int(gr[1]))* (int(pr[0])*int(pr[1])) * int(gr[2])
+                macs += (int(gr[0])*int(gr[1]))* int(gr[2])
             # prev2 = re.match(r'.* \(None, (\d+), (\d+), \d+\).*', line)
             # if prev2 is not None:
             #     prev = prev2
@@ -221,65 +221,67 @@ def compute_locmem(log, ktype, nres, pfi):
     import math
 
     Pk = Pl = 1 # typically to take multiple kernels into account
-    Po = 8
-    Pr  = 4
-    Pc  = 4
+    Po = 16
+    Pr  = 1
+    Pc  = 1
     Tr = 8
     Tc = 8
     To = 16
     Tk = Tl = 3
-    Ti = 16 # if ktype!="bb" else 32
+    Ti=Pi = 16 # if ktype!="bb" else 32
 
     penalty = 0 if abit == 32 else math.ceil(math.log2(64*9*pfi))
     # print(pfi, penalty)
     # accesses to local memory
-    tot1 = (abit+penalty)*Nc/(Pk*Pl*Po*Ti)#*(abit+wbit)/64
+    tot1 = (abit+penalty)*Nc/(Pk*Pl*Po*Ti*Pr*Pc)#*(abit+wbit)/64
     tot2 = abit * Nc/(To*Tk*Tl)
     tot3 = wbit * Nc/(Tr*Tc)
     totloc = tot1+tot2+tot3
-    # print(tot1/totloc, tot2/totloc, tot3/totloc)
+    print(tot1/totloc, tot2/totloc, tot3/totloc)
+    totloc = Nc/(Pk*Pl*Po*Pi*Pr*Pc)
 
     # accesses to global memory
     totglob = Ns*wbit +  1.9*As*abit
     tot = (totloc*2 + totglob*5)
-    print(totloc*2/ (totglob*5) )
+    print(totloc*200/ (totglob*5) )
+    tot = Nc*abit*wbit
     return accuracy, tot
 
-def compute_locmem2(log, ktype, nres, pfi):
-    wbit, abit = models[ktype]
-    accuracy = get_acc(log)
-    As = get_acts(log)
-    Ns = get_weights(log)
-    Nc = get_macs(log)
-
-    import math
-
-    Pk = Pl = 1 # typically to take multiple kernels into account
-    Po = 8
-    Pr  = 4
-    Pc  = 4
-    Tr = 8
-    Tc = 8
-    To = 16
-    Tk = Tl = 3
-    Ti = 16 # if ktype!="bb" else 32
-
-    penalty = 0 if abit == 32 else math.ceil(math.log2(64*9*pfi))
-    print(pfi, penalty)
-    # accesses to local memory
-    tot1 = (abit+penalty)*Nc/(Pk*Pl*To*Ti)
-    tot2 = abit * Nc/(To*Tk*Tl)
-    tot3 = wbit * Nc/(Tr*Tc)
-    totloc = 2*tot1+tot2+tot3
-    totglob = Ns*wbit +  1.9*As*abit
-    totmac = Nc/2 if wbit <= 2 else Nc
-    Q = wbit
-    QQ   = Q/16
-    Emac = 3.4*1e-12*(QQ)**-1.25
-    Ed   = 640*(QQ)
-    El   = 5*(QQ)
-    tot = totloc*El + totmac*Emac + totglob*Ed
-    return accuracy, tot
+# def compute_locmem2(log, ktype, nres, pfi):
+#     wbit, abit = models[ktype]
+#     accuracy = get_acc(log)
+#     As = get_acts(log)
+#     Ns = get_weights(log)
+#     Nc = get_macs(log)
+#
+#     import math
+#
+#     Pk = Pl = 1 # typically to take multiple kernels into account
+#     Po = 8
+#     Pr  = 4
+#     Pc  = 4
+#     Tr = 8
+#     Tc = 8
+#     Po = 16
+#     Tk = Tl = 3
+#     Ti = 16 # if ktype!="bb" else 32
+#
+#     penalty = 0 if abit == 32 else math.ceil(math.log2(64*9*pfi))
+#     print(pfi, penalty)
+#     # accesses to local memory
+#     tot1 = (abit+penalty)*Nc/(Pk*Pl*Po*Ti*Pr*Pc)
+#     tot2 = abit * Nc/(To*Tk*Tl)
+#     tot3 = wbit * Nc/(Tr*Tc)
+#     totloc = tot1+tot2+tot3
+#     totglob = Ns*wbit +  1.9*As*abit
+#     totmac = Nc/2 if wbit <= 2 else Nc
+#     Q = wbit
+#     QQ   = Q/16
+#     Emac = 3.4*1e-12*(QQ)**-1.25
+#     Ed   = 640*(QQ)
+#     El   = 5*(QQ)
+#     tot = totloc*El + totmac*Emac + totglob*Ed
+#     return accuracy, tot
 
 
 
@@ -313,13 +315,23 @@ def parse_dir(direc, all_keys, outfiles):
                         outfile.write("{}, {}, {}, {}, {}\n".format(key, nres, sol[0], sol[1], sol[2]))
 
 import sys
+# if __name__ == '__main__':
+#     keys = [
+#         ['bb','b2','b4','b8','bf','ff'],['tt','t2','t4','t8','tf','ff'],['22','24','28','2f','ff'],['42','44','48','4f', 'ff'],
+#         ['bf','tf','2f','4f','ff'],['tt','b2','t2','22','42'],['b4','t4','24','44'],['b8','t8','28','48'],
+#         ['b4', 'tt', 't4', '24', '42', '44'] # TODO: more to compare
+#     ]
+#
+#     outfiles = []
+#     for i in range(len(keys)):
+#         outfiles.append(open(f"results{i+1}.csv", 'w'))
+#     parse_dir(sys.argv[1], keys, outfiles)
+
 if __name__ == '__main__':
     keys = [
-        ['bb','b2','b4','b8','bf','ff'],['tt','t2','t4','t8','tf','ff'],['22','24','28','2f','ff'],['42','44','48','4f', 'ff'],
-        ['bf','tf','2f','4f','ff'],['tt','b2','t2','22','42'],['b4','t4','24','44'],['b8','t8','28','48'],
-        ['b4', 'tt', 't4', '24', '42', '44'] # TODO: more to compare
-    ]
+        ['bb','b2','b4','b8','bf','tt','t2','t4','t8','tf','ff','22','24','28','2f','42','44','48','4f']]
+
     outfiles = []
     for i in range(len(keys)):
-        outfiles.append(open(f"results{i+1}.csv", 'w'))
+        outfiles.append(open(f"results_complete.csv", 'w'))
     parse_dir(sys.argv[1], keys, outfiles)

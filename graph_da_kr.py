@@ -117,8 +117,8 @@ def kernel_reg(da_kr):
         else:
             index = 1
         plt.subplot(1,3,index)
-        graph(value[1], key+"training " + all_labels[dc[index]], "--", all_colors[dc[index]])
-        graph(value[0], key+"validat. " + all_labels[dc[index]], "-",  all_colors[dc[index]])
+        graph(value[1], key+" training " + all_labels[dc[index]], "--", all_colors[dc[index]])
+        graph(value[0], key+" validat. " + all_labels[dc[index]], "-",  all_colors[dc[index]])
         dc[index] += 1
         plt.legend(ncol=1, loc="lower right")
         if index==1:
@@ -131,34 +131,66 @@ def kernel_reg(da_kr):
     else:
         f.savefig(f"../fpga-thesis/img/kernel_reg.pdf", bbox_inches='tight')
 
-def kfold(kf):
+def kfold(kf, kf2):
     files = [f for f in listdir(kf) if isfile(join(kf, f))]
+    files2 = [join(kf2, f) for f in listdir(kf2) if isfile(join(kf2, f))]
     fold_ff = []
     fold_t4 = []
+    fold_44 = []
     for file in sorted(files):
         if re.search(r"ff_", file):
             fold_ff.append(get_acc(join(kf, file)))
         elif re.search(r"t4_", file):
             fold_t4.append(get_acc(join(kf, file)))
-    data = [fold_ff, fold_t4]
+    for file in sorted(files2):
+        fold_44.append(get_acc(file))
+    data = [fold_ff, fold_t4, fold_44]
     plt.style.use('seaborn-darkgrid')
     f = plt.figure()
     sns.boxplot(data=data, palette="vlag")
     sns.swarmplot(data=data, color="0.3", size=2)
     # plt.xlabel("Threshold")
     plt.ylabel("Accuracy [%]")
-    ticks = ["float-float", "ternary-4bit"]
+    ticks = ["float-float", "ternary-4bit", "4bit-4bit"]
     plt.xticks(ticks=[i for i in range(0, len(ticks))], labels=ticks)
     if do_show:
         plt.show()
     else:
         f.savefig(f"../fpga-thesis/img/kfold.pdf", bbox_inches='tight')
 
+def diff_lr(folder):
+    files = [f for f in listdir(folder) if isfile(join(folder, f))]
+    dico = {}
+    for file in sorted(files):
+        y = parse_file(join(folder, file))
+        dico[file] = y
 
-def parse(da_kr, kf, na):
-    data_augmentation(da_kr)
-    kernel_reg(da_kr)
-    kfold(kf)
+    plt.style.use("seaborn-darkgrid")
+    f = plt.figure()
+    all_colors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+
+    index = 0
+    for key, value in dico.items():
+        graph(value[0], key, "-", all_colors[index])
+        plt.legend(ncol=1, loc="lower right")
+        if index==0:
+            plt.ylabel("Validation Accuracy [%]")
+            plt.xlabel("Epoch [-]")
+            plt.ylim([5, 95])
+        index += 1
+    plt.tight_layout()
+    if do_show:
+        plt.show()
+    else:
+        f.savefig(f"../fpga-thesis/img/diff_lr.pdf", bbox_inches='tight')
+
+
+def parse(da_kr):#, kf, kf2):
+    # data_augmentation(da_kr)
+    # kernel_reg(da_kr)
+    # kfold(kf, kf2)
+    diff_lr(da_kr)
+
 
 
 
@@ -172,4 +204,5 @@ def parse(da_kr, kf, na):
 
 
 if __name__ == "__main__":
-    parse(sys.argv[1], sys.argv[2], sys.argv[3])
+    # parse(sys.argv[1], sys.argv[2], sys.argv[3])
+    parse(sys.argv[1])
