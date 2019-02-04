@@ -17,7 +17,7 @@ echo $PARAMS > "$LOGDIR/config.txt"
 
 # standard float
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' | tee "$LOGDIR/ff.out"
-
+exit 0
 #
 # # binary
 python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-bnn' | tee "$LOGDIR/bb.out"

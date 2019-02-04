@@ -5,7 +5,7 @@ Taken from https://github.com/keras-team/keras/blob/master/examples/cifar10_resn
 from __future__ import print_function
 import keras
 from keras.layers import Lambda
-from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D
+from keras.layers import AveragePooling2D, Input, Flatten, ZeroPadding2D, MaxPool2D
 from keras.regularizers import l2
 from keras import backend as K
 from keras.models import Model
@@ -49,7 +49,8 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
         """
         conv = Conv2D(filters=num_filters*cf.pfilt,
                       kernel_size=kernel_size,
-                      strides=strides,
+                      # strides=strides,
+                      strides=1,
                       padding='same',
                       kernel_initializer=cf.kernel_initializer,
                       kernel_regularizer=l2(cf.kernel_regularizer),
@@ -82,6 +83,7 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
             x = conv(x)
         if strides == 2:
             x = OrdinalPooling2D()(x)
+            # x = MaxPool2D(pool_size=2, strides=2)(x)
         return x
 
     def resnet_v1(input_shape, depth):
@@ -128,7 +130,7 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
                                  num_filters=num_filters,
                                  strides=strides)
                 y = resnet_layer(inputs=y,
-                                 num_filters=num_filters
+                                 num_filters=num_filters,
                                  activation=None)
                 if stack > 0 and res_block == 0:  # first layer but not first stack
                     # linear projection residual shortcut connection to match
@@ -136,7 +138,7 @@ def ResNet18(Conv2D, Conv2D1, Activation, Dense, BatchNormalization, cf):
                     x = resnet_layer(inputs=x,
                                      num_filters=num_filters,
                                      kernel_size=1,
-                                     strides=strides)
+                                     strides=strides,
                                      activation=None,
                                      batch_normalization=False)
                 x = keras.layers.add([x, y])
