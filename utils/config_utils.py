@@ -52,7 +52,6 @@ def parse_param(param, value):
     elif not parameter_specs[param][0]: # if not required, check if None
         if value in ['None', 'none', '']:
             return None
-
     return parameter_specs[param][2](value)
 
 class Config:

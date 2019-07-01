@@ -9,6 +9,7 @@ from layers.quantized_layers import QuantizedConv2D,QuantizedDense
 from layers.quantized_ops import quantized_tanh as quantize_op
 from layers.binary_layers import BinaryConv2D, BinaryDense
 from layers.binary_ops import binary_tanh
+from layers.binary_ops import binary_separation
 from layers.ternary_layers import TernaryConv2D, TernaryDense
 from layers.ternary_ops import ternary_tanh
 
@@ -46,7 +47,7 @@ def build_model(cf):
         else: #full-bnn
             Act = lambda: Activation(binary_tanh)
 
-    elif cf.network_type in ['tnn', 'qtnn', 'full-tnn']:
+    elif cf.network_type in ['tnn', 'qtnn', 'full-tnn', 'btnn']:
         Conv = lambda **kwargs: TernaryConv2D(H=1, **kwargs)
         Fc = TernaryDense
 
@@ -54,6 +55,8 @@ def build_model(cf):
             Act = lambda: LeakyReLU()
         elif cf.network_type=='qtnn':
             Act = lambda: Activation(quantized_relu)
+        elif cf.network_type=='btnn':
+            Act = lambda: Activation(binary_separation)
         else: #full-tnn
             Act = lambda: Activation(ternary_tanh)
 

@@ -15,10 +15,10 @@ mkdir "$TIME/logs"
 echo $PARAMS > "$LOGDIR/config.txt"
 
 # 2-qnn
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=2 abits=2 | tee "$LOGDIR/22.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=2 abits=4 | tee "$LOGDIR/24.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=2 abits=8 | tee "$LOGDIR/28.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='qnn' wbits=2 | tee "$LOGDIR/2f.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=2 abits=2 | tee "$LOGDIR/22.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=2 abits=4 | tee "$LOGDIR/24.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=2 abits=8 | tee "$LOGDIR/28.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='qnn' wbits=2 | tee "$LOGDIR/2f.out"
 
 # standard float
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='float' | tee "$LOGDIR/ff.out"
@@ -37,10 +37,11 @@ python3 train.py -c "$CONFIG" -o $PARAMS network_type='qnn' wbits=2 | tee "$LOGD
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=4 | tee "$LOGDIR/t4.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qtnn' abits=8 | tee "$LOGDIR/t8.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='tnn' abits=8 | tee "$LOGDIR/tf.out"
+python3 train.py -c "$CONFIG" -o $PARAMS network_type='btnn' abits=1 | tee "$LOGDIR/tb.out"
 
 
 # 4-qnn
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=2 | tee "$LOGDIR/42.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 | tee "$LOGDIR/44.out"
-python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=8 | tee "$LOGDIR/48.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=2 | tee "$LOGDIR/42.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=4 | tee "$LOGDIR/44.out"
+# python3 train.py -c "$CONFIG" -o $PARAMS network_type='full-qnn' wbits=4 abits=8 | tee "$LOGDIR/48.out"
 # python3 train.py -c "$CONFIG" -o $PARAMS network_type='qnn' wbits=4 | tee "$LOGDIR/4f.out"

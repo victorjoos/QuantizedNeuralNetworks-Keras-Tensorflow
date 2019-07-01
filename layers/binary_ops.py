@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import keras.backend as K
-
+from keras.layers import ReLU
 import tensorflow as tf
 
 
@@ -50,6 +50,9 @@ def binary_tanh(x):
     #x = tf.Print(x,[x],summarize=10,first_n=2)
     return x
 
+def binary_separation(x):
+    x = round_through(K.clip(x, 0, 1))
+    return x
 
 def binarize(W, H=1):
     '''The weights' binarization function, 
