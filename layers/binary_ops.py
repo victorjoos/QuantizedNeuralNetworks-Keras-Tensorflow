@@ -47,6 +47,7 @@ def binary_tanh(x):
 
     '''
     x = 2 * round_through(_hard_sigmoid(x)) - 1
+    # x = round_through(_hard_sigmoid(x))
     #x = tf.Print(x,[x],summarize=10,first_n=2)
     return x
 
@@ -76,3 +77,37 @@ def xnorize(W, H=1., axis=None, keepdims=False):
     Wa = _mean_abs(W, axis, keepdims)
     
     return Wa, Wb
+
+from keras.layers import Layer
+class BinaryReLU(Layer):
+    def __init__(self, **kwargs):
+        super(BinaryReLU, self).__init__(**kwargs)
+        self.supports_masking = True
+        self.threshold = 0
+        self.momentum =  0.9
+
+    def call(self, inputs):
+        cutoff = tf.contrib.distributions.percentile(inputs, 40) #K.mean(inputs)#
+        self.threshold = self.threshold +(cutoff-self.threshold)*self.momentum
+        # print_op2 = tf.print( self.threshold)
+        # with tf.control_dependencies([print_op2]):
+        xx = K.relu(inputs, threshold=self.threshold) # WATCH OUT this does inputs-threshold!!
+        xx = K.clip(xx, 0, 1)
+        # make every value > 0 go to 1
+        xx = round_through(xx+0.499999)
+
+        # ones = K.ones_like(inputs)
+        # zeros = K.zeros_like(inputs)
+        # xx = tf.where(inputs <= cutoff, zeros, ones)
+
+        return xx
+
+    def get_config(self):
+        config = {
+            'threshold': self.threshold
+        }
+        base_config = super(BinaryReLU, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
+    def compute_output_shape(self, input_shape):
+        return input_shape
