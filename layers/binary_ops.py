@@ -79,28 +79,44 @@ def xnorize(W, H=1., axis=None, keepdims=False):
     return Wa, Wb
 
 from keras.layers import Layer
+import tensorflow as tf
 class BinaryReLU(Layer):
     def __init__(self, **kwargs):
         super(BinaryReLU, self).__init__(**kwargs)
         self.supports_masking = True
-        self.threshold = 0
         self.momentum =  0.9
 
     def call(self, inputs):
-        cutoff = tf.contrib.distributions.percentile(inputs, 40) #K.mean(inputs)#
-        self.threshold = self.threshold +(cutoff-self.threshold)*self.momentum
-        # print_op2 = tf.print( self.threshold)
-        # with tf.control_dependencies([print_op2]):
-        xx = K.relu(inputs, threshold=self.threshold) # WATCH OUT this does inputs-threshold!!
-        xx = K.clip(xx, 0, 1)
-        # make every value > 0 go to 1
-        xx = round_through(xx+0.499999)
+        cutoff = K.stop_gradient(tf.contrib.distributions.percentile(K.stop_gradient(inputs), 80, axis=0, keep_dims=True)) #K.mean(inputs)#
+        self.threshold = K.stop_gradient(self.threshold +(cutoff-self.threshold)*self.momentum)
+        thresholds = self.threshold#K.repeat(self.threshold, inputs.shape[0])
+        xx = inputs - thresholds
+        # xx = inputs
+        # for i in range(self.size):
+        #     xx[:,i] -= thresholds[i]
+        print_op  = tf.print( K.sum(tf.cast(inputs[:,0]<=self.threshold[0][0], tf.int32)) )
+        print_op2 = tf.print( K.sum(tf.cast(inputs[:,0] >self.threshold[0][0], tf.int32)) )
+        print_op3 = tf.print(self.threshold)
+        with tf.control_dependencies([print_op, print_op2, print_op3]):
+            xx = K.relu(xx)#, threshold=self.threshold) # WATCH OUT this does inputs-threshold!!
+        # print_op  = tf.print( K.sum(tf.cast(xx>0, tf.int32)) )
+        # with tf.control_dependencies([print_op]):
+        #     xx = xx-1+1
+        
+        # xx = K.clip(xx, 0, 1)
+        # # make every value > 0 go to 1
+        # xx = round_through(xx+0.499999)
 
         # ones = K.ones_like(inputs)
         # zeros = K.zeros_like(inputs)
         # xx = tf.where(inputs <= cutoff, zeros, ones)
 
         return xx
+    
+    def build(self, input_shape):
+        self.threshold = K.zeros((1,input_shape[1]), dtype="float32")
+        self.size = input_shape[1]
+        self.built=True
 
     def get_config(self):
         config = {

@@ -79,12 +79,12 @@ def build_model(cf):
     elif cf.architecture=="RESNET":
         model = ResNet18(Conv, Act, Fc, cf)
     elif cf.architecture=="MLP":
-        model = Mlp(Act, Fc, cf)
+        model, model2 = Mlp(Act, Fc, cf)
     else:
         raise ValueError("Error: type " + str(cf.architecture) + " is not supported")
 
     model.summary()
 
-    return model
+    return model, model2
 
 

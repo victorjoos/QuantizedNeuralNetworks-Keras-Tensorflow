@@ -41,15 +41,15 @@ else:
 
 # ## Construct the network
 print('Construct the Network\n')
-model = build_model(cf)
+model, model2 = build_model(cf)
 
 print('loading data\n')
 train_data, val_data, test_data = load_dataset(cf.dataset, cf)
 
 print('setting up the network and creating callbacks\n')
-checkpoint = ModelCheckpoint(cf.out_wght_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max', period=1)
+checkpoint = ModelCheckpoint(cf.out_wght_path, monitor='val_acc', verbose=1, save_best_only=True, mode='max', period=1, save_weights_only=True)
 tensorboard = TensorBoard(log_dir=str(cf.tensorboard_name), histogram_freq=0, write_graph=True, write_images=False)
-callbacks = [checkpoint, tensorboard, MyEarlyStopping()]
+callbacks = [tensorboard, MyEarlyStopping(), checkpoint]
 # if True:
 #     def lr_schedule(epoch, lr):
 #         if epoch in [100, 160]:
@@ -102,7 +102,25 @@ elif cf.architecture=="RESNET":
                                    cooldown=0,
                                    patience=5,
                                    min_lr=0.5e-6)
-    callbacks += [lr_scheduler, lr_reducer]
+    callbacks += [lr_scheduler]
+    adam = Adam(lr=cf.lr)
+    loss = 'categorical_crossentropy'
+
+elif cf.architecture=="MLP":
+    def lr_schedule(epoch, lr):
+        lr = cf.lr
+        if epoch > 180:
+            lr *= 1e-3
+        elif epoch > 160:
+            lr *= 5e-3
+        elif epoch > 120:
+            lr *= 1e-2
+        elif epoch > 80:
+            lr *= 1e-1
+        print('Learning rate: ', lr)
+        return lr
+    lr_scheduler = LearningRateScheduler(lr_schedule)
+    callbacks += [lr_scheduler]
     adam = Adam(lr=cf.lr)
     loss = 'categorical_crossentropy'
 
@@ -169,4 +187,24 @@ score = model.evaluate(test_data.X, test_data.y, verbose=0)
 print('Test loss2:', score[0])
 print('Test accuracy2:', score[1])
 
+############
+import matplotlib.pyplot as plt
+import tensorflow as tf
+import numpy as np
+smol_ys = model2.predict(test_data.X)
+act0, act1 = smol_ys[0], smol_ys[1]
+plt.hist(np.mean((act0>0),axis = 0),bins = 20)
+plt.show()
+# plt.hist(act0,bins = 20)
+# plt.show()
+plt.hist(np.mean((act1>0),axis = 0),bins = 20)
+plt.show()
+# plt.hist(act1,bins = 20)
+# plt.show()
+print(np.sum(act1), np.sum(act0))
+print("active", np.sum(np.ceil(np.clip(act1,0,1))))
+print(np.sum(np.ceil(np.clip(act1,0,1)),axis=0))
+print("tot", np.sum(np.ones_like(act0)))
+print(np.sum(np.abs(act0)))
+################
 print('Done\n')
